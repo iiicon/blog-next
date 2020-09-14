@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-Hans,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sgw.wiki","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="今天再一次遇到了 1px 的问题，突然有点想不起来，从网上查了一下总结一下常用的方法 0.5px 边框border-width: 0.5px; 直接写，但是兼容性差，安卓不行 border-image也可以用，但是太麻烦了，而且圆角还会模糊 background-image基本和上面一样，替换图片太麻烦了，累 background 设置渐变其实本质和 background-image 是一样的，但">
+<meta property="og:type" content="article">
+<meta property="og:title" content="移动端 1px 边框">
+<meta property="og:url" content="https://sgw.wiki/2019/04/23/%E7%A7%BB%E5%8A%A8%E7%AB%AF-1px-%E8%BE%B9%E6%A1%86/index.html">
+<meta property="og:site_name" content="之哥的荣耀">
+<meta property="og:description" content="今天再一次遇到了 1px 的问题，突然有点想不起来，从网上查了一下总结一下常用的方法 0.5px 边框border-width: 0.5px; 直接写，但是兼容性差，安卓不行 border-image也可以用，但是太麻烦了，而且圆角还会模糊 background-image基本和上面一样，替换图片太麻烦了，累 background 设置渐变其实本质和 background-image 是一样的，但">
+<meta property="og:locale">
+<meta property="og:image" content="https://i.loli.net/2019/04/23/5cbec6fa33545.jpg">
+<meta property="article:published_time" content="2019-04-23T07:31:21.000Z">
+<meta property="article:modified_time" content="2019-04-23T08:05:38.253Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="css">
+<meta property="article:tag" content="h5">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2019/04/23/5cbec6fa33545.jpg">
+
+<link rel="canonical" href="https://sgw.wiki/2019/04/23/%E7%A7%BB%E5%8A%A8%E7%AB%AF-1px-%E8%BE%B9%E6%A1%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>移动端 1px 边框 | 之哥的荣耀</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">之哥的荣耀</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不满是向上的车轮，能够载不自满的人类，向人道前进</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://sgw.wiki/2019/04/23/%E7%A7%BB%E5%8A%A8%E7%AB%AF-1px-%E8%BE%B9%E6%A1%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="coding note and life perception">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="之哥的荣耀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          移动端 1px 边框
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-04-23 15:31:21 / Modified: 16:05:38" itemprop="dateCreated datePublished" datetime="2019-04-23T15:31:21+08:00">2019-04-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/css/" itemprop="url" rel="index"><span itemprop="name">css</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>今天再一次遇到了 1px 的问题，突然有点想不起来，从网上查了一下总结一下常用的方法</p>
+<h3 id="0-5px-边框"><a href="#0-5px-边框" class="headerlink" title="0.5px 边框"></a>0.5px 边框</h3><p><code>border-width: 0.5px;</code> 直接写，但是兼容性差，安卓不行</p>
+<h3 id="border-image"><a href="#border-image" class="headerlink" title="border-image"></a>border-image</h3><p>也可以用，但是太麻烦了，而且圆角还会模糊</p>
+<h3 id="background-image"><a href="#background-image" class="headerlink" title="background-image"></a>background-image</h3><p>基本和上面一样，替换图片太麻烦了，累</p>
+<h3 id="background-设置渐变"><a href="#background-设置渐变" class="headerlink" title="background 设置渐变"></a>background 设置渐变</h3><p>其实本质和 background-image 是一样的，但是这个可以用一下，原理就是一半有颜色，一半透明</p>
+<h3 id="box-shadow"><a href="#box-shadow" class="headerlink" title="box-shadow"></a>box-shadow</h3><p><code>box-shadow: inset 0px -1px 1px -1px #c8c7cc;</code> 效果也不错，这样的话不能设置背景，而且放大之后会有毛边，即使在移动端不会放大</p>
+<h3 id="viewport-rem"><a href="#viewport-rem" class="headerlink" title="viewport + rem"></a>viewport + rem</h3><p>这种方式就比较无脑了，除了用rem 没什么缺点</p>
+<h3 id="伪类加-transform-实现"><a href="#伪类加-transform-实现" class="headerlink" title="伪类加 transform 实现"></a>伪类加 transform 实现</h3><p>这个还是我最喜欢的方式 也是兼容性最好的方式<br><strong>利用 <code>-webkit-device-pixel-ratio</code> 或者 <code>min-resolution</code></strong> scale 以达到目的<br>下面截图来自 MDN<br><img src="https://i.loli.net/2019/04/23/5cbec6fa33545.jpg" alt="20190423160334.jpg" loading="lazy"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.border-top-1px, .border-right-1px, .border-bottom-1px, .border-left-1px</span><br><span class="line">  position: relative</span><br><span class="line">  &amp;::before, &amp;::after</span><br><span class="line">    content: &quot;&quot;</span><br><span class="line">    display: block</span><br><span class="line">    position: absolute</span><br><span class="line">    transform-origin: 0 0</span><br><span class="line"></span><br><span class="line">.border-top-1px</span><br><span class="line">  &amp;::before</span><br><span class="line">    border-top: 1PX solid $color-row-line</span><br><span class="line">    left: 0</span><br><span class="line">    top: 0</span><br><span class="line">    width: 100%</span><br><span class="line">    transform-origin: 0 top</span><br><span class="line"></span><br><span class="line">.border-right-1px</span><br><span class="line">  &amp;::after</span><br><span class="line">    border-right: 1PX solid $color-col-line</span><br><span class="line">    top: 0</span><br><span class="line">    right: 0</span><br><span class="line">    height: 100%</span><br><span class="line">    transform-origin: right 0</span><br><span class="line"></span><br><span class="line">.border-bottom-1px</span><br><span class="line">  &amp;::after</span><br><span class="line">    border-bottom: 1PX solid $color-row-line</span><br><span class="line">    left: 0</span><br><span class="line">    bottom: 0</span><br><span class="line">    width: 100%</span><br><span class="line">    transform-origin: 0 bottom</span><br><span class="line"></span><br><span class="line">.border-left-1px</span><br><span class="line">  &amp;::before</span><br><span class="line">    border-left: 1PX solid $color-col-line</span><br><span class="line">    top: 0</span><br><span class="line">    left: 0</span><br><span class="line">    height: 100%</span><br><span class="line">    transform-origin: left 0</span><br><span class="line"></span><br><span class="line">@media (min-resolution: 2dppx)</span><br><span class="line">  .border-top-1px</span><br><span class="line">    &amp;::before</span><br><span class="line">      width: 200%</span><br><span class="line">      transform: scale(.5)</span><br><span class="line">  .border-right-1px</span><br><span class="line">    &amp;::after</span><br><span class="line">      height: 200%</span><br><span class="line">      transform: scale(.5)</span><br><span class="line">  .border-bottom-1px</span><br><span class="line">    &amp;::after</span><br><span class="line">      width: 200%</span><br><span class="line">      transform: scale(.5)</span><br><span class="line">  .border-left-1px</span><br><span class="line">    &amp;::before</span><br><span class="line">      height: 200%</span><br><span class="line">      transform: scale(.5)****</span><br><span class="line"></span><br><span class="line">@media (min-resolution: 3dppx)</span><br><span class="line">  .border-top-1px</span><br><span class="line">    &amp;::before</span><br><span class="line">      width: 300%</span><br><span class="line">      transform: scale(.333)</span><br><span class="line">  .border-right-1px</span><br><span class="line">    &amp;::after</span><br><span class="line">      height: 300%</span><br><span class="line">      transform: scale(.333)</span><br><span class="line">  .border-bottom-1px</span><br><span class="line">    &amp;::after</span><br><span class="line">      width: 300%</span><br><span class="line">      transform: scale(.333)</span><br><span class="line">  .border-left-1px</span><br><span class="line">    &amp;::before</span><br><span class="line">      height: 300%</span><br><span class="line">      transform: scale(.333)</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/css/" rel="tag"># css</a>
+              <a href="/tags/h5/" rel="tag"># h5</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/04/14/%E6%80%BB%E7%BB%93split%E7%9A%84%E6%89%80%E6%9C%89%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95/" rel="prev" title="总结split的所有基础用法">
+      <i class="fa fa-chevron-left"></i> 总结split的所有基础用法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/04/23/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B9%8B%E7%BB%A7%E6%89%BF%EF%BC%88%E4%B8%80%EF%BC%89/" rel="next" title="面向对象之继承（一）">
+      面向对象之继承（一） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0-5px-%E8%BE%B9%E6%A1%86"><span class="nav-number">1.</span> <span class="nav-text">0.5px 边框</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#border-image"><span class="nav-number">2.</span> <span class="nav-text">border-image</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#background-image"><span class="nav-number">3.</span> <span class="nav-text">background-image</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#background-%E8%AE%BE%E7%BD%AE%E6%B8%90%E5%8F%98"><span class="nav-number">4.</span> <span class="nav-text">background 设置渐变</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#box-shadow"><span class="nav-number">5.</span> <span class="nav-text">box-shadow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#viewport-rem"><span class="nav-number">6.</span> <span class="nav-text">viewport + rem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%AA%E7%B1%BB%E5%8A%A0-transform-%E5%AE%9E%E7%8E%B0"><span class="nav-number">7.</span> <span class="nav-text">伪类加 transform 实现</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description">coding note and life perception</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

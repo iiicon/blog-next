@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-Hans,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sgw.wiki","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="最近用hexo搭建了一个博客，采用next主题，用来记录自己工作学习生活的点点滴滴正好想巩固一下es6的基础知识，好了，现在开始  解构赋值 数据解构 对象解构  数组解构 [a, b] &#x3D; [1, 2] &#x2F;&#x2F; 1 2  [a, b, ...rest] &#x3D; [1,2,3,4,5,6] [3, 4, 5, 6]  [a, , , b] &#x3D; [1, 2, 3, 4, 5] &#x2F;&#x2F; 1 4  默认值 [a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES6">
+<meta property="og:url" content="https://sgw.wiki/2017/10/04/es6/index.html">
+<meta property="og:site_name" content="之哥的荣耀">
+<meta property="og:description" content="最近用hexo搭建了一个博客，采用next主题，用来记录自己工作学习生活的点点滴滴正好想巩固一下es6的基础知识，好了，现在开始  解构赋值 数据解构 对象解构  数组解构 [a, b] &#x3D; [1, 2] &#x2F;&#x2F; 1 2  [a, b, ...rest] &#x3D; [1,2,3,4,5,6] [3, 4, 5, 6]  [a, , , b] &#x3D; [1, 2, 3, 4, 5] &#x2F;&#x2F; 1 4  默认值 [a">
+<meta property="og:locale">
+<meta property="og:image" content="http://oxb2vhvil.bkt.clouddn.com/es6-logo.jpg">
+<meta property="article:published_time" content="2017-10-04T09:45:13.000Z">
+<meta property="article:modified_time" content="2019-11-29T07:49:54.549Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="es6">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://oxb2vhvil.bkt.clouddn.com/es6-logo.jpg">
+
+<link rel="canonical" href="https://sgw.wiki/2017/10/04/es6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>ES6 | 之哥的荣耀</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">之哥的荣耀</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不满是向上的车轮，能够载不自满的人类，向人道前进</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://sgw.wiki/2017/10/04/es6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="coding note and life perception">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="之哥的荣耀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ES6
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-10-04 17:45:13" itemprop="dateCreated datePublished" datetime="2017-10-04T17:45:13+08:00">2017-10-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-11-29 15:49:54" itemprop="dateModified" datetime="2019-11-29T15:49:54+08:00">2019-11-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index"><span itemprop="name">js</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>最近用hexo搭建了一个博客，采用next主题，用来记录自己工作学习生活的点点滴滴<br>正好想巩固一下es6的基础知识，好了，现在开始</p>
+<p><img src="http://oxb2vhvil.bkt.clouddn.com/es6-logo.jpg" alt="es6 Screenshot" loading="lazy"></p>
+<h2 id="解构赋值"><a href="#解构赋值" class="headerlink" title="解构赋值"></a>解构赋值</h2><blockquote>
+<p>数据解构 对象解构</p>
+</blockquote>
+<h3 id="数组解构"><a href="#数组解构" class="headerlink" title="数组解构"></a>数组解构</h3><ul>
+<li><p><code>[a, b] = [1, 2]</code> // 1 2</p>
+</li>
+<li><p><code>[a, b, ...rest] = [1,2,3,4,5,6]</code> [3, 4, 5, 6]</p>
+</li>
+<li><p><code>[a, , , b] = [1, 2, 3, 4, 5]</code> // 1 4</p>
+</li>
+<li><p><code>默认值 [a, b, c=3] = [1, 2]</code>   </p>
+</li>
+</ul>
+<p><strong>使用场景</strong> 1/变量交换</p>
+<h3 id="对象解构"><a href="#对象解构" class="headerlink" title="对象解构"></a>对象解构</h3><ul>
+<li><p><code>&#123;a, b&#125; = &#123;a: 1, b: 2&#125;</code> // 1 2</p>
+</li>
+<li><p><code>&#123;a=2, b&#125; = &#123;a: 1, b: 2&#125;</code> // 1 2</p>
+</li>
+</ul>
+<ul>
+<li><strong>使用场景</strong>    </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">* let data &#x3D; &#123;title: &#39;abc&#39;, test: [&#123;title: &#39;test&#39;&#125;]&#125;</span><br><span class="line">* let &#123;title: f,test: [&#123;title: s&#125;]&#125;  &#x3D; data        </span><br></pre></td></tr></table></figure>
+
+
+<h2 id="正则扩展"><a href="#正则扩展" class="headerlink" title="正则扩展"></a>正则扩展</h2><blockquote>
+<p>u y 修饰符</p>
+</blockquote>
+<ul>
+<li><p><code>reg= new RegExp(/xyz/i)</code></p>
+</li>
+<li><p><code>reg= new RegExp(/xyz/ig,&#39;i&#39;)</code> <strong>后面的修饰符覆盖前面的修饰符</strong></p>
+</li>
+<li><p><code>reg.flags</code> // &#39;i&#39;</p>
+</li>
+<li><p><code>/b+/y.exec(&#39;bbbbb_bbb&#39;)</code> // 只能匹配一次</p>
+</li>
+<li><p><code>/b+/g.exec(&#39;bbbbb_bbb&#39;)</code> // 可以匹配两次 <strong>reg.sticky可以判断是不是y</strong></p>
+</li>
+<li><p><code>/美&#123;2&#125;/u.test(&#39;美美&#39;)</code> <strong>如果不能识别多个字符串，要加u</strong></p>
+</li>
+</ul>
+<h2 id="字符串扩展"><a href="#字符串扩展" class="headerlink" title="字符串扩展"></a>字符串扩展</h2><blockquote>
+<p>unicode表示法  遍历接口  模板字符串 新增的十种方法</p>
+</blockquote>
+<h3 id="unicode"><a href="#unicode" class="headerlink" title="unicode"></a>unicode</h3><ul>
+<li><p><code>console.log(</code>\u0061/<code>)</code></p>
+</li>
+<li><p><code>console.log(</code>\u00617<code>)</code></p>
+</li>
+<li><p><code>console.log(</code>\u{00617}<code>)</code> <strong>大于两个字符的需要用大括号包起来</strong></p>
+</li>
+<li><pre><code>let str = `\u&#123;20BB7&#125;`
+
+str.charCodeAt(0) // 55362
+str.charCodeAt(1) // 57271 
+
+str.codePointAt(0) // 134071
+str.codePointAt(1) // 57571 
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">**codePointAt比charCode更智能，charCodeAt只能识别两位字节，fromCharCode也一样，fromCodePoint更能灵活识别unicode**</span><br><span class="line"></span><br><span class="line">### 遍历接口</span><br><span class="line"></span><br><span class="line">- &#96;&#96;\u&#123;20BB7&#125;abc&#96;通过for循环不能正常遍历，通过of可以正确识别&#96;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### api</span><br><span class="line"></span><br><span class="line">- &#96;&#39;string&#39;.includes(&#39;t&#39;)&#96; &#x2F;&#x2F; true</span><br><span class="line"></span><br><span class="line">- &#96;&#39;string&#39;.startsWith(&#39;s&#39;)&#96; &#x2F;&#x2F; true</span><br><span class="line"></span><br><span class="line">- &#96;&#39;string&#39;.endsWith(&#39;ng&#39;)&#96; &#x2F;&#x2F; true</span><br><span class="line"></span><br><span class="line">- &#96;&#39;string&#39;.repeat(2)&#96; &#x2F;&#x2F; stringstring</span><br><span class="line"></span><br><span class="line">- &#96;&#39;1&#39;.padStart(2, &#39;0&#39;)&#96; &#x2F;&#x2F; 01</span><br><span class="line"></span><br><span class="line">- &#96;&#39;1&#39;.padEnd(2, &#39;0&#39;)&#96; &#x2F;&#x2F; 10</span><br><span class="line"></span><br><span class="line">- &#96;String.raw &#96;Hello \n girl&#96;&#96; &#x2F;&#x2F; 不能换行，raw会在&#39;&#x2F;&#39;之前再一次转义</span><br><span class="line"></span><br><span class="line">### 字符串模板</span><br><span class="line"></span><br><span class="line">- &#96;$&#123;str&#125;&#96; &#x2F;&#x2F; 很简单，不做赘述</span><br><span class="line"></span><br><span class="line">-		&#96;&#96;&#96;</span><br><span class="line">		let str &#x3D; &#123;</span><br><span class="line">			name: &#39;ez&#39;,</span><br><span class="line">			age: 1000</span><br><span class="line">		&#125;</span><br><span class="line">		abc&#96;i am $&#123;usr.name&#125;$&#123;usr.age&#125;&#96;</span><br><span class="line">		function abc(s,v1,v2) &#123; console.log(s,v1, v2)</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure></code></pre>
+</li>
+</ul>
+<ul>
+<li><strong>应用场景</strong> 1.处理标签，防止xss攻击  2.处理多语言标签渲染</li>
+</ul>
+<h2 id="数值扩展"><a href="#数值扩展" class="headerlink" title="数值扩展"></a>数值扩展</h2><blockquote>
+<p>新增的方法 方法调整</p>
+</blockquote>
+<ul>
+<li><p>二进制都是0b表示 <code>console.log(0b111)</code> 不分大小写 // 7</p>
+</li>
+<li><p>八进制都是0o表示 <code>console.log(0o111)</code>  // 73</p>
+</li>
+<li><p>判断是不是有尽 <code>Number.isFinite(19303295)</code>  // true</p>
+</li>
+<li><p>判断是不是数字 <code>Number.isNaN(NaN)</code> // 以上这两使用频率不是很高</p>
+</li>
+<li><p>判断是不是整数 <code>Number.isInteger(10.1)</code> // false     <code>Number.isInteger(10.0)</code> // true</p>
+</li>
+<li><p>取整数部分 <code>Math.trunc(5.2) Math.trunc(5.9)</code> // 5</p>
+</li>
+<li><p>判断正负  <code>Math.sign(3)</code> // 1 -1 0 NaN</p>
+</li>
+<li><p>返回平方和的平方根 <code>Math.hypot([value1[, value2[, ...]]])</code> //</p>
+</li>
+</ul>
+<h2 id="数组扩展"><a href="#数组扩展" class="headerlink" title="数组扩展"></a>数组扩展</h2><blockquote>
+<p>新增的方法 of from keys values entries</p>
+</blockquote>
+<h3 id="api"><a href="#api" class="headerlink" title="api"></a>api</h3><ul>
+<li><p><code>Array.of(0,2,3)</code> // [0, 2, 3]</p>
+</li>
+<li><p><code>Array.from(document.queryAll(&#39;p&#39;))</code> // []</p>
+</li>
+<li><p><code>Array.from(&#123;length: 100000&#125;, (v, i) =&gt; i)</code> // 会先生成 undefined，然后赋值</p>
+</li>
+<li><p><code>Array.from([1,2,4], (item) =&gt; &#123;return item*2&#125;)</code> // [2, 4, 8] 和map    一样</p>
+</li>
+<li><p><code>[1, &#39;a&#39;, undefined].fill(7)</code> // [7, 7, 7]</p>
+</li>
+<li><p><code>[1, &#39;a&#39;, undefined].fill(7, 1, 3)</code> // [1, 7, 7]</p>
+</li>
+<li><pre><code>let b c
+b = [1, &#39;a&#39;, undefined].keys() 
+// b = [1, &#39;a&#39;, undefined].values()
+// c = [1, &#39;a&#39;, undefined].entries()
+for (let index of b) &#123;console.log(index)&#125;
+//for (let [index, value] of c) &#123;console.log(index, value)&#125;
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">* *复制数组元素到指定位置(一个比较有意思的api)*</span><br><span class="line">- &#96;[1,2,3,4,5].copyWithin(0, 2, 5)&#96; &#x2F;&#x2F; [3, 4, 5, 4, 5]</span><br><span class="line"></span><br><span class="line">**查找（比较重要）**      </span><br><span class="line"></span><br><span class="line">- &#96;[3, 4, 5, 4, 5].findIndex((item) &#x3D;&gt; &#123;return item&gt;4&#125;)&#96; &#x2F;&#x2F; 5</span><br><span class="line"></span><br><span class="line">- &#96;[3, 4, 5, 4, 5].find((item) &#x3D;&gt; &#123;return item&gt;4&#125;)&#96; &#x2F;&#x2F; 2</span><br><span class="line"></span><br><span class="line">&#96;[1, NaN, 9].includes(NaN)&#96; &#x2F;&#x2F; true **可以判断NaN这个比较厉害**</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## 函数扩展</span><br><span class="line">&gt; 参数默认值 rest参数 扩展运算符 箭头函数 this绑定 尾调用</span><br><span class="line"></span><br><span class="line">### 默认值</span><br><span class="line"></span><br><span class="line">- 参数默认值要注意必须写在参数最后面</span><br><span class="line"></span><br><span class="line">- 函数参数是按值传递的</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+&#123;
+let x=&#39;test&#39;;
+function test2(x,y=x)&#123;
+console.log(&#39;作用域&#39;,x,y);
+&#125;
+test2(&#39;kill&#39;);
+&#125;      
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- rest参数可以通过 (...args) 来获取函数的 arguments</span><br><span class="line"></span><br><span class="line">- 箭头函数不做赘述</span><br><span class="line"></span><br><span class="line">- 尾调用就是把函数作为参数传入，返回另一个函数，类似于函数柯里化这种</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+&#123;
+function tail(x)&#123;
+console.log(&#39;tail&#39;,x);
+&#125;
+function fx(x)&#123;
+return tail(x)
+&#125;
+fx(123)
+&#125;
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">## 对象扩展</span><br><span class="line">&gt; 对象新增特性： 简洁表示法 属性表达式 扩展预算符 新增api</span><br><span class="line"></span><br><span class="line">### 属性和方法的简洁表示</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+   let o=1;
+   let k=2;
+   let es5=&#123;
+       o:o,
+       k:k
+   &#125;;
+   let es6=&#123;
+       o,
+       k
+   &#125;;
+   console.log(es5,es6);
+
+   let es5_method=&#123;
+       hello:function()&#123;
+           console.log(&#39;hello&#39;);
+       &#125;
+   &#125;;
+   let es6_method=&#123;
+       hello()&#123;
+           console.log(&#39;hello&#39;);
+       &#125;
+   &#125;;
+   console.log(es5_method.hello(),es6_method.hello());
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">### 属性表达式（很重要）</span><br></pre></td></tr></table></figure>
+   let a=&#39;b&#39;;
+   let es5_obj=&#123;
+       a:&#39;c&#39;,
+       b:&#39;c&#39;
+   &#125;;
+
+   let es6_obj=&#123;
+       [a]:&#39;c&#39;
+   &#125;
+
+   console.log(es5_obj,es6_obj);
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">### 新增api</span><br><span class="line">&gt; is assign entries</span><br><span class="line"></span><br><span class="line">- &#96;console.log(&#39;字符串&#39;,Object.is(&#39;abc&#39;,&#39;abc&#39;),&#39;abc&#39;&#x3D;&#x3D;&#x3D;&#39;abc&#39;);&#96;  </span><br><span class="line">	&#96;console.log(&#39;数组&#39;,Object.is([],[]),[]&#x3D;&#x3D;&#x3D;[]);&#96;</span><br><span class="line"></span><br><span class="line">- &#96;console.log(&#39;拷贝&#39;,Object.assign(&#123;a:&#39;a&#39;&#125;,&#123;b:&#39;b&#39;&#125;));&#96;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+let test=&#123;k:123,o:456&#125;;
+for(let [key,value] of Object.entries(test))&#123;
+console.log([key,value]);
+&#125;
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">## symbol用法</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+&#123;
+let a1=Symbol.for(&#39;abc&#39;);
+let obj=&#123;
+// 基础用法
+[a1]:&#39;123&#39;,
+&#39;abc&#39;:345,
+&#39;c&#39;:456
+&#125;;
+console.log(&#39;obj&#39;,obj);
+</code></pre>
+</li>
+</ul>
+<p>// 只能取到普通属性<br>  for(let [key,value] of Object.entries(obj)){<br>    console.log(&#39;let of&#39;,key,value);<br>  }</p>
+<p>// 只能取到symbol声明<br>  Object.getOwnPropertySymbols(obj).forEach(function(item){<br>    console.log(obj[item]);<br>  })</p>
+<p>// 可以去到实例的所有属性<br>  Reflect.ownKeys(obj).forEach(function(item){<br>    console.log(&#39;ownkeys&#39;,item,obj[item]);<br>  })<br>}</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">## 数据结构</span><br><span class="line">&gt; set weakset map weakmap</span><br><span class="line"></span><br><span class="line">### set</span><br><span class="line"></span><br><span class="line">#### new Set</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>let list = new Set();<br>list.add(5);<br>list.add(7);</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<p>let arr = [1,2,3,4,5];<br>let list = new Set(arr);</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">&#96;长度 list.size&#96;</span><br><span class="line"></span><br><span class="line">#### 去重</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>let arr = [1,2,3,1,&#39;2&#39;];<br>let list2 = new Set(arr);<br>list.add(1)<br>console.log(&#39;unique&#39;,list2);</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">**可以利用set这个特性去重**</span><br><span class="line"></span><br><span class="line">#### set实例的方法</span><br></pre></td></tr></table></figure>
+<p>let arr=[&#39;add&#39;,&#39;delete&#39;,&#39;clear&#39;,&#39;has&#39;];<br>let list=new Set(arr);</p>
+<p>console.log(&#39;has&#39;,list.has(&#39;add&#39;));<br>console.log(&#39;delete&#39;,list.delete(&#39;add&#39;),list);<br>list.clear();<br>console.log(&#39;list&#39;,list);</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">#### set实例遍历</span><br><span class="line">**可以用对象遍历的所有方法**</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>let arr=[&#39;add&#39;,&#39;delete&#39;,&#39;clear&#39;,&#39;has&#39;];<br>let list=new Set(arr);</p>
+<p>for(let key of list.keys()){<br>    console.log(&#39;keys&#39;,key);<br>}<br>for(let value of list.values()){<br>    console.log(&#39;value&#39;,value);<br>}<br>for(let [key,value] of list.entries()){<br>    console.log(&#39;entries&#39;,key,value);<br>}</p>
+<p>list.forEach(function(item){console.log(item);})</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">### weakSet</span><br><span class="line">&gt; 1 元素必须是对象 </span><br><span class="line">&gt; 2 只是对象的弱引用，不会被垃圾回收机制检测到</span><br><span class="line">&gt; 3 没有clear方法</span><br><span class="line">&gt; 4 不能遍历</span><br><span class="line"></span><br><span class="line">### map</span><br><span class="line">&gt; 直接上代码，不好说</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>let map = new Map();<br>let arr=[&#39;123&#39;];</p>
+<p>map.set(arr,456);</p>
+<p>console.log(&#39;map&#39;,map,map.get(arr));</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#96;&#96;&#96;</span><br><span class="line">let map &#x3D; new Map([[&#39;a&#39;,123],[&#39;b&#39;,456]]);</span><br><span class="line">console.log(&#39;map args&#39;,map);</span><br><span class="line">console.log(&#39;size&#39;,map.size);</span><br><span class="line">console.log(&#39;delete&#39;,map.delete(&#39;a&#39;),map);</span><br><span class="line">console.log(&#39;clear&#39;,map.clear(),map);</span><br></pre></td></tr></table></figure>
+
+<h3 id="weakmap"><a href="#weakmap" class="headerlink" title="weakmap"></a>weakmap</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">let weakmap&#x3D;new WeakMap();</span><br><span class="line"></span><br><span class="line">let o&#x3D;&#123;&#125;;</span><br><span class="line">weakmap.set(o,123);</span><br><span class="line">console.log(weakmap.get(o));</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="有意思的代码"><a href="#有意思的代码" class="headerlink" title="有意思的代码"></a>有意思的代码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1. Distance between two points</span><br><span class="line">const distance &#x3D; (x0, y0, x1, y1) &#x3D;&gt; Math.hypot(x1 - x0, y1 - y0)</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/es6/" rel="tag"># es6</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/10/02/new-start/" rel="prev" title="new start">
+      <i class="fa fa-chevron-left"></i> new start
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/10/18/%E5%BE%AE%E4%BF%A1%E9%A1%B9%E7%9B%AE%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/" rel="next" title="微信项目中遇到的一些问题">
+      微信项目中遇到的一些问题 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC"><span class="nav-number">1.</span> <span class="nav-text">解构赋值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E8%A7%A3%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">数组解构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E8%A7%A3%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">对象解构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E6%89%A9%E5%B1%95"><span class="nav-number">2.</span> <span class="nav-text">正则扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%89%A9%E5%B1%95"><span class="nav-number">3.</span> <span class="nav-text">字符串扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#unicode"><span class="nav-number">3.1.</span> <span class="nav-text">unicode</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%80%BC%E6%89%A9%E5%B1%95"><span class="nav-number">4.</span> <span class="nav-text">数值扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E6%89%A9%E5%B1%95"><span class="nav-number">5.</span> <span class="nav-text">数组扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#api"><span class="nav-number">5.1.</span> <span class="nav-text">api</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#weakmap"><span class="nav-number">5.2.</span> <span class="nav-text">weakmap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="nav-number">5.3.</span> <span class="nav-text">有意思的代码</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description">coding note and life perception</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

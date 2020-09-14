@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-Hans,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sgw.wiki","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="Symbolsymbol 是一种基本数据类型  Symbol()函数会返回 symbol 类型的值，该类型具有静态属性和静态方法。它的静态属性会暴露几个内建的成员对象；它的静态方法会暴露全局的 symbol 注册，且类似于内建对象类，但作为构造函数来说它并不完整，因为它不支持语法：&quot;new Symbol()&quot;。每个从 Symbol()返回的 symbol 值都是唯一的。一个 s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES6新增的数据类型">
+<meta property="og:url" content="https://sgw.wiki/2019/08/11/ES6%E6%96%B0%E5%A2%9E%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">
+<meta property="og:site_name" content="之哥的荣耀">
+<meta property="og:description" content="Symbolsymbol 是一种基本数据类型  Symbol()函数会返回 symbol 类型的值，该类型具有静态属性和静态方法。它的静态属性会暴露几个内建的成员对象；它的静态方法会暴露全局的 symbol 注册，且类似于内建对象类，但作为构造函数来说它并不完整，因为它不支持语法：&quot;new Symbol()&quot;。每个从 Symbol()返回的 symbol 值都是唯一的。一个 s">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-08-11T15:14:39.000Z">
+<meta property="article:modified_time" content="2020-08-10T07:49:48.364Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="G">
+<meta property="article:tag" content="es6">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://sgw.wiki/2019/08/11/ES6%E6%96%B0%E5%A2%9E%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>ES6新增的数据类型 | 之哥的荣耀</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">之哥的荣耀</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不满是向上的车轮，能够载不自满的人类，向人道前进</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://sgw.wiki/2019/08/11/ES6%E6%96%B0%E5%A2%9E%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="coding note and life perception">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="之哥的荣耀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ES6新增的数据类型
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-08-11 23:14:39" itemprop="dateCreated datePublished" datetime="2019-08-11T23:14:39+08:00">2019-08-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-08-10 15:49:48" itemprop="dateModified" datetime="2020-08-10T15:49:48+08:00">2020-08-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index"><span itemprop="name">js</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="Symbol"><a href="#Symbol" class="headerlink" title="Symbol"></a>Symbol</h3><p><strong>symbol 是一种基本数据类型</strong></p>
+<blockquote>
+<p>Symbol()函数会返回 symbol 类型的值，该类型具有静态属性和静态方法。它的静态属性会暴露几个内建的成员对象；它的静态方法会暴露全局的 symbol 注册，且类似于内建对象类，但作为构造函数来说它并不完整，因为它不支持语法：&quot;new Symbol()&quot;。<br>每个从 Symbol()返回的 symbol 值都是唯一的。一个 symbol 值能作为对象属性的标识符；这是该数据类型仅有的目的。</p>
+</blockquote>
+<pre><code>Symbol() === Symbol() // false</code></pre>
+<h4 id="在对象中查找-symbol-属性"><a href="#在对象中查找-symbol-属性" class="headerlink" title="在对象中查找 symbol 属性"></a>在对象中查找 symbol 属性</h4><pre><code>Object.getOwnPropertySymbols()</code></pre>
+<h4 id="应用于私有属性"><a href="#应用于私有属性" class="headerlink" title="应用于私有属性"></a>应用于私有属性</h4><pre><code>&#123;
+  let a = Symbol()
+  let obj = &#123;
+    [a]: 1
+  &#125;
+  window.obj = obj
+&#125;
+obj // &#123;Symbol(): 1&#125;
+obj[a] // undefined</code></pre>
+<h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3><p>Set 函数可以接受一个数组，(或者具有 iterable 接口的其他数据结构)，作为参数用来初始化</p>
+<p>操作方法有 <code>add delete has(value) clear</code> 方法</p>
+<p>遍历可以用 <code>keys values entires forEach</code></p>
+<p>属性 size 返回实例成员的总数</p>
+<blockquote>
+<p>Set 对象允许你存储任何类型的唯一值，无论是原始值或者是对象引用。<br>Set 对象是值的集合，你可以按照插入的顺序迭代它的元素。 Set 中的元素只会出现一次，即 Set 中的元素是唯一的。</p>
+</blockquote>
+<p><strong>WeakSet 的一个用处，是储存 DOM 节点，而不用担心这些节点从文档移除时，会引发内存泄漏。</strong></p>
+<h4 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h4><pre><code>size</code></pre>
+<p>有一个比较重要的是 set 没有键名，所以 key 和 value 是一样的</p>
+<h4 id="实例方法"><a href="#实例方法" class="headerlink" title="实例方法"></a>实例方法</h4><pre><code>var a = new Set()
+a.add(1) // Set(1) &#123;1&#125;
+a.has(1) // true
+a.delete(1) // true
+a.entries()
+a.keys()
+a.values() // SetIterator &#123;1 =&gt; 1, &#123;…&#125; =&gt; &#123;…&#125;&#125;</code></pre>
+<h4 id="实例默认可迭代"><a href="#实例默认可迭代" class="headerlink" title="实例默认可迭代"></a>实例默认可迭代</h4><pre><code>// 默认生成器函数就是 values 方法
+Set.prototype[Symbol.iterator] === Set.prototype.values
+Set.prototype[Symbol.iterator] === Set.prototype.keys</code></pre>
+<p>上面三个 api 都返回迭代器对象，意味着我们可以用 for of 迭代拿到这些值<br>同时也提供了 forEach 方法，和数组的用法一致</p>
+<h4 id="典型例子"><a href="#典型例子" class="headerlink" title="典型例子"></a>典型例子</h4><pre><code>// 数组去重
+[...new Set(arr)]</code></pre>
+<h3 id="WeakSet"><a href="#WeakSet" class="headerlink" title="WeakSet"></a>WeakSet</h3><blockquote>
+<p>WeakSet 对象允许你将弱保持对象存储在一个集合中。<br>也就是这个对象中的成员有可能被 GC</p>
+</blockquote>
+<h4 id="实例方法-1"><a href="#实例方法-1" class="headerlink" title="实例方法"></a>实例方法</h4><pre><code>var b = new WeakSet() // WeakSet &#123;&#125;
+var o = &#123;&#125;
+b.add(o)
+o = null
+b.has(o) // false</code></pre>
+<p>可以看出已经没有这个成员了，这就是 weakSet 的作用</p>
+<p>它只有四个 api</p>
+<pre><code>WeakSet.prototype.add(value)
+WeakSet.prototype.clear()
+WeakSet.prototype.delete(value)
+WeakSet.prototype.has(value)</code></pre>
+<h3 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h3><blockquote>
+<p>Map 对象保存键值对。任何值(对象或者原始值) 都可以作为一个键或一个值。<br>就是说对象的 key 值可以是一个对象，以前会直接转换为字符串</p>
+</blockquote>
+<pre><code>let o = &#123;&#125;
+let a = &#123;&#125;
+a[o] = 1 // &#123; [object Object]: 1 &#125;</code></pre>
+<p>作为构造函数，Map 也可以接受一个数组作为参数。该数组的成员是一个个表示键值对的数组</p>
+<pre><code>var m = new Map([
+    [&#39;name&#39;, &#39;xxx&#39;],
+    [&#39;age&#39;, 18]
+])
+
+// 实际上是下面这个操作
+const map = new Map();
+
+items.forEach(
+([key, value]) =&gt; map.set(key, value)
+);</code></pre>
+<p>Map 的方法基本和 Set 一样</p>
+<pre><code>// 默认的迭代器函数是 entries
+Map.prototype[Symbol.iterator] === Map.prototype.entries</code></pre>
+<p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map#Objects_%E5%92%8C_maps_%E7%9A%84%E6%AF%94%E8%BE%83">Objects 和 Maps 的比较</a></p>
+<h3 id="WeakMap"><a href="#WeakMap" class="headerlink" title="WeakMap"></a>WeakMap</h3><blockquote>
+<p>WeakMap 对象是一组键/值对的集合，其中的键是弱引用的。其键必须是对象，而值可以是任意的。<br>原生的 WeakMap 持有的是每个键或值对象的“弱引用”，这意味着在没有其他引用存在时垃圾回收能正确进行。原生 WeakMap 的结构是特殊且有效的，其用于映射的 key 只有在其没有被回收时才是有效的。</p>
+</blockquote>
+<h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> wm = <span class="keyword">new</span> <span class="built_in">WeakMap</span>();</span><br><span class="line"><span class="keyword">let</span> key = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">5</span> * <span class="number">1024</span> * <span class="number">1024</span>);</span><br><span class="line">wm.set(key, <span class="number">1</span>);</span><br><span class="line">key = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
+
+<p>当我们设置 <code>wm.set(key, 1)</code> 时，其实建立了 <code>wm</code> 对 <code>key</code> 所引用的对象的弱引用，但因为 <code>let key = new Array(5 * 1024 * 1024)</code> 建立了 <code>key</code> 对所引用对象的强引用，被引用的对象并不会被回收，但是当我们设置 <code>key = null</code> 的时候，就只有 <code>wm</code> 对所引用对象的弱引用，下次垃圾回收机制执行的时候，该引用对象就会被回收掉。</p>
+<p><strong>WeakMap 可以帮你省掉手动删除对象关联数据的步骤，所以当你不能或者不想控制关联数据的生命周期时就可以考虑使用 WeakMap。</strong></p>
+<p>WeakMap 只接受对象作为键名</p>
+<p>同样它也是不可枚举的，有四个 api</p>
+<h4 id="WeakMap-api"><a href="#WeakMap-api" class="headerlink" title="WeakMap api"></a>WeakMap api</h4><pre><code>WeakMap.prototype.delete(key)
+WeakMap.prototype.get(key)
+WeakMap.prototype.has(key)
+WeakMap.prototype.set(key, value)</code></pre>
+<h3 id="key-弱引用，value-不是"><a href="#key-弱引用，value-不是" class="headerlink" title="key 弱引用，value 不是"></a>key 弱引用，value 不是</h3><pre><code>const wm = new WeakMap();
+let key = &#123;&#125;;
+let obj = &#123;foo: 1&#125;;
+
+wm.set(key, obj);
+obj = null;
+wm.get(key)
+// Object &#123;foo: 1&#125;</code></pre>
+<h3 id="关于-Map-的应用"><a href="#关于-Map-的应用" class="headerlink" title="关于 Map 的应用"></a>关于 Map 的应用</h3><ol>
+<li>在 DOM 对象上保存相关数据<br>传统使用 jQuery 的时候，我们会通过 $.data() 方法在 DOM 对象上储存相关信息(就比如在删除按钮元素上储存帖子的 ID 信息)，jQuery 内部会使用一个对象管理 DOM 和对应的数据，当你将 DOM 元素删除，DOM 对象置为空的时候，相关联的数据并不会被删除，你必须手动执行 $.removeData() 方法才能删除掉相关联的数据，WeakMap 就可以简化这一操作：</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> wm = <span class="keyword">new</span> <span class="built_in">WeakMap</span>(),</span><br><span class="line">  element = <span class="built_in">document</span>.querySelector(<span class="string">&quot;.element&quot;</span>);</span><br><span class="line">wm.set(element, <span class="string">&quot;data&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> value = wm.get(elemet);</span><br><span class="line"><span class="built_in">console</span>.log(value); <span class="comment">// data</span></span><br><span class="line"></span><br><span class="line">element.parentNode.removeChild(element);</span><br><span class="line">element = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>数据缓存<br>从上一个例子，我们也可以看出，当我们需要关联对象和数据，比如在不修改原有对象的情况下储存某些属性或者根据对象储存一些计算的值等，而又不想管理这些数据的死活时非常适合考虑使用 WeakMap。数据缓存就是一个非常好的例子：</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> cache = <span class="keyword">new</span> <span class="built_in">WeakMap</span>();</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">countOwnKeys</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (cache.has(obj)) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;Cached&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> cache.get(obj);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;Computed&quot;</span>);</span><br><span class="line">    <span class="keyword">const</span> count = <span class="built_in">Object</span>.keys(obj).length;</span><br><span class="line">    cache.set(obj, count);</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>私有属性<br>WeakMap 也可以被用于实现私有变量，不过在 ES6 中实现私有变量的方式有很多种，这只是其中一种：</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> privateData = <span class="keyword">new</span> <span class="built_in">WeakMap</span>();</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(name, age) &#123;</span><br><span class="line">    privateData.set(<span class="built_in">this</span>, &#123; <span class="attr">name</span>: name, <span class="attr">age</span>: age &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getName() &#123;</span><br><span class="line">    <span class="keyword">return</span> privateData.get(<span class="built_in">this</span>).name;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getAge() &#123;</span><br><span class="line">    <span class="keyword">return</span> privateData.get(<span class="built_in">this</span>).age;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> Person;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>更多<br><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2017/04/memory-leak.html">http://www.ruanyifeng.com/blog/2017/04/memory-leak.html</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/G/" rel="tag"># G</a>
+              <a href="/tags/es6/" rel="tag"># es6</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/08/11/ES6%E4%B9%8BPromise%E7%94%A8%E6%B3%95/" rel="prev" title="ES6之Promise用法">
+      <i class="fa fa-chevron-left"></i> ES6之Promise用法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/08/12/ES6%E4%B9%8Basync%E5%92%8Cawait/" rel="next" title="ES6之async和await">
+      ES6之async和await <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Symbol"><span class="nav-number">1.</span> <span class="nav-text">Symbol</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%A8%E5%AF%B9%E8%B1%A1%E4%B8%AD%E6%9F%A5%E6%89%BE-symbol-%E5%B1%9E%E6%80%A7"><span class="nav-number">1.1.</span> <span class="nav-text">在对象中查找 symbol 属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E4%BA%8E%E7%A7%81%E6%9C%89%E5%B1%9E%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">应用于私有属性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Set"><span class="nav-number">2.</span> <span class="nav-text">Set</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7"><span class="nav-number">2.1.</span> <span class="nav-text">属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">实例方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E9%BB%98%E8%AE%A4%E5%8F%AF%E8%BF%AD%E4%BB%A3"><span class="nav-number">2.3.</span> <span class="nav-text">实例默认可迭代</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B8%E5%9E%8B%E4%BE%8B%E5%AD%90"><span class="nav-number">2.4.</span> <span class="nav-text">典型例子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WeakSet"><span class="nav-number">3.</span> <span class="nav-text">WeakSet</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95-1"><span class="nav-number">3.1.</span> <span class="nav-text">实例方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Map"><span class="nav-number">4.</span> <span class="nav-text">Map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WeakMap"><span class="nav-number">5.</span> <span class="nav-text">WeakMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%B3%95"><span class="nav-number">6.</span> <span class="nav-text">用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#WeakMap-api"><span class="nav-number">6.1.</span> <span class="nav-text">WeakMap api</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#key-%E5%BC%B1%E5%BC%95%E7%94%A8%EF%BC%8Cvalue-%E4%B8%8D%E6%98%AF"><span class="nav-number">7.</span> <span class="nav-text">key 弱引用，value 不是</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E-Map-%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">8.</span> <span class="nav-text">关于 Map 的应用</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description">coding note and life perception</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

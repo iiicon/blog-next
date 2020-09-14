@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-Hans,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sgw.wiki","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="DOM数据结构就是树在 DOM 树中，树上有节点（Node）Node 主要有 Document Element text 等DOM 树抽象为对象主要有三个构造函数 Document Element Text，他们都继承自 Node.prototype 上图就是 DOM 的大致原型链的关系与此同时 Node 提供了一系列 API 用来操作 DOM Node 接口属性：childNodes &amp;#x2F">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jsDOM">
+<meta property="og:url" content="https://sgw.wiki/2019/03/03/jsDOM/index.html">
+<meta property="og:site_name" content="之哥的荣耀">
+<meta property="og:description" content="DOM数据结构就是树在 DOM 树中，树上有节点（Node）Node 主要有 Document Element text 等DOM 树抽象为对象主要有三个构造函数 Document Element Text，他们都继承自 Node.prototype 上图就是 DOM 的大致原型链的关系与此同时 Node 提供了一系列 API 用来操作 DOM Node 接口属性：childNodes &amp;#x2F">
+<meta property="og:locale">
+<meta property="og:image" content="https://i.loli.net/2019/03/03/5c7bf21547e43.jpg">
+<meta property="article:published_time" content="2019-03-03T14:42:15.000Z">
+<meta property="article:modified_time" content="2019-03-26T01:36:43.912Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="js">
+<meta property="article:tag" content="G">
+<meta property="article:tag" content="DOM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2019/03/03/5c7bf21547e43.jpg">
+
+<link rel="canonical" href="https://sgw.wiki/2019/03/03/jsDOM/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>jsDOM | 之哥的荣耀</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">之哥的荣耀</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不满是向上的车轮，能够载不自满的人类，向人道前进</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://sgw.wiki/2019/03/03/jsDOM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="coding note and life perception">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="之哥的荣耀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          jsDOM
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-03-03 22:42:15" itemprop="dateCreated datePublished" datetime="2019-03-03T22:42:15+08:00">2019-03-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-03-26 09:36:43" itemprop="dateModified" datetime="2019-03-26T09:36:43+08:00">2019-03-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index"><span itemprop="name">js</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="DOM"><a href="#DOM" class="headerlink" title="DOM"></a>DOM</h3><p>数据结构就是树<br>在 DOM 树中，树上有节点（Node）<br>Node 主要有 Document Element text 等<br>DOM 树抽象为对象主要有三个构造函数 Document Element Text，他们都继承自 Node.prototype<br><img src="https://i.loli.net/2019/03/03/5c7bf21547e43.jpg" alt="1551626734126.jpg" loading="lazy"></p>
+<p>上图就是 DOM 的大致原型链的关系<br>与此同时 Node 提供了一系列 API 用来操作 DOM</p>
+<h3 id="Node-接口"><a href="#Node-接口" class="headerlink" title="Node 接口"></a>Node 接口</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">属性：</span><br><span class="line">childNodes &#x2F;&#x2F; 返回 NodeList 继承自 Object</span><br><span class="line">children &#x2F;&#x2F; 返回 HTMLCollection 继承自 Object</span><br><span class="line">firstChild</span><br><span class="line">innerText</span><br><span class="line">lastChild</span><br><span class="line">nextSibiling</span><br><span class="line">nodeName</span><br><span class="line">nodeType</span><br><span class="line">nodeValue</span><br><span class="line">outerText</span><br><span class="line">ownerDocument</span><br><span class="line">parentElement</span><br><span class="line">parentNode</span><br><span class="line">previousSibiling</span><br><span class="line">textContent</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">方法</span><br><span class="line">appendChild()</span><br><span class="line">cloneNode() &#x2F;&#x2F; 参数为 true 就是深拷贝，否则为浅拷贝</span><br><span class="line">contains()</span><br><span class="line">hasChildNodes()</span><br><span class="line">insertBefore()</span><br><span class="line">insertAfter()</span><br><span class="line">isEqualNode() &#x2F;&#x2F; dom 一致</span><br><span class="line">isSameNode() &#x2F;&#x2F; 同一个 dom</span><br><span class="line">removeChild()</span><br><span class="line">replaceChild()</span><br><span class="line">normalize() &#x2F;&#x2F; 合并文本节点</span><br></pre></td></tr></table></figure>
+
+<h3 id="Document-接口"><a href="#Document-接口" class="headerlink" title="Document 接口"></a>Document 接口</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">属性</span><br><span class="line">body</span><br><span class="line">characterSet</span><br><span class="line">childElementCount</span><br><span class="line">children</span><br><span class="line">doctype</span><br><span class="line">domain</span><br><span class="line">fullscreen</span><br><span class="line">head</span><br><span class="line">images</span><br><span class="line">links</span><br><span class="line">location</span><br><span class="line">referrer</span><br><span class="line">scripts</span><br><span class="line">scrollingElement</span><br><span class="line">title</span><br><span class="line">documentElement</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">方法</span><br><span class="line">createDocumentFragment()</span><br><span class="line">createElement()</span><br><span class="line">createTextNode()</span><br><span class="line">execCommand()</span><br><span class="line">exitFullscreen()</span><br><span class="line">getElementById()</span><br><span class="line">getElementsByClassName()</span><br><span class="line">getElementsByName()</span><br><span class="line">getElementsByTagName()</span><br><span class="line">getSelection()</span><br><span class="line">hasFocus()</span><br><span class="line">open()</span><br><span class="line">close()</span><br><span class="line">querySelector()</span><br><span class="line">querySelectorAll()</span><br><span class="line">registerElement()</span><br><span class="line">write()</span><br><span class="line">writeln()</span><br></pre></td></tr></table></figure>
+
+<h3 id="Element-接口"><a href="#Element-接口" class="headerlink" title="Element 接口"></a>Element 接口</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">offsetWidth</span><br><span class="line">offsetHeight</span><br><span class="line">clientLeft</span><br><span class="line">clientTop</span><br><span class="line">scrollHeight</span><br><span class="line">scrollTop</span><br><span class="line">getBoundingClientRect().left</span><br></pre></td></tr></table></figure>
+
+<h3 id="NodeList-和-HTMLCollection"><a href="#NodeList-和-HTMLCollection" class="headerlink" title="NodeList 和 HTMLCollection"></a>NodeList 和 HTMLCollection</h3><ul>
+<li>上述的 api 有的返回是 NodeList 实例，有的返回 collection 实例，这两者是有区别的</li>
+</ul>
+<p>HTMLCollection 实例对象的成员只能是 Element 节点，NodeList 实例对象的成员可以包含其他节点。<br>HTMLCollection 实例对象可以用 id 属性或 name 属性引用节点元素，NodeList 只能使用数字索引引用。<br>HTMLCollection 实例对象是静态的 NodeList 是动态的。(x) 两者都是动态的 -_-</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/js/" rel="tag"># js</a>
+              <a href="/tags/G/" rel="tag"># G</a>
+              <a href="/tags/DOM/" rel="tag"># DOM</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/03/03/js%E5%87%BD%E6%95%B0%E6%9F%AF%E9%87%8C%E5%8C%96/" rel="prev" title="js函数curry">
+      <i class="fa fa-chevron-left"></i> js函数curry
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/03/09/jquery%E9%87%8D%E6%B8%A9/" rel="next" title="jquery重温">
+      jquery重温 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#DOM"><span class="nav-number">1.</span> <span class="nav-text">DOM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.</span> <span class="nav-text">Node 接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Document-%E6%8E%A5%E5%8F%A3"><span class="nav-number">3.</span> <span class="nav-text">Document 接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Element-%E6%8E%A5%E5%8F%A3"><span class="nav-number">4.</span> <span class="nav-text">Element 接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NodeList-%E5%92%8C-HTMLCollection"><span class="nav-number">5.</span> <span class="nav-text">NodeList 和 HTMLCollection</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description">coding note and life perception</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

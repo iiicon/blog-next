@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-Hans,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sgw.wiki","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="注：mac 版本的 vscode，其他版本需要稍微变通一下  基础语言支持还需要再研究研究cmd option 好像有点交换，需要研究一下  1 上手 vscodevscode --help 列出所有的命令cmd + shift + p 打开命令面板 命令行的使用 首先在命令面板中搜索 shell 命令，在 PATH 中安装 code 命令，就可以在命令行中使用 code 命令打开 vscode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="玩转 VS Code">
+<meta property="og:url" content="https://sgw.wiki/2018/12/25/vscode/index.html">
+<meta property="og:site_name" content="之哥的荣耀">
+<meta property="og:description" content="注：mac 版本的 vscode，其他版本需要稍微变通一下  基础语言支持还需要再研究研究cmd option 好像有点交换，需要研究一下  1 上手 vscodevscode --help 列出所有的命令cmd + shift + p 打开命令面板 命令行的使用 首先在命令面板中搜索 shell 命令，在 PATH 中安装 code 命令，就可以在命令行中使用 code 命令打开 vscode">
+<meta property="og:locale">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/11/8c/1111c17d45a16da352a5b71f05c6d18c.png">
+<meta property="article:published_time" content="2018-12-25T04:12:21.000Z">
+<meta property="article:modified_time" content="2020-03-06T08:57:59.950Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="vscode">
+<meta property="article:tag" content="compiler">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://static001.geekbang.org/resource/image/11/8c/1111c17d45a16da352a5b71f05c6d18c.png">
+
+<link rel="canonical" href="https://sgw.wiki/2018/12/25/vscode/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>玩转 VS Code | 之哥的荣耀</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">之哥的荣耀</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不满是向上的车轮，能够载不自满的人类，向人道前进</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://sgw.wiki/2018/12/25/vscode/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="coding note and life perception">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="之哥的荣耀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          玩转 VS Code
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-12-25 12:12:21" itemprop="dateCreated datePublished" datetime="2018-12-25T12:12:21+08:00">2018-12-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-03-06 16:57:59" itemprop="dateModified" datetime="2020-03-06T16:57:59+08:00">2020-03-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><strong>注：mac 版本的 vscode，其他版本需要稍微变通一下</strong></p>
+<blockquote>
+<p>基础语言支持还需要再研究研究<br>cmd option 好像有点交换，需要研究一下</p>
+</blockquote>
+<h3 id="1-上手-vscode"><a href="#1-上手-vscode" class="headerlink" title="1 上手 vscode"></a>1 上手 vscode</h3><p>vscode --help 列出所有的命令<br>cmd + shift + p 打开命令面板</p>
+<h4 id="命令行的使用"><a href="#命令行的使用" class="headerlink" title="命令行的使用"></a>命令行的使用</h4><ul>
+<li><p>首先在命令面板中搜索 shell 命令，在 PATH 中安装 code 命令，就可以在命令行中使用 code 命令打开 vscode</p>
+</li>
+<li><p>当然如果后面跟上文件路径就可以打开指定的文件</p>
+</li>
+<li><p>如果你希望在已经打开的窗口打开文件，可以在 code 命令后添加参数 -r 来进行窗口的复用</p>
+</li>
+<li><p>也可以使用 -g <a href="file:line[:character]">file:line[:character]</a> 打开文件然后滚动到指定位置，比如输入 code -g package.json:128 </p>
+</li>
+<li><p>可以使用 -d 来比较两个文件，传入两个路径， code -r -d a.js b.js</p>
+</li>
+<li><p>除了以上直接打开磁盘上的文件外，也可以接受来自管道中的数据。这样就可以在 vsode 中显示命令行中的内容，比如 ls | code -</p>
+</li>
+</ul>
+<h3 id="2-核心的键盘操作"><a href="#2-核心的键盘操作" class="headerlink" title="2 核心的键盘操作"></a>2 核心的键盘操作</h3><h4 id="光标的移动（一个方向说明）"><a href="#光标的移动（一个方向说明）" class="headerlink" title="光标的移动（一个方向说明）"></a>光标的移动（一个方向说明）</h4><ul>
+<li>单词移动 option + ←    </li>
+<li>行首  cmd + ←   </li>
+<li>在代码块（各种括号）首末进行跳转 cmd + shift + \   </li>
+<li>移动到文档首尾  </li>
+</ul>
+<h4 id="文本选择"><a href="#文本选择" class="headerlink" title="文本选择"></a>文本选择</h4><ul>
+<li>对于基于单词 行 和整个文档的光标操作，你只需要多按一个 shift 键，就可以在移动光标的同时选中其中的文本</li>
+<li>对于代码块可以使用命令面板，选择括号所有内容来选中文本（原本没有，我自己定义了快捷键 control + shift + a）</li>
+</ul>
+<h4 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h4><ul>
+<li>删除前面 delete cmd + delete option + delete</li>
+<li>删除后面 fn + delete cmd + fn + delete option + fn + delete</li>
+</ul>
+<h3 id="3-快捷键进阶"><a href="#3-快捷键进阶" class="headerlink" title="3 快捷键进阶"></a>3 快捷键进阶</h3><h4 id="代码行编辑"><a href="#代码行编辑" class="headerlink" title="代码行编辑"></a>代码行编辑</h4><ul>
+<li>删除整行 cmd + shift + k</li>
+<li>剪切整行 cmd + x</li>
+<li>当前行下面重新开始一行  cmd + enter</li>
+<li>当前行的上面重新开始一行 cmd + shift + enter</li>
+<li>移动行 option + ↑</li>
+<li>复制行 option + shift + ↑</li>
+</ul>
+<h4 id="编程语言相关的命令"><a href="#编程语言相关的命令" class="headerlink" title="编程语言相关的命令"></a>编程语言相关的命令</h4><h5 id="添加注释"><a href="#添加注释" class="headerlink" title="添加注释"></a>添加注释</h5><ul>
+<li>行注释 cmd + /</li>
+<li>块注释 option + shift + a</li>
+</ul>
+<h5 id="代码格式化"><a href="#代码格式化" class="headerlink" title="代码格式化"></a>代码格式化</h5><ul>
+<li>option + shift + f （个人建议安装 prettier，很 nice）</li>
+</ul>
+<h5 id="代码缩进"><a href="#代码缩进" class="headerlink" title="代码缩进"></a>代码缩进</h5><ul>
+<li>可以用命令行，当时自己用的多的还是格式化</li>
+<li>当然也可以使用 cmd + [ 进行行缩进</li>
+</ul>
+<h4 id="其余小技巧"><a href="#其余小技巧" class="headerlink" title="其余小技巧"></a>其余小技巧</h4><ul>
+<li>调用字符的顺序 ctrl + t</li>
+<li>转化大小写 可以用 cmd + shift + p 打开命令面板，搜索 transform to Uppercase, 也可以 cmd + k cmd + u(小写为l) 来执行，选择哪个看自己喜好</li>
+<li>合并代码行 cmd + j 自己试试就知道了，一般没用，因为要格式化</li>
+<li>行排序 命令面板搜索吧，一般没什么用</li>
+<li>撤销光标的移动和选择 cmd + u （这个是神器）</li>
+</ul>
+<h3 id="4-多光标特性"><a href="#4-多光标特性" class="headerlink" title="4 多光标特性"></a>4 多光标特性</h3><ul>
+<li>按住 cmd + 鼠标左键可以创建多光标</li>
+<li>cmd + option + ↑ 可以创建多光标</li>
+<li>cmd + d 第一次按下时，他会选中光标附近的单词，第二次按下时，他会找到这个单词第二次出现的位置，创建一个新的光标，并且选中它</li>
+<li>cmd + k cmd + d 跳过当前这个选择 跳到下一个</li>
+<li>option + shift + i 他是和代码行批量处理有关，先用 ctrl + shift + a 选中括号内的代码，然后按下 option + shift + i 就会在每一行最后都会创建一个光标</li>
+</ul>
+<h3 id="5-如何快速在文件-代码-符号之间跳转"><a href="#5-如何快速在文件-代码-符号之间跳转" class="headerlink" title="5 如何快速在文件 代码 符号之间跳转"></a>5 如何快速在文件 代码 符号之间跳转</h3><h4 id="文件跳转"><a href="#文件跳转" class="headerlink" title="文件跳转"></a>文件跳转</h4><ul>
+<li>ctrl + tab 在打开的文件中跳转</li>
+<li>cmd + p 打开最近的文件列表（cmd + enter 会在侧边打开）</li>
+</ul>
+<h4 id="行跳转"><a href="#行跳转" class="headerlink" title="行跳转"></a>行跳转</h4><ul>
+<li>ctrl + g 直接输入数字跳转(cmd + p 打开命令面板直接输入冒号也是一样的)</li>
+<li>cmd + p 输入文件名直接加冒号 跳转到指定的位置是一个神器 （很喜欢）</li>
+</ul>
+<h4 id="符号（symbols）跳转"><a href="#符号（symbols）跳转" class="headerlink" title="符号（symbols）跳转"></a>符号（symbols）跳转</h4><ul>
+<li>cmd + shift + o 打开当前文件的所有符号，输入 : 就可以将这些符号进行分类，也可以搜索， endter 跳转到符号位置</li>
+</ul>
+<h4 id="多文件符号跳转暂且不提"><a href="#多文件符号跳转暂且不提" class="headerlink" title="多文件符号跳转暂且不提 - -"></a>多文件符号跳转暂且不提 - -</h4><h3 id="6-代码自动补全、快速修复和重构"><a href="#6-代码自动补全、快速修复和重构" class="headerlink" title="6 代码自动补全、快速修复和重构"></a>6 代码自动补全、快速修复和重构</h3><ul>
+<li>tab 补全</li>
+<li>esc 关闭提示</li>
+<li>黄色灯泡可以选择补全和代码重构（提取函数）</li>
+</ul>
+<h3 id="7-如何书写-code-snippet"><a href="#7-如何书写-code-snippet" class="headerlink" title="7 如何书写 code snippet"></a>7 如何书写 code snippet</h3><ul>
+<li><p>代码片段是对常用代码的一个抽象，他保留了大部分不变的代码，然后把需要经常变动的部分，换成变量，这样等下次调用它的时候，只需要把这些变量换成我们需要的就行了</p>
+</li>
+<li><p>javascript.json 一个 block 包含 prefix body description, body 里的内容并不只是一个纯文本，它其实是一个模板。要让它像模板一样工作，我们就需要先理解一个概念，叫做 tab stop，当 body 里的内容被插入到编辑器后你就会发现内容里的 $1 和 $2 不见了，取而代之的是两个竖线，这个 $1 和 $2 就是 tab stop，就是我们按下 tab 之后光标移动到的位置</p>
+</li>
+<li><p>在我们插入 tab stop 的时候，除了 $1 $2 这样的语法，我们还可以填入 ${1:label}, 在这个格式下，代码片段被插入编辑器时，$1 的位置处，会预先填入 label 这个值，并且 label 会被选中, 多光标只需要多次输入 {1:label} 就可以实现多光标 ..</p>
+</li>
+</ul>
+<h3 id="8-代码折叠、小地图、面包屑特性"><a href="#8-代码折叠、小地图、面包屑特性" class="headerlink" title="8 代码折叠、小地图、面包屑特性"></a>8 代码折叠、小地图、面包屑特性</h3><h4 id="关于代码折叠"><a href="#关于代码折叠" class="headerlink" title="关于代码折叠"></a>关于代码折叠</h4><ul>
+<li>cmd + option + [  折叠当前光标所在的内层代码</li>
+<li>cmd + option + ]  展开</li>
+<li>cmd + k cmd + [   递归折叠当前所在代码</li>
+<li>cmd + k cmd + ]   递归展开当前所在代码</li>
+<li>折叠所有代码在我的电脑上不起作用不知道是什么原因 原始是 cmd + k cmd + 0 但是没有作用，自己又设置了 cmd + option + - ，展开是可以的 cmd + k cmd + j 自己设置了快捷键 cmd + option + =，所以现在折叠所有只能在命令面板里输入 fold all</li>
+</ul>
+<h4 id="小地图"><a href="#小地图" class="headerlink" title="小地图"></a>小地图</h4><ul>
+<li>小地图默认是打开的</li>
+<li>设置 editor.minimap.renderCharaters 为 false 就可以关闭小地图上显示的代码，用色块来代替，也可以用 editor.minimap.maxColumn 设置长度，默认 120 我觉得挺合适，很多时候我们只需看下每行代前的缩进和前面的代码高亮，就能看出个大概来了。</li>
+</ul>
+<h4 id="面包屑-（breadcrumb）"><a href="#面包屑-（breadcrumb）" class="headerlink" title="面包屑 （breadcrumb）"></a>面包屑 （breadcrumb）</h4><ul>
+<li>默认是关闭的，需要设置 breadcrumbs.enabled = true</li>
+<li>这是一个新功能，尤其是在函数中的时候可以把对应函数名显示到面包屑上，很舒服，希望在使用的时候它能给你带来一些便利吧</li>
+</ul>
+<h3 id="9-极速搜索有时候比-intellisense-还要重要（这里留一个疑问）"><a href="#9-极速搜索有时候比-intellisense-还要重要（这里留一个疑问）" class="headerlink" title="9 极速搜索有时候比 intellisense 还要重要（这里留一个疑问）"></a>9 极速搜索有时候比 intellisense 还要重要（<strong>这里留一个疑问</strong>）</h3><h4 id="单文件搜索"><a href="#单文件搜索" class="headerlink" title="单文件搜索"></a>单文件搜索</h4><ul>
+<li>cmd + f 编辑器会把当前光标所在位置的单词自动填充到搜索框中，我们可以通过 enter 和 shift + enter 在搜索结果中来回跳转</li>
+<li>cmd + f cmd + g 的操作有bug，期待后续完善（fn+f3）</li>
+<li>大小写敏感 cmd + option + c</li>
+<li>全单词匹配 cmd + option + w</li>
+<li>正则表达式支持 cmd + option + r</li>
+</ul>
+<h4 id="搜索配置"><a href="#搜索配置" class="headerlink" title="搜索配置"></a>搜索配置</h4><ul>
+<li>是否自动填充搜索关键词 editor.find.seedSearchStringFromSelection</li>
+<li>选中多行文本自动在区域中搜索 editor.find.autoFindInSelection</li>
+</ul>
+<h4 id="单文件替换"><a href="#单文件替换" class="headerlink" title="单文件替换"></a>单文件替换</h4><ul>
+<li>编辑替换操作就直接在搜索窗口操作，感觉不需要快捷键</li>
+<li>cmd + option + f 直接掉起替换窗口</li>
+</ul>
+<h4 id="多文件搜索和替换"><a href="#多文件搜索和替换" class="headerlink" title="多文件搜索和替换"></a>多文件搜索和替换</h4><ul>
+<li>cmd + shift + f 调出多文件搜索</li>
+<li>搜索框下面的三个点，能配置包含的文件和排除的文件，书写格式是 glob 语法</li>
+</ul>
+<h4 id="多文件搜索配置"><a href="#多文件搜索配置" class="headerlink" title="多文件搜索配置"></a>多文件搜索配置</h4><ul>
+<li>search.collapseResults : &quot;alwaysExpand&quot; 搜索结果始终打开</li>
+<li>search.location: &quot;panel&quot; 搜索框放到底部</li>
+<li>search.globalFindClipboard 和 editor.find.globalFindClipboard 控制“搜索”视图是否读取或修改 macOS 的共享查找剪贴板</li>
+</ul>
+<h3 id="优化编辑器设置"><a href="#优化编辑器设置" class="headerlink" title="优化编辑器设置"></a>优化编辑器设置</h3><ul>
+<li>编辑器行号 editor.lineNumbers</li>
+<li>编辑器空格 editor.renderWhitespace </li>
+<li>缩进参考线 editor.renderIndentGuides</li>
+<li>垂直标尺   editor.rulers:[120]</li>
+<li>小地图      editor.minimap.enabled</li>
+<li>光标          editor.cursorBlinking | style | width</li>
+<li>当前行高亮  editor.renderLineHeight</li>
+</ul>
+<h3 id="什么是工作台和命令面板"><a href="#什么是工作台和命令面板" class="headerlink" title="什么是工作台和命令面板"></a>什么是工作台和命令面板</h3><h4 id="工作台-workbench"><a href="#工作台-workbench" class="headerlink" title="工作台 workbench"></a>工作台 workbench</h4><ul>
+<li>左侧的几个 UI 组件比较简单，用的该已经熟悉了，需要说的是下面的那个设置按钮，用起来还是比较方便的</li>
+<li>底部是状态栏</li>
+<li>顶部是标题栏</li>
+<li>面板有四个组件 问题面板、输出面板、调试控制台、输出终端，加上我把 search.location 也设置为了 panel，所以会有五个</li>
+</ul>
+<h4 id="命令面板"><a href="#命令面板" class="headerlink" title="命令面板"></a>命令面板</h4><ul>
+<li>命令面板（基于文本的交互界面） 输入 ？ 你就可以看到十几条选项，分别代表你能在命令面板中使用不同的功能，首先就是几个符号<ol>
+<li><blockquote>
+<p>显示所有命令</p>
+</blockquote>
+</li>
+<li>@ 显示跳转和文件中symbols 加 ： 分类</li>
+<li>&#39;#&#39; 显示跳转和工作区中的符号</li>
+<li>： lines<br>还有几个就是英文单词或者缩写</li>
+<li>edt 编辑</li>
+<li>ext </li>
+<li>task debug</li>
+<li>term</li>
+<li>view 这个就可以打开各个组件</li>
+</ol>
+</li>
+</ul>
+<h3 id="了解文件管理，什么是-multiroot-workspace"><a href="#了解文件管理，什么是-multiroot-workspace" class="headerlink" title="了解文件管理，什么是 multiroot workspace"></a>了解文件管理，什么是 multiroot workspace</h3><ul>
+<li>资源管理器、关于资源管理器的设置 explorer、</li>
+<li>.vscode 文件夹、第一个配置文件是 settings.json, 还有另外两个 launch.json tasks.json </li>
+<li>多文件夹工作区，通过搜索命令面板 add folder to workspace, 添加工作区，save workspace as 之后会有一个后缀为 .code-workspace 的文件，这个文件有两个 key, 一个是 folders，一个是 settings，当然还有两个可选的键 extentsions 和 launch</li>
+<li>ctrl + r 打开最近的文件夹，cmd + enter 就可以在新窗口打开</li>
+<li>ctrl + w 切换窗口</li>
+</ul>
+<h3 id="怎么在编辑器里做好版本管理？"><a href="#怎么在编辑器里做好版本管理？" class="headerlink" title="怎么在编辑器里做好版本管理？"></a>怎么在编辑器里做好版本管理？</h3><h4 id="版本管理视图"><a href="#版本管理视图" class="headerlink" title="版本管理视图"></a>版本管理视图</h4><ul>
+<li><p>ctrl + shift + g 打开版本管理视图</p>
+</li>
+<li><p>git 和 svn 基本都同样的界面，但是也有差异，先拿 git 来说，比如说 git 有三种主要的文件状态 committed 已提交， Modified 修改， staged 暂存，当我们修改了一个文件，它会变成 Modified， 然后我们通过脚本 git add ${filename} 把这个文件状态改为暂存，被标记为暂存状态的文件，才有机会被提交，最后我们通过 git commit 来提交所有在暂存状态里的文件</p>
+</li>
+</ul>
+<h3 id="配置终端模拟器"><a href="#配置终端模拟器" class="headerlink" title="配置终端模拟器"></a>配置终端模拟器</h3><blockquote>
+<p>图形化界面不可能适应每个人，也不可能替我们完成所有可能的操作</p>
+</blockquote>
+<blockquote>
+<p>vscode 的理念：用图形化的工具，只完成最常用的或者 GUI 擅长做的那些操作，而把剩下的那部分重新交还给终端</p>
+</blockquote>
+<blockquote>
+<p>内置的终端又叫做集成终端</p>
+</blockquote>
+<h4 id="创建终端"><a href="#创建终端" class="headerlink" title="创建终端"></a>创建终端</h4><ul>
+<li>ctrl + ` toggle integrated terminal (切换集成终端, 打开或者关闭)</li>
+<li>ctrl + shift + ` create new integrated terminal (新建集成终端)</li>
+<li>cmd + \ split terminal （拆分终端）</li>
+<li>终止终端在命令面板中设置 kill the active terminal instance</li>
+</ul>
+<h4 id="终端内操作以及设置"><a href="#终端内操作以及设置" class="headerlink" title="终端内操作以及设置"></a>终端内操作以及设置</h4><p>&quot;terminal.integrated.shell.osx&quot;: &quot;/bin/zsh&quot; 修改启动 shell 环境<br>&quot;terminal.integrated.env.osx&quot;: {} 设置环境变量<br>&quot;terminal.integrated.cwd&quot;: &quot;&quot; shell 启动时的初始目录<br>&quot;terminal.integrated.rightClickBehavior&quot;: &quot;selectWord&quot; 控制右键点击行为<br>&quot;terminal.integrated.scrollback&quot;: 1000 终端运行脚本显示的行数</p>
+<h3 id="为你的项目打造-workflow"><a href="#为你的项目打造-workflow" class="headerlink" title="为你的项目打造 workflow"></a>为你的项目打造 workflow</h3><h4 id="执行任务"><a href="#执行任务" class="headerlink" title="执行任务"></a>执行任务</h4><blockquote>
+<p>任务系统的目的就是将各种形形色色的任务脚本尽可能地统一化，然后提供一套简单又定制化强的方式操作他们</p>
+</blockquote>
+<h5 id="任务自动检测"><a href="#任务自动检测" class="headerlink" title="任务自动检测"></a>任务自动检测</h5><p>如果你的项目中有 typescript grunt jake gulp npm 这几个脚本工具的配置文件的话，vscode 会自动读取当前文件夹下的配置。</p>
+<p>如果有 package.json， 命令面板搜索运行任务 run task 时，就能看到 npm 相关的任务（文件就是 .vscode 下面的 task.json）</p>
+<h5 id="自定义任务（configure-task）"><a href="#自定义任务（configure-task）" class="headerlink" title="自定义任务（configure task）"></a>自定义任务（configure task）</h5><ul>
+<li>type 为 shell</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;version&quot;: &quot;2.0.0&quot;,</span><br><span class="line">  &quot;tasks&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;label&quot;: &quot;echo&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;shell&quot;, &#x2F;&#x2F; 默认 shell</span><br><span class="line">      &quot;command&quot;: &quot;echo Hello&quot;  &#x2F;&#x2F; 命令或者程序</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>type 为 process, 打开 qq 浏览器</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">      &quot;label&quot;: &quot;QQBrowser&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;process&quot;,</span><br><span class="line">      &quot;command&quot;: &quot;&#x2F;Applications&#x2F;QQBrowser.app&#x2F;Contents&#x2F;MacOS&#x2F;QQBrowser&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="分组和结果显示"><a href="#分组和结果显示" class="headerlink" title="分组和结果显示"></a>分组和结果显示</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;label&quot;: &quot;test shell&quot;,</span><br><span class="line">  &quot;type&quot;: &quot;shell&quot;,</span><br><span class="line">  &quot;command&quot;: &quot;.&#x2F;test.sh&quot;,</span><br><span class="line">  &quot;args&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">    	&quot;value&quot;: &quot;hello&quot;,</span><br><span class="line">    	&quot;quoting&quot;: &quot;escape&quot; &#x2F;&#x2F; 默认使用 escape，strong 是单引号，weak 是双引号</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">  &quot;windows&quot;: &#123;</span><br><span class="line">    &quot;command&quot;: &quot;.\\scripts\\test.cmd&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;group&quot;: &#123;   &#x2F;&#x2F; 三种选择 build test none</span><br><span class="line">    &quot;isDefault&quot;: true,   &#x2F;&#x2F; 设为默认运行测试任务</span><br><span class="line">    &quot;kind&quot;: &quot;test&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;presentation&quot;: &#123;  &#x2F;&#x2F; 任务运行的时候是否调出运行的界面</span><br><span class="line">    &quot;reveal&quot;: &quot;always&quot;,  </span><br><span class="line">    &quot;panel&quot;: &quot;new&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;options&quot;: &#123;</span><br><span class="line">    &quot;cwd&quot;: &quot;&quot;, &#x2F;&#x2F; 任务脚本文件夹地址</span><br><span class="line">    &quot;env&quot;: &#123;&#125;, &#x2F;&#x2F; 环境变量</span><br><span class="line">    &quot;shell&quot;: &#123; &#x2F;&#x2F; 指定 shell 环境</span><br><span class="line">      &quot;executable&quot;: &quot;bash&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>  <strong>但是现在有一个问题就是 run test 可以运行，但是 cmd shift b 却不行</strong></p>
+<h3 id="debugger"><a href="#debugger" class="headerlink" title="debugger"></a>debugger</h3><h4 id="调试窗口"><a href="#调试窗口" class="headerlink" title="调试窗口"></a>调试窗口</h4><ul>
+<li>打开 cmd + shift + d</li>
+<li>f5 开始调试</li>
+</ul>
+<p>vscode 用于配置调试的文件也是一个 json 文件，launch.json</p>
+<h4 id="调试-launch-json"><a href="#调试-launch-json" class="headerlink" title="调试 launch.json"></a>调试 launch.json</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> &#x2F;&#x2F; 使用 IntelliSense 了解相关属性。 </span><br><span class="line"> &#x2F;&#x2F; 悬停以查看现有属性的描述。</span><br><span class="line"> &#x2F;&#x2F; 欲了解更多信息，请访问: https:&#x2F;&#x2F;go.microsoft.com&#x2F;fwlink&#x2F;?linkid&#x3D;830387</span><br><span class="line"> &quot;version&quot;: &quot;0.2.0&quot;,</span><br><span class="line"> &quot;configurations&quot;: [</span><br><span class="line">  &#123;</span><br><span class="line">   &quot;type&quot;: &quot;node&quot;, &#x2F;&#x2F; 调试器的类型</span><br><span class="line">   &quot;request&quot;: &quot;launch&quot;, &#x2F;&#x2F; 如果我们的代码已经运行起来了，则可以将它的值设为 attach 我们则是使用调试器来调试已有的代码进程，如果值是 launch，意味着我们会使用调试器来调试这个已有的代码进程</span><br><span class="line">   &quot;name&quot;: &quot; 启动程序 &quot;, &#x2F;&#x2F; 这个配置的名字</span><br><span class="line">   &quot;program&quot;: &quot;$&#123;file&#125;&quot;</span><br><span class="line">  &#125;</span><br><span class="line"> ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>剩下的模板和智能提示已经做得很好了，还有就是新增加的参数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> &quot;type&quot;: &quot;node&quot;,</span><br><span class="line"> &quot;request&quot;: &quot;launch&quot;,</span><br><span class="line"> &quot;name&quot;: &quot;Gulp task&quot;,</span><br><span class="line"> &quot;program&quot;: &quot;$&#123;workspaceFolder&#125;&#x2F;node_modules&#x2F;gulp&#x2F;bin&#x2F;gulp.js&quot;,</span><br><span class="line"> &quot;args&quot;: [ &#x2F;&#x2F; 传入的参数</span><br><span class="line">  &quot;task&quot;</span><br><span class="line"> ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="你不知道的工作区快捷键"><a href="#你不知道的工作区快捷键" class="headerlink" title="你不知道的工作区快捷键"></a>你不知道的工作区快捷键</h3><h4 id="编辑器操作"><a href="#编辑器操作" class="headerlink" title="编辑器操作"></a>编辑器操作</h4><h5 id="横向编辑器组（多个编辑器称为编辑器组-editor-group）"><a href="#横向编辑器组（多个编辑器称为编辑器组-editor-group）" class="headerlink" title="横向编辑器组（多个编辑器称为编辑器组 editor group）"></a>横向编辑器组（多个编辑器称为编辑器组 editor group）</h5><ul>
+<li>拆分编辑器 （split editor） cmd + \</li>
+<li>关闭编辑器依然可以用 cmd + w</li>
+<li>编辑器组之间快速跳转 ctrl + 1、2</li>
+</ul>
+<h5 id="纵向编辑器组"><a href="#纵向编辑器组" class="headerlink" title="纵向编辑器组"></a>纵向编辑器组</h5><ul>
+<li>切换垂直/水平编辑器布局（flip editor group layout） cmd + option + 0</li>
+</ul>
+<h5 id="Tab"><a href="#Tab" class="headerlink" title="Tab"></a>Tab</h5><ul>
+<li>打开上一个/下一个编辑器（open next/previous editor）cmd + option + ←/→ 需要注意的是这个命令会打开编辑器中的每一个tab，如果你需要在 group 中你需要（open next editor in group）</li>
+</ul>
+<h5 id="移动编辑器-tab"><a href="#移动编辑器-tab" class="headerlink" title="移动编辑器 tab"></a>移动编辑器 tab</h5><ul>
+<li>move editor into next/previous group</li>
+</ul>
+<h5 id="grid-布局"><a href="#grid-布局" class="headerlink" title="grid 布局"></a>grid 布局</h5><ul>
+<li>grid editor layout 2*2</li>
+<li>聚焦到上方编辑器组（focus above editor group）</li>
+</ul>
+<h5 id="drag-amp-drop"><a href="#drag-amp-drop" class="headerlink" title="drag &amp; drop"></a>drag &amp; drop</h5><p>虽然网格系统很强大，但是不一定它就一定是合适的，一般而言，左右两个编辑器组就够用了，只需要熟悉几个快捷键就行了，还有就是可以使用鼠标，拖到你想要的位置</p>
+<h5 id="专注模式"><a href="#专注模式" class="headerlink" title="专注模式"></a>专注模式</h5><ul>
+<li>关闭视图（toggle ） cmd + b</li>
+<li>关闭面板（toggle panel） cmd + J</li>
+<li>切换活动栏（toggle activity bar visibility）</li>
+<li>切换状态栏（toggle status bar visibility）</li>
+<li>切换禅模式（toggle zen model）,esc退出</li>
+<li>切换居中布局（toggle centered layout）</li>
+</ul>
+<p><img src="https://static001.geekbang.org/resource/image/11/8c/1111c17d45a16da352a5b71f05c6d18c.png" alt="创造自己的工作台" loading="lazy"></p>
+<h3 id="编辑器设置和快捷键"><a href="#编辑器设置和快捷键" class="headerlink" title="编辑器设置和快捷键"></a>编辑器设置和快捷键</h3><p>主要说快捷键绑定的一些操作，其他的操作都比较简单，有图形化的界面</p>
+<p>打开 keybindings.json 在右边可以设置自己的快捷键</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;key&quot;: &quot;cmd+enter&quot;,   &#x2F;&#x2F; 按键</span><br><span class="line">  &quot;command&quot;: &quot;command&quot;,  &#x2F;&#x2F; 为那个命令指定快捷键</span><br><span class="line">  &quot;when&quot;: &quot;editorTextFocus&quot; &#x2F;&#x2F; 条件</span><br><span class="line">  		可以用 ！ &#x3D;&#x3D;  &amp;&amp; 和 &#x3D;~（正则）</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>要删除快捷键在 command 上加 - 就行了</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;key&quot;: &quot;cmd+s&quot;,</span><br><span class="line">  &quot;command&quot;: &quot;-workbench.action.files.save&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="基础语言支持：JSON-Markdown"><a href="#基础语言支持：JSON-Markdown" class="headerlink" title="基础语言支持：JSON Markdown"></a>基础语言支持：JSON Markdown</h3><h4 id="JSON"><a href="#JSON" class="headerlink" title="JSON"></a>JSON</h4><p>vscode 的配置文件、任务系统、代码片段都是使用 JSON 语法，而且 vscode 为文件指定了一个特殊的 JSON 文件类型，称为 JSON width Comments</p>
+<p>与此同时，JSON 的语言服务支持 JSON Schema，可以规范 JSON 内容的格式，和做一定程度的语法检查</p>
+<p>在自己的个人设置或者工作区设置中可以有三种情况，修改 json.schemas 就行了</p>
+<h5 id="第一种"><a href="#第一种" class="headerlink" title="第一种"></a>第一种</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">   &quot;$schema&quot;: &quot;http:&#x2F;&#x2F;json.schemastore.org&#x2F;babelrc&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="第二种"><a href="#第二种" class="headerlink" title="第二种"></a>第二种</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;json.schemas&quot;: [</span><br><span class="line">     &#123;</span><br><span class="line">        &quot;fileMatch&quot;: [</span><br><span class="line">            &quot;&#x2F;.babelrc&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;url&quot;: &quot;http:&#x2F;&#x2F;json.schemastore.org&#x2F;babelrc&quot;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="第三种"><a href="#第三种" class="headerlink" title="第三种"></a>第三种</h5><p><strong>注意默认情况下 vscode 并不认识自己设置的文件，需要点击语言设置选择 JSON</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;fileMatch&quot;: [</span><br><span class="line">    &quot;&#x2F;.myconfig&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;schema&quot;: &#123;</span><br><span class="line">    &quot;type&quot;: &quot;object&quot;,</span><br><span class="line">    &quot;properties&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;string&quot;,</span><br><span class="line">        &quot;description&quot;: &quot;the name of the iiicon wanna&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="前端语言支持"><a href="#前端语言支持" class="headerlink" title="前端语言支持"></a>前端语言支持</h3><h4 id="基础语言支持"><a href="#基础语言支持" class="headerlink" title="基础语言支持"></a>基础语言支持</h4><p>转到定义 go to definition (F12)<br>格式化文件 fromat document<br>符号跳转 cmd shift o<br>函数建议列表和参数建议</p>
+<h4 id="类型提示"><a href="#类型提示" class="headerlink" title="类型提示"></a>类型提示</h4><h5 id="JSDoc"><a href="#JSDoc" class="headerlink" title="JSDoc"></a>JSDoc</h5><h5 id="typings-d-ts"><a href="#typings-d-ts" class="headerlink" title="typings/d.ts"></a>typings/d.ts</h5><p>VS Code 会自动搜索，找到合适的 d.ts 文件，然后下载下来，接着就能提供智能提示功能了，这种功能又叫做自动采集功能 auto type acquisition    </p>
+<h5 id="ts-check-真是一个好东西"><a href="#ts-check-真是一个好东西" class="headerlink" title="ts-check(真是一个好东西)"></a>ts-check(真是一个好东西)</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; @ts-check 手动开启更强的代码审核</span><br></pre></td></tr></table></figure>
+
+<h4 id="模块引用"><a href="#模块引用" class="headerlink" title="模块引用"></a>模块引用</h4><h5 id="相对地址引用"><a href="#相对地址引用" class="headerlink" title="相对地址引用"></a>相对地址引用</h5><h5 id="jsconfig-json"><a href="#jsconfig-json" class="headerlink" title="jsconfig.json"></a>jsconfig.json</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;compilerOptions&quot;: &#123;</span><br><span class="line">        &quot;module&quot;: &quot;commonjs&quot;,</span><br><span class="line">        &quot;target&quot;: &quot;es2016&quot;,</span><br><span class="line">        &quot;baseUrl&quot;: &quot;.&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;exclude&quot;: [</span><br><span class="line">        &quot;node_modules&quot;,</span><br><span class="line">        &quot;**&#x2F;node_modules&#x2F;*&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="自模块引用-auto-imports"><a href="#自模块引用-auto-imports" class="headerlink" title="自模块引用 auto imports"></a>自模块引用 auto imports</h5><h5 id="自动模块更新"><a href="#自动模块更新" class="headerlink" title="自动模块更新"></a>自动模块更新</h5><p>当你文件的路径改变的时候会自动修改 import 的文件路径</p>
+<h4 id="代码审查-tsconfig-checkJs"><a href="#代码审查-tsconfig-checkJs" class="headerlink" title="代码审查 tsconfig/checkJs"></a>代码审查 tsconfig/checkJs</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;compilerOptions&quot;: &#123;</span><br><span class="line">        &quot;module&quot;: &quot;commonjs&quot;,</span><br><span class="line">        &quot;target&quot;: &quot;es2016&quot;,</span><br><span class="line">        &quot;baseUrl&quot;: &quot;.&quot;,</span><br><span class="line">        &quot;paths&quot;: &#123;</span><br><span class="line">            &quot;*&quot;: [</span><br><span class="line">                &quot;*&quot;,</span><br><span class="line">                &quot;common&#x2F;*&quot;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;checkJs&quot;: true</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;exclude&quot;: [</span><br><span class="line">        &quot;node_modules&quot;,</span><br><span class="line">        &quot;**&#x2F;node_modules&#x2F;*&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h4><blockquote>
+<p>vscode 的代码调试 api，nodejs 是支持最好的</p>
+</blockquote>
+<h5 id="代码调试-auto-attach"><a href="#代码调试-auto-attach" class="headerlink" title="代码调试 auto attach"></a>代码调试 auto attach</h5><p>打开命令面板 输入切换开关自动附加 toggle auto attach, 然后打断点，接着执行命令 <code>node --inspect-brk index.js</code>,个人感觉用处不大的原因可能还是平时不怎么写 node，写 node 的话可以省去平时写 lunch.json 的麻烦</p>
+<h5 id="记录点-logpoints"><a href="#记录点-logpoints" class="headerlink" title="记录点 logpoints"></a>记录点 logpoints</h5><p>一样可以得到输出结果，而且不用改变代码</p>
+<h3 id="HTML、CSS-以及前端开关神器-Emmet-介绍与支持"><a href="#HTML、CSS-以及前端开关神器-Emmet-介绍与支持" class="headerlink" title="HTML、CSS 以及前端开关神器 Emmet 介绍与支持"></a>HTML、CSS 以及前端开关神器 Emmet 介绍与支持</h3><h4 id="HTML、CSS"><a href="#HTML、CSS" class="headerlink" title="HTML、CSS"></a>HTML、CSS</h4><h5 id="1-取色器-color-picker"><a href="#1-取色器-color-picker" class="headerlink" title="1 取色器 color picker"></a>1 取色器 color picker</h5><p>五个部件 饱和度（saturation）透明度（opacity）色相（hue）上方左侧不同写法，右侧回退之前</p>
+<h5 id="2-预览"><a href="#2-预览" class="headerlink" title="2 预览"></a>2 预览</h5><p>经测试也只能在 css 中预览 html 结构</p>
+<h4 id="Emmet"><a href="#Emmet" class="headerlink" title="Emmet"></a>Emmet</h4><pre><code>子节点操作符 &gt;
+ul&gt;li
+
+兄弟节点操作符 +
+div+p+bq
+
+乘法操作 *
+ul&gt;li*3
+
+class name Id
+ul#list&gt;list*3
+
+官方例子
+#page&gt;div.logo+ul#navigation&gt;li*5&gt;a&#123;Item $&#125;</code></pre>
+<h4 id="Emmet-in-vscode"><a href="#Emmet-in-vscode" class="headerlink" title="Emmet in vscode"></a>Emmet in vscode</h4><h5 id="展开缩写"><a href="#展开缩写" class="headerlink" title="展开缩写"></a>展开缩写</h5><p>默认 tab 展开是关闭的 可以设置 <code>emmet.triggerExpansionOnTab</code></p>
+<h5 id="建议列表"><a href="#建议列表" class="headerlink" title="建议列表"></a>建议列表</h5><p>比如 p10 padding: 10px</p>
+<h5 id="使用缩写包围"><a href="#使用缩写包围" class="headerlink" title="使用缩写包围"></a>使用缩写包围</h5><p>选中要包围的标签，打开命令面板输入缩写包围，wrap with abbreviation</p>
+<h5 id="多光标也支持缩写包围"><a href="#多光标也支持缩写包围" class="headerlink" title="多光标也支持缩写包围"></a>多光标也支持缩写包围</h5><h5 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h5><p>标签转至配对 emmet: 转至匹配对（go to matching pair）<br>删除标签对 emmet: 移除标签 （remove tag）</p>
+<h5 id="在某个语言中打开-emmet-支持"><a href="#在某个语言中打开-emmet-支持" class="headerlink" title="在某个语言中打开 emmet 支持"></a>在某个语言中打开 emmet 支持</h5><pre><code>&quot;emmet.includeLanguages&quot;: &#123;
+    &quot;wxml&quot;: &quot;html&quot;,
+    &quot;vue-html&quot;: &quot;html&quot;
+&#125;</code></pre>
+<h3 id="如何深度定制自己的主题"><a href="#如何深度定制自己的主题" class="headerlink" title="如何深度定制自己的主题"></a>如何深度定制自己的主题</h3><h4 id="固定-UI-视图"><a href="#固定-UI-视图" class="headerlink" title="固定 UI 视图"></a>固定 UI 视图</h4><ul>
+<li>切换状态栏可见性 toggle status bar visibility</li>
+<li>切换侧边栏位置 toggle side bar position</li>
+<li>切换搜索视图位置 </li>
+</ul>
+<h4 id="修改工作区配色"><a href="#修改工作区配色" class="headerlink" title="修改工作区配色"></a>修改工作区配色</h4><p><em>个人表示懒得弄</em></p>
+<pre><code>workbench.colorCustomizations 触发提示就能看到了</code></pre>
+<h4 id="修改编辑器配色"><a href="#修改编辑器配色" class="headerlink" title="修改编辑器配色"></a>修改编辑器配色</h4><p>检查 TM 作用域（inspect TM scope）运行这个命令会有一个悬浮窗口呈现，就是当前代码缩对应的语言、语法类型以及当前的颜色和背景色</p>
+<pre><code>editor.tokenColorCustomization 设置颜色</code></pre>
+<h4 id="基于主题修改配色"><a href="#基于主题修改配色" class="headerlink" title="基于主题修改配色"></a>基于主题修改配色</h4><p>也一样，设置的时候先选择主题就行了</p>
+<h3 id="一些可能没有用的-tips-amp-tricks"><a href="#一些可能没有用的-tips-amp-tricks" class="headerlink" title="一些可能没有用的 tips &amp; tricks"></a>一些可能没有用的 tips &amp; tricks</h3><p>跳转 F12 自己的 mac 只能切屏 不起作用</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/vscode/" rel="tag"># vscode</a>
+              <a href="/tags/compiler/" rel="tag"># compiler</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/12/16/code-convention/" rel="prev" title="code-convention">
+      <i class="fa fa-chevron-left"></i> code-convention
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/12/25/vscode-extensions/" rel="next" title="VS Code 插件管理">
+      VS Code 插件管理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%8A%E6%89%8B-vscode"><span class="nav-number">1.</span> <span class="nav-text">1 上手 vscode</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">1.1.</span> <span class="nav-text">命令行的使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%A0%B8%E5%BF%83%E7%9A%84%E9%94%AE%E7%9B%98%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">2 核心的键盘操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%89%E6%A0%87%E7%9A%84%E7%A7%BB%E5%8A%A8%EF%BC%88%E4%B8%80%E4%B8%AA%E6%96%B9%E5%90%91%E8%AF%B4%E6%98%8E%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">光标的移动（一个方向说明）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E9%80%89%E6%8B%A9"><span class="nav-number">2.2.</span> <span class="nav-text">文本选择</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C"><span class="nav-number">2.3.</span> <span class="nav-text">删除操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%BF%AB%E6%8D%B7%E9%94%AE%E8%BF%9B%E9%98%B6"><span class="nav-number">3.</span> <span class="nav-text">3 快捷键进阶</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%A1%8C%E7%BC%96%E8%BE%91"><span class="nav-number">3.1.</span> <span class="nav-text">代码行编辑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E7%9B%B8%E5%85%B3%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="nav-number">3.2.</span> <span class="nav-text">编程语言相关的命令</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E6%B3%A8%E9%87%8A"><span class="nav-number">3.2.1.</span> <span class="nav-text">添加注释</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="nav-number">3.2.2.</span> <span class="nav-text">代码格式化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E7%BC%A9%E8%BF%9B"><span class="nav-number">3.2.3.</span> <span class="nav-text">代码缩进</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BD%99%E5%B0%8F%E6%8A%80%E5%B7%A7"><span class="nav-number">3.3.</span> <span class="nav-text">其余小技巧</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%A4%9A%E5%85%89%E6%A0%87%E7%89%B9%E6%80%A7"><span class="nav-number">4.</span> <span class="nav-text">4 多光标特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E5%9C%A8%E6%96%87%E4%BB%B6-%E4%BB%A3%E7%A0%81-%E7%AC%A6%E5%8F%B7%E4%B9%8B%E9%97%B4%E8%B7%B3%E8%BD%AC"><span class="nav-number">5.</span> <span class="nav-text">5 如何快速在文件 代码 符号之间跳转</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E8%B7%B3%E8%BD%AC"><span class="nav-number">5.1.</span> <span class="nav-text">文件跳转</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A1%8C%E8%B7%B3%E8%BD%AC"><span class="nav-number">5.2.</span> <span class="nav-text">行跳转</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%A6%E5%8F%B7%EF%BC%88symbols%EF%BC%89%E8%B7%B3%E8%BD%AC"><span class="nav-number">5.3.</span> <span class="nav-text">符号（symbols）跳转</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E6%96%87%E4%BB%B6%E7%AC%A6%E5%8F%B7%E8%B7%B3%E8%BD%AC%E6%9A%82%E4%B8%94%E4%B8%8D%E6%8F%90"><span class="nav-number">5.4.</span> <span class="nav-text">多文件符号跳转暂且不提 - -</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E4%BB%A3%E7%A0%81%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8%E3%80%81%E5%BF%AB%E9%80%9F%E4%BF%AE%E5%A4%8D%E5%92%8C%E9%87%8D%E6%9E%84"><span class="nav-number">6.</span> <span class="nav-text">6 代码自动补全、快速修复和重构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E5%A6%82%E4%BD%95%E4%B9%A6%E5%86%99-code-snippet"><span class="nav-number">7.</span> <span class="nav-text">7 如何书写 code snippet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-%E4%BB%A3%E7%A0%81%E6%8A%98%E5%8F%A0%E3%80%81%E5%B0%8F%E5%9C%B0%E5%9B%BE%E3%80%81%E9%9D%A2%E5%8C%85%E5%B1%91%E7%89%B9%E6%80%A7"><span class="nav-number">8.</span> <span class="nav-text">8 代码折叠、小地图、面包屑特性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E4%BB%A3%E7%A0%81%E6%8A%98%E5%8F%A0"><span class="nav-number">8.1.</span> <span class="nav-text">关于代码折叠</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E5%9C%B0%E5%9B%BE"><span class="nav-number">8.2.</span> <span class="nav-text">小地图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%A2%E5%8C%85%E5%B1%91-%EF%BC%88breadcrumb%EF%BC%89"><span class="nav-number">8.3.</span> <span class="nav-text">面包屑 （breadcrumb）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-%E6%9E%81%E9%80%9F%E6%90%9C%E7%B4%A2%E6%9C%89%E6%97%B6%E5%80%99%E6%AF%94-intellisense-%E8%BF%98%E8%A6%81%E9%87%8D%E8%A6%81%EF%BC%88%E8%BF%99%E9%87%8C%E7%95%99%E4%B8%80%E4%B8%AA%E7%96%91%E9%97%AE%EF%BC%89"><span class="nav-number">9.</span> <span class="nav-text">9 极速搜索有时候比 intellisense 还要重要（这里留一个疑问）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E6%96%87%E4%BB%B6%E6%90%9C%E7%B4%A2"><span class="nav-number">9.1.</span> <span class="nav-text">单文件搜索</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2%E9%85%8D%E7%BD%AE"><span class="nav-number">9.2.</span> <span class="nav-text">搜索配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E6%96%87%E4%BB%B6%E6%9B%BF%E6%8D%A2"><span class="nav-number">9.3.</span> <span class="nav-text">单文件替换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E6%96%87%E4%BB%B6%E6%90%9C%E7%B4%A2%E5%92%8C%E6%9B%BF%E6%8D%A2"><span class="nav-number">9.4.</span> <span class="nav-text">多文件搜索和替换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E6%96%87%E4%BB%B6%E6%90%9C%E7%B4%A2%E9%85%8D%E7%BD%AE"><span class="nav-number">9.5.</span> <span class="nav-text">多文件搜索配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E7%BC%96%E8%BE%91%E5%99%A8%E8%AE%BE%E7%BD%AE"><span class="nav-number">10.</span> <span class="nav-text">优化编辑器设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%92%8C%E5%91%BD%E4%BB%A4%E9%9D%A2%E6%9D%BF"><span class="nav-number">11.</span> <span class="nav-text">什么是工作台和命令面板</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E5%8F%B0-workbench"><span class="nav-number">11.1.</span> <span class="nav-text">工作台 workbench</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E9%9D%A2%E6%9D%BF"><span class="nav-number">11.2.</span> <span class="nav-text">命令面板</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%86%E8%A7%A3%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86%EF%BC%8C%E4%BB%80%E4%B9%88%E6%98%AF-multiroot-workspace"><span class="nav-number">12.</span> <span class="nav-text">了解文件管理，什么是 multiroot workspace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%9C%A8%E7%BC%96%E8%BE%91%E5%99%A8%E9%87%8C%E5%81%9A%E5%A5%BD%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%EF%BC%9F"><span class="nav-number">13.</span> <span class="nav-text">怎么在编辑器里做好版本管理？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E8%A7%86%E5%9B%BE"><span class="nav-number">13.1.</span> <span class="nav-text">版本管理视图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%BB%88%E7%AB%AF%E6%A8%A1%E6%8B%9F%E5%99%A8"><span class="nav-number">14.</span> <span class="nav-text">配置终端模拟器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%BB%88%E7%AB%AF"><span class="nav-number">14.1.</span> <span class="nav-text">创建终端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%88%E7%AB%AF%E5%86%85%E6%93%8D%E4%BD%9C%E4%BB%A5%E5%8F%8A%E8%AE%BE%E7%BD%AE"><span class="nav-number">14.2.</span> <span class="nav-text">终端内操作以及设置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BD%A0%E7%9A%84%E9%A1%B9%E7%9B%AE%E6%89%93%E9%80%A0-workflow"><span class="nav-number">15.</span> <span class="nav-text">为你的项目打造 workflow</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1"><span class="nav-number">15.1.</span> <span class="nav-text">执行任务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E8%87%AA%E5%8A%A8%E6%A3%80%E6%B5%8B"><span class="nav-number">15.1.1.</span> <span class="nav-text">任务自动检测</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BB%BB%E5%8A%A1%EF%BC%88configure-task%EF%BC%89"><span class="nav-number">15.1.2.</span> <span class="nav-text">自定义任务（configure task）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%86%E7%BB%84%E5%92%8C%E7%BB%93%E6%9E%9C%E6%98%BE%E7%A4%BA"><span class="nav-number">15.1.3.</span> <span class="nav-text">分组和结果显示</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#debugger"><span class="nav-number">16.</span> <span class="nav-text">debugger</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E7%AA%97%E5%8F%A3"><span class="nav-number">16.1.</span> <span class="nav-text">调试窗口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B0%83%E8%AF%95-launch-json"><span class="nav-number">16.2.</span> <span class="nav-text">调试 launch.json</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8C%BA%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="nav-number">17.</span> <span class="nav-text">你不知道的工作区快捷键</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E5%99%A8%E6%93%8D%E4%BD%9C"><span class="nav-number">17.1.</span> <span class="nav-text">编辑器操作</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A8%AA%E5%90%91%E7%BC%96%E8%BE%91%E5%99%A8%E7%BB%84%EF%BC%88%E5%A4%9A%E4%B8%AA%E7%BC%96%E8%BE%91%E5%99%A8%E7%A7%B0%E4%B8%BA%E7%BC%96%E8%BE%91%E5%99%A8%E7%BB%84-editor-group%EF%BC%89"><span class="nav-number">17.1.1.</span> <span class="nav-text">横向编辑器组（多个编辑器称为编辑器组 editor group）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BA%B5%E5%90%91%E7%BC%96%E8%BE%91%E5%99%A8%E7%BB%84"><span class="nav-number">17.1.2.</span> <span class="nav-text">纵向编辑器组</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Tab"><span class="nav-number">17.1.3.</span> <span class="nav-text">Tab</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%A7%BB%E5%8A%A8%E7%BC%96%E8%BE%91%E5%99%A8-tab"><span class="nav-number">17.1.4.</span> <span class="nav-text">移动编辑器 tab</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#grid-%E5%B8%83%E5%B1%80"><span class="nav-number">17.1.5.</span> <span class="nav-text">grid 布局</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#drag-amp-drop"><span class="nav-number">17.1.6.</span> <span class="nav-text">drag &amp; drop</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%93%E6%B3%A8%E6%A8%A1%E5%BC%8F"><span class="nav-number">17.1.7.</span> <span class="nav-text">专注模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E5%99%A8%E8%AE%BE%E7%BD%AE%E5%92%8C%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="nav-number">18.</span> <span class="nav-text">编辑器设置和快捷键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E8%AF%AD%E8%A8%80%E6%94%AF%E6%8C%81%EF%BC%9AJSON-Markdown"><span class="nav-number">19.</span> <span class="nav-text">基础语言支持：JSON Markdown</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#JSON"><span class="nav-number">19.1.</span> <span class="nav-text">JSON</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E7%A7%8D"><span class="nav-number">19.1.1.</span> <span class="nav-text">第一种</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E7%A7%8D"><span class="nav-number">19.1.2.</span> <span class="nav-text">第二种</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E7%A7%8D"><span class="nav-number">19.1.3.</span> <span class="nav-text">第三种</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF%E8%AF%AD%E8%A8%80%E6%94%AF%E6%8C%81"><span class="nav-number">20.</span> <span class="nav-text">前端语言支持</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E8%AF%AD%E8%A8%80%E6%94%AF%E6%8C%81"><span class="nav-number">20.1.</span> <span class="nav-text">基础语言支持</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E6%8F%90%E7%A4%BA"><span class="nav-number">20.2.</span> <span class="nav-text">类型提示</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#JSDoc"><span class="nav-number">20.2.1.</span> <span class="nav-text">JSDoc</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#typings-d-ts"><span class="nav-number">20.2.2.</span> <span class="nav-text">typings&#x2F;d.ts</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ts-check-%E7%9C%9F%E6%98%AF%E4%B8%80%E4%B8%AA%E5%A5%BD%E4%B8%9C%E8%A5%BF"><span class="nav-number">20.2.3.</span> <span class="nav-text">ts-check(真是一个好东西)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E5%BC%95%E7%94%A8"><span class="nav-number">20.3.</span> <span class="nav-text">模块引用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%9B%B8%E5%AF%B9%E5%9C%B0%E5%9D%80%E5%BC%95%E7%94%A8"><span class="nav-number">20.3.1.</span> <span class="nav-text">相对地址引用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#jsconfig-json"><span class="nav-number">20.3.2.</span> <span class="nav-text">jsconfig.json</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%87%AA%E6%A8%A1%E5%9D%97%E5%BC%95%E7%94%A8-auto-imports"><span class="nav-number">20.3.3.</span> <span class="nav-text">自模块引用 auto imports</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E6%A8%A1%E5%9D%97%E6%9B%B4%E6%96%B0"><span class="nav-number">20.3.4.</span> <span class="nav-text">自动模块更新</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%A1%E6%9F%A5-tsconfig-checkJs"><span class="nav-number">20.4.</span> <span class="nav-text">代码审查 tsconfig&#x2F;checkJs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Node-js"><span class="nav-number">20.5.</span> <span class="nav-text">Node.js</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%B0%83%E8%AF%95-auto-attach"><span class="nav-number">20.5.1.</span> <span class="nav-text">代码调试 auto attach</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AE%B0%E5%BD%95%E7%82%B9-logpoints"><span class="nav-number">20.5.2.</span> <span class="nav-text">记录点 logpoints</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTML%E3%80%81CSS-%E4%BB%A5%E5%8F%8A%E5%89%8D%E7%AB%AF%E5%BC%80%E5%85%B3%E7%A5%9E%E5%99%A8-Emmet-%E4%BB%8B%E7%BB%8D%E4%B8%8E%E6%94%AF%E6%8C%81"><span class="nav-number">21.</span> <span class="nav-text">HTML、CSS 以及前端开关神器 Emmet 介绍与支持</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTML%E3%80%81CSS"><span class="nav-number">21.1.</span> <span class="nav-text">HTML、CSS</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E5%8F%96%E8%89%B2%E5%99%A8-color-picker"><span class="nav-number">21.1.1.</span> <span class="nav-text">1 取色器 color picker</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E9%A2%84%E8%A7%88"><span class="nav-number">21.1.2.</span> <span class="nav-text">2 预览</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Emmet"><span class="nav-number">21.2.</span> <span class="nav-text">Emmet</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Emmet-in-vscode"><span class="nav-number">21.3.</span> <span class="nav-text">Emmet in vscode</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B1%95%E5%BC%80%E7%BC%A9%E5%86%99"><span class="nav-number">21.3.1.</span> <span class="nav-text">展开缩写</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%BB%BA%E8%AE%AE%E5%88%97%E8%A1%A8"><span class="nav-number">21.3.2.</span> <span class="nav-text">建议列表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%BC%A9%E5%86%99%E5%8C%85%E5%9B%B4"><span class="nav-number">21.3.3.</span> <span class="nav-text">使用缩写包围</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%9A%E5%85%89%E6%A0%87%E4%B9%9F%E6%94%AF%E6%8C%81%E7%BC%A9%E5%86%99%E5%8C%85%E5%9B%B4"><span class="nav-number">21.3.4.</span> <span class="nav-text">多光标也支持缩写包围</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%93%8D%E4%BD%9C"><span class="nav-number">21.3.5.</span> <span class="nav-text">其他操作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9C%A8%E6%9F%90%E4%B8%AA%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%89%93%E5%BC%80-emmet-%E6%94%AF%E6%8C%81"><span class="nav-number">21.3.6.</span> <span class="nav-text">在某个语言中打开 emmet 支持</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%B7%B1%E5%BA%A6%E5%AE%9A%E5%88%B6%E8%87%AA%E5%B7%B1%E7%9A%84%E4%B8%BB%E9%A2%98"><span class="nav-number">22.</span> <span class="nav-text">如何深度定制自己的主题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%BA%E5%AE%9A-UI-%E8%A7%86%E5%9B%BE"><span class="nav-number">22.1.</span> <span class="nav-text">固定 UI 视图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%B7%A5%E4%BD%9C%E5%8C%BA%E9%85%8D%E8%89%B2"><span class="nav-number">22.2.</span> <span class="nav-text">修改工作区配色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E7%BC%96%E8%BE%91%E5%99%A8%E9%85%8D%E8%89%B2"><span class="nav-number">22.3.</span> <span class="nav-text">修改编辑器配色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9%E9%85%8D%E8%89%B2"><span class="nav-number">22.4.</span> <span class="nav-text">基于主题修改配色</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%8F%AF%E8%83%BD%E6%B2%A1%E6%9C%89%E7%94%A8%E7%9A%84-tips-amp-tricks"><span class="nav-number">23.</span> <span class="nav-text">一些可能没有用的 tips &amp; tricks</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description">coding note and life perception</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

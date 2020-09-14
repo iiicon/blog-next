@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-Hans,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sgw.wiki","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="Errorvar error &#x3D; new Error(&#39;error&#39;) error 有三个属性 error.name error.message error.stack 参数 error 就是 message 属性 抛出 Error 之后，整个程序就中断在发生错误的地方，不再往下执行 六个派生对象这六个对象是在 Error 对象的基础上生成的，这个六个对象同时也是函数 他们的 pr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="js错误处理机制">
+<meta property="og:url" content="https://sgw.wiki/2019/01/10/js%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="之哥的荣耀">
+<meta property="og:description" content="Errorvar error &#x3D; new Error(&#39;error&#39;) error 有三个属性 error.name error.message error.stack 参数 error 就是 message 属性 抛出 Error 之后，整个程序就中断在发生错误的地方，不再往下执行 六个派生对象这六个对象是在 Error 对象的基础上生成的，这个六个对象同时也是函数 他们的 pr">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-01-10T03:35:36.000Z">
+<meta property="article:modified_time" content="2019-03-26T01:36:43.929Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="js">
+<meta property="article:tag" content="G">
+<meta property="article:tag" content="Error对象">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://sgw.wiki/2019/01/10/js%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>js错误处理机制 | 之哥的荣耀</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">之哥的荣耀</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不满是向上的车轮，能够载不自满的人类，向人道前进</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://sgw.wiki/2019/01/10/js%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="coding note and life perception">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="之哥的荣耀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          js错误处理机制
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-01-10 11:35:36" itemprop="dateCreated datePublished" datetime="2019-01-10T11:35:36+08:00">2019-01-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-03-26 09:36:43" itemprop="dateModified" datetime="2019-03-26T09:36:43+08:00">2019-03-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index"><span itemprop="name">js</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="Error"><a href="#Error" class="headerlink" title="Error"></a>Error</h3><pre><code>var error = new Error(&#39;error&#39;)
+error 有三个属性 error.name error.message error.stack
+参数 error 就是 message 属性</code></pre>
+<p>抛出 Error 之后，整个程序就中断在发生错误的地方，不再往下执行</p>
+<h3 id="六个派生对象"><a href="#六个派生对象" class="headerlink" title="六个派生对象"></a>六个派生对象</h3><p>这六个对象是在 Error 对象的基础上生成的，这个六个对象同时也是函数 他们的 prototype 指向 Error 对象</p>
+<pre><code>var err = new Error(&#39;xx&#39;)
+SyntaxError.prototype == Error &#123;&#125; // js这个命名有时候真是不懂
+Error.prototype == 错误 &#123;&#125;
+err.__proto__ == 错误 &#123;&#125;
+错误.__proto__ == Object.prototype</code></pre>
+<h4 id="SyntaxError"><a href="#SyntaxError" class="headerlink" title="SyntaxError"></a>SyntaxError</h4><pre><code>var 1a</code></pre>
+<h4 id="ReferenceError"><a href="#ReferenceError" class="headerlink" title="ReferenceError"></a>ReferenceError</h4><pre><code>unknownVariable</code></pre>
+<h4 id="RangeError"><a href="#RangeError" class="headerlink" title="RangeError"></a>RangeError</h4><pre><code>new Array(-1)</code></pre>
+<h4 id="TypeError"><a href="#TypeError" class="headerlink" title="TypeError"></a>TypeError</h4><pre><code>new 123</code></pre>
+<h4 id="URIError"><a href="#URIError" class="headerlink" title="URIError"></a>URIError</h4><pre><code>decodeURI(&#39;%2&#39;)</code></pre>
+<h4 id="EvalError"><a href="#EvalError" class="headerlink" title="EvalError"></a>EvalError</h4><h4 id="当然你可以自定义错误"><a href="#当然你可以自定义错误" class="headerlink" title="当然你可以自定义错误"></a>当然你可以自定义错误</h4><pre><code>function UserError(message) &#123;
+  this.message = message || &#39;默认信息&#39;;
+  this.name = &#39;UserError&#39;;
+&#125;
+
+UserError.prototype = new Error();
+UserError.prototype.constructor = UserError;</code></pre>
+<h3 id="相关语法"><a href="#相关语法" class="headerlink" title="相关语法"></a>相关语法</h3><h4 id="throw-语句"><a href="#throw-语句" class="headerlink" title="throw 语句"></a>throw 语句</h4><p>throw 抛出一个错误，中断程序的执行，可以抛出任何的值<br>    throw 123</p>
+<h4 id="try-catch-结构"><a href="#try-catch-结构" class="headerlink" title="try-catch 结构"></a>try-catch 结构</h4><p>因为发生错误会中断程序的执行，js 提供 try-catch 用来捕获错误，选择是否往下执行</p>
+<h4 id="finally-代码块"><a href="#finally-代码块" class="headerlink" title="finally 代码块"></a>finally 代码块</h4><p>不论发生错误与否，都会执行<br>如果 catch 中有 return 或者 throw 就会先执行 finally 中的代码，而且 return 不会阻止 finally 代码的执行<br>如果没有 catch 报错就会中断程序，但这之前会执行 finally 中的代码</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/js/" rel="tag"># js</a>
+              <a href="/tags/G/" rel="tag"># G</a>
+              <a href="/tags/Error%E5%AF%B9%E8%B1%A1/" rel="tag"># Error对象</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/01/10/JS-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B2/" rel="prev" title="JS 数据类型(二)">
+      <i class="fa fa-chevron-left"></i> JS 数据类型(二)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/01/10/%E8%AE%BA%E8%AF%AD%C2%B7%E5%AD%A3%E6%B0%8F%E7%AC%AC%E5%8D%81%E5%85%AD/" rel="next" title="论语·季氏第十六">
+      论语·季氏第十六 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Error"><span class="nav-number">1.</span> <span class="nav-text">Error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AD%E4%B8%AA%E6%B4%BE%E7%94%9F%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.</span> <span class="nav-text">六个派生对象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SyntaxError"><span class="nav-number">2.1.</span> <span class="nav-text">SyntaxError</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ReferenceError"><span class="nav-number">2.2.</span> <span class="nav-text">ReferenceError</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RangeError"><span class="nav-number">2.3.</span> <span class="nav-text">RangeError</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TypeError"><span class="nav-number">2.4.</span> <span class="nav-text">TypeError</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#URIError"><span class="nav-number">2.5.</span> <span class="nav-text">URIError</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#EvalError"><span class="nav-number">2.6.</span> <span class="nav-text">EvalError</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BD%93%E7%84%B6%E4%BD%A0%E5%8F%AF%E4%BB%A5%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF"><span class="nav-number">2.7.</span> <span class="nav-text">当然你可以自定义错误</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E8%AF%AD%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">相关语法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#throw-%E8%AF%AD%E5%8F%A5"><span class="nav-number">3.1.</span> <span class="nav-text">throw 语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#try-catch-%E7%BB%93%E6%9E%84"><span class="nav-number">3.2.</span> <span class="nav-text">try-catch 结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#finally-%E4%BB%A3%E7%A0%81%E5%9D%97"><span class="nav-number">3.3.</span> <span class="nav-text">finally 代码块</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description">coding note and life perception</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

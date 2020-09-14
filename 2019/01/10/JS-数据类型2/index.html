@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-Hans,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sgw.wiki","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="概述key对象就是一组键值对的集合，是一种无序的复合数据集合对象 obj 的所有键名虽然看上去像数值，实际上都被自动转成了字符串，如果键名不符合标识名的条件，且也不是数字，则必须加上引号，否则就会报错 对象的引用如果不同的变量名指向同一个对象，那么他们都是这个对象的引用 表达式还是语句{ console.log(123) }是一个代码块，要解释为对象，最好在大括号前加上圆括号，因为圆括号里面只能是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS 数据类型(二)">
+<meta property="og:url" content="https://sgw.wiki/2019/01/10/JS-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B2/index.html">
+<meta property="og:site_name" content="之哥的荣耀">
+<meta property="og:description" content="概述key对象就是一组键值对的集合，是一种无序的复合数据集合对象 obj 的所有键名虽然看上去像数值，实际上都被自动转成了字符串，如果键名不符合标识名的条件，且也不是数字，则必须加上引号，否则就会报错 对象的引用如果不同的变量名指向同一个对象，那么他们都是这个对象的引用 表达式还是语句{ console.log(123) }是一个代码块，要解释为对象，最好在大括号前加上圆括号，因为圆括号里面只能是">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-01-09T17:41:07.000Z">
+<meta property="article:modified_time" content="2019-03-26T01:36:43.908Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="js">
+<meta property="article:tag" content="G">
+<meta property="article:tag" content="js数据类型">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://sgw.wiki/2019/01/10/JS-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>JS 数据类型(二) | 之哥的荣耀</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">之哥的荣耀</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不满是向上的车轮，能够载不自满的人类，向人道前进</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://sgw.wiki/2019/01/10/JS-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="coding note and life perception">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="之哥的荣耀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JS 数据类型(二)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-01-10 01:41:07" itemprop="dateCreated datePublished" datetime="2019-01-10T01:41:07+08:00">2019-01-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-03-26 09:36:43" itemprop="dateModified" datetime="2019-03-26T09:36:43+08:00">2019-03-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index"><span itemprop="name">js</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><h4 id="key"><a href="#key" class="headerlink" title="key"></a>key</h4><p>对象就是一组键值对的集合，是一种无序的复合数据集合<br>对象 obj 的所有键名虽然看上去像数值，实际上都被自动转成了字符串，如果键名不符合标识名的条件，且也不是数字，则必须加上引号，否则就会报错</p>
+<h4 id="对象的引用"><a href="#对象的引用" class="headerlink" title="对象的引用"></a>对象的引用</h4><p>如果不同的变量名指向同一个对象，那么他们都是这个对象的引用</p>
+<h4 id="表达式还是语句"><a href="#表达式还是语句" class="headerlink" title="表达式还是语句"></a>表达式还是语句</h4><p>{ console.log(123) }是一个代码块，要解释为对象，最好在大括号前加上圆括号，因为圆括号里面只能是表达式，所以确保大括号只能解释为对象<br>这种差异在 eval 中显示的最为明显</p>
+<pre><code>eval(&#39;&#123;foo:1&#125;&#39;)
+eval(&#39;(&#123;foo:1&#125;)&#39;)</code></pre>
+<h3 id="属性的操作"><a href="#属性的操作" class="headerlink" title="属性的操作"></a>属性的操作</h3><h4 id="读取"><a href="#读取" class="headerlink" title="读取"></a>读取</h4><p>有两种方法，一种是使用点运算符，还有一种是使用方括号运算符。<br>obj.o obj[&#39;o&#39;] 使用点 o 就是字符串，使用方括号 o 就是变量<br>如果 key 是数字，则只能使用方括号，点会报错，方括号里的数字会自动转换为字符串</p>
+<h4 id="赋值"><a href="#赋值" class="headerlink" title="赋值"></a>赋值</h4><p>允许&#39;后绑定&#39;</p>
+<h4 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h4><p>查看一个对象本身的所有属性，可以用 Object.keys 方法</p>
+<h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><p>删除对象本身的属性用 delete, delete obj.o 成功后返回 true<br>只有一种情况 delete 返回 false 那就是该属性存在且不得删除<br>var obj = Object.defineProperty({}, &#39;p&#39;, {value: 1, configurable: false}) delete obj.p<br>delete 返回 true 之后并不能说明已经删除，比如继承的属性</p>
+<h4 id="in-运算符判断属性是否存在"><a href="#in-运算符判断属性是否存在" class="headerlink" title="in 运算符判断属性是否存在"></a>in 运算符判断属性是否存在</h4><p>in 和 hasOwnProperty() 可以查找自身的属性</p>
+<h4 id="for-in-属性遍历"><a href="#for-in-属性遍历" class="headerlink" title="for in 属性遍历"></a>for in 属性遍历</h4><ul>
+<li>它遍历的是所有 enumerable 的属性，会跳过不可遍历的属性</li>
+<li>它不仅遍历对象自身的属性，还遍历继承的属性</li>
+</ul>
+<p>####数组的本质<br>typeof 返回 object<br>数组的特殊性体现在他的键名是按次序排列的一组整数<br>之所以能用数值取值是因为数值会被转换成字符串，赋值的时候也是<br>arr.0 的写法不合法，因为单独的数值不能作为标识符（identifier）</p>
+<h4 id="length"><a href="#length" class="headerlink" title="length"></a>length</h4><p>返回数组成员的个数<br>数组的数字键不需要连续，length 总是最大的下标加 1，这也表明数组是动态的数据结构，可以随时增减数组的成员<br>length 的最大值是 2^32-1<br>设置 length 的值会导致数组的变化，设为 0 就可以清空数组，大于当前数组个数用 undefined 填充，如果设置为不合法的值会报错<br>设置数组属性，不会影响数组的 length<br>如果设置的键名是超出范围的数值，则会自动转换为字符串</p>
+<h4 id="in"><a href="#in" class="headerlink" title="in"></a>in</h4><p>in 运算符也适用于数组，但是个人感觉没啥用，可以用来判断属性？</p>
+<h4 id="for-in"><a href="#for-in" class="headerlink" title="for in"></a>for in</h4><p>for in 会遍历所有的键，包括属性，所以不推荐适用</p>
+<h4 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h4><p>一般可以用 while for forEach</p>
+<h4 id="数组的空位"><a href="#数组的空位" class="headerlink" title="数组的空位"></a>数组的空位</h4><p>当数组的两个逗号之间没有任何值，那么这个数组就存在空位 hole<br>delete arr[1] 会形成空位<br>空位虽然取值也是 undefined 但是和 undefined 是不一样的<br>数组的遍历方法 forEach for in 以及 Object.keys() 会跳过空位，undefined 不会</p>
+<h4 id="类数组对象"><a href="#类数组对象" class="headerlink" title="类数组对象"></a>类数组对象</h4><p>如果一个对象的所有键名都是正整数或零，并且有 length 属性，他就是 array-like object<br>常见的类数组对象有 Dom 集合 函数的 arguments 对象 以及 i 字符串<br>数组的 slice 方法可以把类数组对象变成数组 Array.prototype.slice.call(arguments)</p>
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><h4 id="函数的声明"><a href="#函数的声明" class="headerlink" title="函数的声明"></a>函数的声明</h4><p>1 function<br>2 var x = function x() {} name x 一般自己不写但是这个在函数内部可以获取到而且可以除错，不至于显示匿名函数<br>3 new Function(&#39;x&#39;,&#39;y&#39;,&#39;return x+y&#39;) 这种方式没有人用</p>
+<p>递归真是强大，体验了一把 fib 函数</p>
+<p>由于函数和其他数据类型的地位平等，所以在 js 中又称为第一等公民</p>
+<p>函数名也是会提升，js 引擎会把函数名视同为变量名</p>
+<h4 id="函数的属性和方法"><a href="#函数的属性和方法" class="headerlink" title="函数的属性和方法"></a>函数的属性和方法</h4><p>#####f.name 属性的一个用处就是获取参数函数的名字</p>
+<h5 id="f-length-获取函数参数的个数"><a href="#f-length-获取函数参数的个数" class="headerlink" title="f.length 获取函数参数的个数"></a>f.length 获取函数参数的个数</h5><p>length 属性提供了一种机制，判断定义时和调用时参数的差异，以便实现面向对象编程的”方法重载“（overload）</p>
+<h5 id="f-toString-返回字符串"><a href="#f-toString-返回字符串" class="headerlink" title="f.toString() 返回字符串"></a>f.toString() 返回字符串</h5><h4 id="函数作用域"><a href="#函数作用域" class="headerlink" title="函数作用域"></a>函数作用域</h4><p>对于 var 命令来说，局部变量只能在函数内部，其他区块中都是全局变量，在函数内部，也会存在变量提升</p>
+<h5 id="函数本身的作用域"><a href="#函数本身的作用域" class="headerlink" title="函数本身的作用域"></a>函数本身的作用域</h5><p>函数本身也是一个值，也有自己的作用域，他的作用域和变量一样，就是其声明时所在的作用域，而不是调用时所在的作用域<br>当函数执行返回另一个函数的时候，就可以绑定当前函数的作用域，从而形成闭包</p>
+<h5 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h5><p>函数的参数不是必须的，js 允许省略参数<br>参数如果传的是原始类型的值那么传递方式的就是 pass by value，如果传的是复合类型的值，传递方式就是 pass by reference<br>arguments 对象包含了函数运行时所需要的全部参数，严格模式下他是只读的，他是一个类数组对象，可以用 arguments.callee 来调用自身函数，但是同样严格模式是禁用的</p>
+<h5 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h5><p>为了得到函数内的局部变量，只有在函数内部在定义一个函数，再返回这个内部函数，就可以读取函数变量了<br>实质上闭包就是将函数内部和函数外部连接起来的一座桥梁<br>闭包的最大用处有两个，一个是可以读取函数内部的变量 两一个就是可以让这些变量始终保持在内存中<br><strong>闭包两大场景 返回另一个函数 封装对象的私有属性和私有方法</strong><br>注意太多的闭包对内存消耗很大，因此不能滥用闭包，否则会造成的性能问题</p>
+<h5 id="立即调用的函数表达式-IIFE"><a href="#立即调用的函数表达式-IIFE" class="headerlink" title="立即调用的函数表达式 IIFE"></a>立即调用的函数表达式 IIFE</h5><p>function f(){}() 直接加上 () 是会报错</p>
+<blockquote>
+<p>JavaScript 引擎看到行首是 function 关键字之后，认为这一段都是函数的定义，不应该以圆括号结尾，所以就报错了</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(function()&#123; &#x2F;* code *&#x2F;  &#125;());</span><br><span class="line">&#x2F;&#x2F; 或者</span><br><span class="line">(function()&#123; &#x2F;* code *&#x2F;  &#125;)();</span><br></pre></td></tr></table></figure>
+
+<p>所以只要可以让解释器以表达式来处理函数定义，就能产生同样的效果</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">var i &#x3D; function()&#123;&#125;();</span><br><span class="line">true &amp;&amp; function()&#123;&#125;();</span><br><span class="line">!function()&#123;&#125;();</span><br><span class="line">+function()&#123;&#125;();</span><br><span class="line">~function()&#123;&#125;();</span><br><span class="line">-function()&#123;&#125;();</span><br></pre></td></tr></table></figure>
+
+<p>IIFE Immediately-Invoked Function Expression 的主要目的有两个<br>一个就是不用为函数命名，避免污染全局变量<br>二就是内部形成了一个独立的作用域，可以封装一些外部无法读取的私有变量</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/js/" rel="tag"># js</a>
+              <a href="/tags/G/" rel="tag"># G</a>
+              <a href="/tags/js%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" rel="tag"># js数据类型</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/01/10/js%E5%AF%B9%E8%B1%A1%E7%9B%B8%E5%85%B3/" rel="prev" title="js对象相关">
+      <i class="fa fa-chevron-left"></i> js对象相关
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/01/10/js%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/" rel="next" title="js错误处理机制">
+      js错误处理机制 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#key"><span class="nav-number">1.1.</span> <span class="nav-text">key</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%BC%95%E7%94%A8"><span class="nav-number">1.2.</span> <span class="nav-text">对象的引用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%98%E6%98%AF%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.3.</span> <span class="nav-text">表达式还是语句</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">属性的操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%BB%E5%8F%96"><span class="nav-number">2.1.</span> <span class="nav-text">读取</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B5%8B%E5%80%BC"><span class="nav-number">2.2.</span> <span class="nav-text">赋值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B"><span class="nav-number">2.3.</span> <span class="nav-text">查看</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A0%E9%99%A4"><span class="nav-number">2.4.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#in-%E8%BF%90%E7%AE%97%E7%AC%A6%E5%88%A4%E6%96%AD%E5%B1%9E%E6%80%A7%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8"><span class="nav-number">2.5.</span> <span class="nav-text">in 运算符判断属性是否存在</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#for-in-%E5%B1%9E%E6%80%A7%E9%81%8D%E5%8E%86"><span class="nav-number">2.6.</span> <span class="nav-text">for in 属性遍历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#length"><span class="nav-number">2.7.</span> <span class="nav-text">length</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#in"><span class="nav-number">2.8.</span> <span class="nav-text">in</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#for-in"><span class="nav-number">2.9.</span> <span class="nav-text">for in</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%81%8D%E5%8E%86"><span class="nav-number">2.10.</span> <span class="nav-text">遍历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E7%9A%84%E7%A9%BA%E4%BD%8D"><span class="nav-number">2.11.</span> <span class="nav-text">数组的空位</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B1%BB%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.12.</span> <span class="nav-text">类数组对象</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%A3%B0%E6%98%8E"><span class="nav-number">3.1.</span> <span class="nav-text">函数的声明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95"><span class="nav-number">3.2.</span> <span class="nav-text">函数的属性和方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#f-length-%E8%8E%B7%E5%8F%96%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E4%B8%AA%E6%95%B0"><span class="nav-number">3.2.1.</span> <span class="nav-text">f.length 获取函数参数的个数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#f-toString-%E8%BF%94%E5%9B%9E%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">3.2.2.</span> <span class="nav-text">f.toString() 返回字符串</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">3.3.</span> <span class="nav-text">函数作用域</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%9C%AC%E8%BA%AB%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">3.3.1.</span> <span class="nav-text">函数本身的作用域</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%82%E6%95%B0"><span class="nav-number">3.3.2.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%97%AD%E5%8C%85"><span class="nav-number">3.3.3.</span> <span class="nav-text">闭包</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AB%8B%E5%8D%B3%E8%B0%83%E7%94%A8%E7%9A%84%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F-IIFE"><span class="nav-number">3.3.4.</span> <span class="nav-text">立即调用的函数表达式 IIFE</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description">coding note and life perception</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

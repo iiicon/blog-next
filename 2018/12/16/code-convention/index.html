@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-Hans,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sgw.wiki","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="“程序是写给人读的，只是偶尔让计算机执行一下。”                     -- Donald Knuth  基本的格式化1. 缩进层级  个人偏好使用敲击 tab 时插入两个空格的习惯，配合 line-height 可以达到视觉上的舒服（个人偏好）,这也是谷歌的 javascript 编程规范使用两个空格的缩进。 2.语句结尾  语句结尾一般是要写分号，虽然有赖于 Automat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="code-convention">
+<meta property="og:url" content="https://sgw.wiki/2018/12/16/code-convention/index.html">
+<meta property="og:site_name" content="之哥的荣耀">
+<meta property="og:description" content="“程序是写给人读的，只是偶尔让计算机执行一下。”                     -- Donald Knuth  基本的格式化1. 缩进层级  个人偏好使用敲击 tab 时插入两个空格的习惯，配合 line-height 可以达到视觉上的舒服（个人偏好）,这也是谷歌的 javascript 编程规范使用两个空格的缩进。 2.语句结尾  语句结尾一般是要写分号，虽然有赖于 Automat">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-12-16T11:49:43.000Z">
+<meta property="article:modified_time" content="2019-03-06T09:43:43.659Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="js">
+<meta property="article:tag" content="code-spec">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://sgw.wiki/2018/12/16/code-convention/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>code-convention | 之哥的荣耀</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">之哥的荣耀</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不满是向上的车轮，能够载不自满的人类，向人道前进</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://sgw.wiki/2018/12/16/code-convention/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="coding note and life perception">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="之哥的荣耀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          code-convention
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-12-16 19:49:43" itemprop="dateCreated datePublished" datetime="2018-12-16T19:49:43+08:00">2018-12-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-03-06 17:43:43" itemprop="dateModified" datetime="2019-03-06T17:43:43+08:00">2019-03-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index"><span itemprop="name">js</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>“程序是写给人读的，只是偶尔让计算机执行一下。”                     -- Donald Knuth</p>
+</blockquote>
+<h2 id="基本的格式化"><a href="#基本的格式化" class="headerlink" title="基本的格式化"></a>基本的格式化</h2><h4 id="1-缩进层级"><a href="#1-缩进层级" class="headerlink" title="1. 缩进层级"></a>1. 缩进层级</h4><p>  个人偏好使用敲击 tab 时插入两个空格的习惯，配合 line-height 可以达到视觉上的舒服（个人偏好）,这也是谷歌的 javascript 编程规范使用两个空格的缩进。</p>
+<h4 id="2-语句结尾"><a href="#2-语句结尾" class="headerlink" title="2.语句结尾"></a>2.语句结尾</h4><p>  语句结尾一般是要写分号，虽然有赖于 Automatic Semicolon Insertion， ASI机制，JavaScript 省略分号也是可以正常工作的，但是规范建议不要省略分号，因为可能会导致一些错误，谷歌和 jquery 的规范都不建议省去，但是个人偏好不使用分号，毕竟打分号也挺累的，没有分号看起来更清爽一些。</p>
+<h4 id="3-行的长度"><a href="#3-行的长度" class="headerlink" title="3. 行的长度"></a>3. 行的长度</h4><p>  很多语言的编程规范都提到了一行代码不能超过 80 个字符的限制，是源于很久之前的文本编辑器的单行最好字符限制，虽然工作中一般也不限制这个，个人实践这个也是在 sublime 中设置过换行，我现在也倾向于将行的长度限定在 80 个字符</p>
+<h4 id="4-换行"><a href="#4-换行" class="headerlink" title="4. 换行"></a>4. 换行</h4><p>  当一行长度达到了单行最大字符数限制时，就需要手动将一行拆成两行，通常会在运算符后换行，下一行会增加两个层级的缩进。但是有一个例外，当给变量赋值时，第二行的位置应当与赋值运算符的位置保持对齐。个人也决定这样实践。</p>
+<h4 id="5-空行"><a href="#5-空行" class="headerlink" title="5. 空行"></a>5. 空行</h4><p>  每个流程控制语句之前，for 和 if 之前添加空行，这样做能够使你更加流畅的阅读这些语句，一般来讲，在下面这些场景中添加空行也是不错的注意（）</p>
+<ul>
+<li><p>在方法之间</p>
+</li>
+<li><p>在方法中的局部变量（local variable）和第一条语句之间</p>
+</li>
+<li><p>在单行或多行注释只是之前</p>
+</li>
+<li><p>return 之前</p>
+</li>
+<li><p>在方法内逻辑片段之间插入空行，提高可读性</p>
+</li>
+</ul>
+<h4 id="6-命名"><a href="#6-命名" class="headerlink" title="6. 命名"></a>6. 命名</h4><ul>
+<li><p>变量遵照 camel case<br>  变量用名词开头<br>  函数用动词开头</p>
+</li>
+<li><p>常量使用大写字母加下划线</p>
+</li>
+<li><p>构造函数遵照 Pascal case</p>
+</li>
+</ul>
+<h4 id="7-直接量"><a href="#7-直接量" class="headerlink" title="7. 直接量"></a>7. 直接量</h4><ul>
+<li><p>字符串 推荐使用大括号，个人喜欢小括号</p>
+</li>
+<li><p>数字 整数和小数部分要写完整</p>
+</li>
+<li><p>null </p>
+<p>使用场景：  </p>
+<pre><code>1. 用来初始化一个变量，这个变量很可能赋值为一个对象  
+2. 用来和一个已经初始化的变量比较，这个变量可以是也可以不是一个对象  
+3. 当函数的参数期望是对象时，用作参数传入  
+4. 当函数的返回值期望是一个对象时，用作返回值传出  </code></pre>
+<p>不建议使用的场景：  </p>
+<pre><code>1. 不要使用 null 来检测是否传入了某个参数  
+2. 不要使用 null 来检测一个未初始化的变量   </code></pre>
+</li>
+<li><p>undefined<br>通过禁止使用 undefined，可以有效地确保只有在一种情况下 typeof 才会返回 undefined，那就是变量未声明的时候。 如果你使用了一个可能会也可能不会赋值一个对象的变量的时候，则将其赋值为 null (这点有待实践，个人习惯变量就是 undefined， 空对象就是 null)</p>
+</li>
+<li><p>对象直接量  也是推荐的写法</p>
+</li>
+<li><p>数组直接量  也是推荐的写法</p>
+</li>
+</ul>
+<h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><h4 id="1-单行注释"><a href="#1-单行注释" class="headerlink" title="1 单行注释"></a>1 单行注释</h4><p>单行注释不应该以连续多行注释的形式出现，除非你注释掉一大段代码，只要当需要注释掉一段很长的文本时才需要多行注释</p>
+<h4 id="2-多行注释"><a href="#2-多行注释" class="headerlink" title="2 多行注释"></a>2 多行注释</h4><p>注释和代码之间没有空行间隔，和单行注释一样，多行注释之前应当有一个空行，且缩进层级和其他描述代码保持一致，代码尾部不要用多行注释格式</p>
+<h4 id="3-使用注释"><a href="#3-使用注释" class="headerlink" title="3 使用注释"></a>3 使用注释</h4><p>当代码不够清晰时添加注释，当代码很明了时不应当添加注释</p>
+<h4 id="4-文档注释"><a href="#4-文档注释" class="headerlink" title="4 文档注释"></a>4 文档注释</h4><p>所有的方法<br>所有的构造函数<br>所有包含文档化方法的对象</p>
+<h3 id="语句和表达式"><a href="#语句和表达式" class="headerlink" title="语句和表达式"></a>语句和表达式</h3><p>不论块语句包含多行代码还是单行代码，都应当总是使用花括号</p>
+<h4 id="1-if-语句"><a href="#1-if-语句" class="headerlink" title="1 if 语句"></a>1 if 语句</h4><p>在左圆括号之前和右圆括号之后各添加一个空格</p>
+<h4 id="2-switch-语句"><a href="#2-switch-语句" class="headerlink" title="2 switch 语句"></a>2 switch 语句</h4><p>switch 语句中可以使用任意类型值，任何表达式都可用于 case 从句。但是在其他语言中则必须使用原始值和常量</p>
+<h4 id="3-for-循环"><a href="#3-for-循环" class="headerlink" title="3 for 循环"></a>3 for 循环</h4><p>尽可能避免使用 continue</p>
+<h4 id="4-for-in-循环"><a href="#4-for-in-循环" class="headerlink" title="4 for-in 循环"></a>4 for-in 循环</h4><p>用的时候最好使用 hasOwnPorperty 方法来过滤出实例属性，所以 for-in 是用来遍历实例对象和原型链中的 key 的</p>
+<h3 id="变量、函数和运算符"><a href="#变量、函数和运算符" class="headerlink" title="变量、函数和运算符"></a>变量、函数和运算符</h3><h4 id="1-变量声明"><a href="#1-变量声明" class="headerlink" title="1 变量声明"></a>1 变量声明</h4><p>建议将所有的 var 语句合并成一个语句，每个变量的初始化独占一行，赋值运算符应当对齐。对于那些没有初始值的变量来说，他们应当出现在 var 语句的尾部，合并之后可以让代码更短，下载更快</p>
+<h4 id="2-函数声明"><a href="#2-函数声明" class="headerlink" title="2 函数声明"></a>2 函数声明</h4><p>函数最好是先声明再使用，而且不能出现在块语句之内</p>
+<h4 id="3-函数调用间隔"><a href="#3-函数调用间隔" class="headerlink" title="3 函数调用间隔"></a>3 函数调用间隔</h4><p>一般情况下，在函数名和左括号之间没有空格没有空格，这样做是为了将它和块语句区分开来</p>
+<h4 id="4-立即调用的函数"><a href="#4-立即调用的函数" class="headerlink" title="4 立即调用的函数"></a>4 立即调用的函数</h4><p>js 中允许声明匿名函数，并将匿名函数赋值给变量或者属性</p>
+<h4 id="5-严格模式-strict-mode"><a href="#5-严格模式-strict-mode" class="headerlink" title="5 严格模式 strict mode"></a>5 严格模式 strict mode</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">use strict</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>希望通过这种方式来谨慎地解析 JavaScript，以减少错误。</p>
+<h4 id="6-相等"><a href="#6-相等" class="headerlink" title="6 相等"></a>6 相等</h4><p>1 我推荐除了 null 和 undefined 其余的都使用 === 进行判断<br>2 js 会发生强制类型转换，在运用 == 和 != 的时候</p>
+<h4 id="7-eval"><a href="#7-eval" class="headerlink" title="7 eval"></a>7 eval</h4><p>参数是一个字符串，eval 会将传入的字符串当做代码来执行。es5 严格模式禁止在一个封闭的作用域中使用它创建新变量和函数。这条限制帮助我们避免了 eval() 先天的安全漏洞，然而如果没有别的办法来完成当前任务，这个时候仍推荐使用 eval()</p>
+<h4 id="8-原始包装类型"><a href="#8-原始包装类型" class="headerlink" title="8 原始包装类型"></a>8 原始包装类型</h4><p>js 有三种包装类型 String Number Boolean<br>原始包装类型的主要作用是让原始值具有对象般的行为</p>
+<pre><code>var name = &#39;zhangsan&#39;
+console.log(name.toUpperCase())
+</code></pre>
+<p>这种做法之所以正确的原因就是因为，js 引擎创建了 String 类型的新实例，紧接着就被销毁了，当再次需要的时候就会创建另一个对象<br>尽管我们可以使用这些包装类型，当时强烈建议避免使用它们</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/js/" rel="tag"># js</a>
+              <a href="/tags/code-spec/" rel="tag"># code-spec</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/12/15/gif-%E5%8E%8B%E7%BC%A9%E5%B7%A5%E5%85%B7-gifsicle/" rel="prev" title="gif 压缩工具 gifsicle">
+      <i class="fa fa-chevron-left"></i> gif 压缩工具 gifsicle
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/12/25/vscode/" rel="next" title="玩转 VS Code">
+      玩转 VS Code <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">基本的格式化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E7%BC%A9%E8%BF%9B%E5%B1%82%E7%BA%A7"><span class="nav-number">1.0.1.</span> <span class="nav-text">1. 缩进层级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E8%AF%AD%E5%8F%A5%E7%BB%93%E5%B0%BE"><span class="nav-number">1.0.2.</span> <span class="nav-text">2.语句结尾</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E8%A1%8C%E7%9A%84%E9%95%BF%E5%BA%A6"><span class="nav-number">1.0.3.</span> <span class="nav-text">3. 行的长度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E6%8D%A2%E8%A1%8C"><span class="nav-number">1.0.4.</span> <span class="nav-text">4. 换行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E7%A9%BA%E8%A1%8C"><span class="nav-number">1.0.5.</span> <span class="nav-text">5. 空行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-%E5%91%BD%E5%90%8D"><span class="nav-number">1.0.6.</span> <span class="nav-text">6. 命名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-%E7%9B%B4%E6%8E%A5%E9%87%8F"><span class="nav-number">1.0.7.</span> <span class="nav-text">7. 直接量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E9%87%8A"><span class="nav-number">1.1.</span> <span class="nav-text">注释</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%8D%95%E8%A1%8C%E6%B3%A8%E9%87%8A"><span class="nav-number">1.1.1.</span> <span class="nav-text">1 单行注释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%A4%9A%E8%A1%8C%E6%B3%A8%E9%87%8A"><span class="nav-number">1.1.2.</span> <span class="nav-text">2 多行注释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E4%BD%BF%E7%94%A8%E6%B3%A8%E9%87%8A"><span class="nav-number">1.1.3.</span> <span class="nav-text">3 使用注释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E6%96%87%E6%A1%A3%E6%B3%A8%E9%87%8A"><span class="nav-number">1.1.4.</span> <span class="nav-text">4 文档注释</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E5%8F%A5%E5%92%8C%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">语句和表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-if-%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.2.1.</span> <span class="nav-text">1 if 语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-switch-%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.2.2.</span> <span class="nav-text">2 switch 语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-for-%E5%BE%AA%E7%8E%AF"><span class="nav-number">1.2.3.</span> <span class="nav-text">3 for 循环</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-for-in-%E5%BE%AA%E7%8E%AF"><span class="nav-number">1.2.4.</span> <span class="nav-text">4 for-in 循环</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E3%80%81%E5%87%BD%E6%95%B0%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">1.3.</span> <span class="nav-text">变量、函数和运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E"><span class="nav-number">1.3.1.</span> <span class="nav-text">1 变量声明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%87%BD%E6%95%B0%E5%A3%B0%E6%98%8E"><span class="nav-number">1.3.2.</span> <span class="nav-text">2 函数声明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E9%97%B4%E9%9A%94"><span class="nav-number">1.3.3.</span> <span class="nav-text">3 函数调用间隔</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E7%AB%8B%E5%8D%B3%E8%B0%83%E7%94%A8%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.4.</span> <span class="nav-text">4 立即调用的函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F-strict-mode"><span class="nav-number">1.3.5.</span> <span class="nav-text">5 严格模式 strict mode</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-%E7%9B%B8%E7%AD%89"><span class="nav-number">1.3.6.</span> <span class="nav-text">6 相等</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-eval"><span class="nav-number">1.3.7.</span> <span class="nav-text">7 eval</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-%E5%8E%9F%E5%A7%8B%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.3.8.</span> <span class="nav-text">8 原始包装类型</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description">coding note and life perception</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

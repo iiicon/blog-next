@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-Hans,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sgw.wiki","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="Array.from生成一个数组 var s &#x3D; new Set([&#39;foo&#39;, window]);Array.from(s);&#x2F;&#x2F; [&quot;foo&quot;, Window]Array.from([1,2,3],x&#x3D;&gt;x+x)&#x2F;&#x2F; [2, 4, 6]Array.from(&#39;123&#39;)&amp;#x2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES6新增api">
+<meta property="og:url" content="https://sgw.wiki/2019/08/13/ES6%E6%96%B0%E5%A2%9Eapi/index.html">
+<meta property="og:site_name" content="之哥的荣耀">
+<meta property="og:description" content="Array.from生成一个数组 var s &#x3D; new Set([&#39;foo&#39;, window]);Array.from(s);&#x2F;&#x2F; [&quot;foo&quot;, Window]Array.from([1,2,3],x&#x3D;&gt;x+x)&#x2F;&#x2F; [2, 4, 6]Array.from(&#39;123&#39;)&amp;#x2">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-08-13T14:51:08.000Z">
+<meta property="article:modified_time" content="2019-11-29T07:49:54.506Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="G">
+<meta property="article:tag" content="es6">
+<meta property="article:tag" content="Array">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://sgw.wiki/2019/08/13/ES6%E6%96%B0%E5%A2%9Eapi/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>ES6新增api | 之哥的荣耀</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">之哥的荣耀</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不满是向上的车轮，能够载不自满的人类，向人道前进</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://sgw.wiki/2019/08/13/ES6%E6%96%B0%E5%A2%9Eapi/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="coding note and life perception">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="之哥的荣耀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ES6新增api
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-08-13 22:51:08" itemprop="dateCreated datePublished" datetime="2019-08-13T22:51:08+08:00">2019-08-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-11-29 15:49:54" itemprop="dateModified" datetime="2019-11-29T15:49:54+08:00">2019-11-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index"><span itemprop="name">js</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="Array-from"><a href="#Array-from" class="headerlink" title="Array.from"></a>Array.from</h3><p>生成一个数组</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">var s &#x3D; new Set([&#39;foo&#39;, window]);</span><br><span class="line">Array.from(s);</span><br><span class="line">&#x2F;&#x2F; [&quot;foo&quot;, Window]</span><br><span class="line"></span><br><span class="line">Array.from([1,2,3],x&#x3D;&gt;x+x)</span><br><span class="line">&#x2F;&#x2F; [2, 4, 6]</span><br><span class="line"></span><br><span class="line">Array.from(&#39;123&#39;)</span><br><span class="line">&#x2F;&#x2F; [&quot;1&quot;, &quot;2&quot;, &quot;3&quot;]</span><br><span class="line"></span><br><span class="line">let m &#x3D; new Map([[1, 2], [2, 4], [4, 8]]);</span><br><span class="line">Array.from(m);</span><br><span class="line">&#x2F;&#x2F; [Array(2), Array(2), Array(2)] -- [1, 2]1: (2) [2, 4]2: (2) [4, 8]</span><br><span class="line"></span><br><span class="line">Array.from(&#123;length: 5&#125;, (v, i) &#x3D;&gt; i);</span><br><span class="line">&#x2F;&#x2F; [0, 1, 2, 3, 4]</span><br><span class="line">这个可以和 new Array() 做对比，new Array 生成的数组没有下标</span><br><span class="line"></span><br><span class="line">Array.from(&#123;length: 5&#125;).fill(5);</span><br><span class="line">&#x2F;&#x2F; [5, 5, 5, 5, 5]</span><br><span class="line"></span><br><span class="line">&lt;!-- 要求写一个生成n个n的数组的函数 --&gt;</span><br><span class="line">&#x2F;&#x2F; Es6</span><br><span class="line">function g(n) &#123;</span><br><span class="line">	return Array.from(&#123;length: n&#125;).fill(n)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Es5</span><br><span class="line">function g(n) &#123;</span><br><span class="line">	return Array.apply(null, &#123;length:n+1&#125;).join(n).split(&#39;&#39;)</span><br><span class="line">&#125;</span><br><span class="line">function g(n) &#123;</span><br><span class="line">	return new Array(n+1).join(n).split(&#39;&#39;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Array-of"><a href="#Array-of" class="headerlink" title="Array.of"></a>Array.of</h3><p>生成一个数组</p>
+<pre><code>Array.of(5) // [5]
+Array.of(1,&#123;&#125;) // [1, &#123;&#125;]</code></pre>
+<h3 id="Array-prototype-fill-n-start-end"><a href="#Array-prototype-fill-n-start-end" class="headerlink" title="Array.prototype.fill(n, start, end)"></a>Array.prototype.fill(n, start, end)</h3><p>填充</p>
+<pre><code>var a = [1, 2, 3]
+a.fill(0) // [0, 0, 0]
+a.fill(5,1) //  [0, 5, 5]</code></pre>
+<h3 id="Array-prototype-find-gt"><a href="#Array-prototype-find-gt" class="headerlink" title="Array.prototype.find(()=&gt;{})"></a>Array.prototype.find(()=&gt;{})</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">var o &#x3D; [&#123;name:&#39;xx&#39;, age:18&#125;, &#123;name:&#39;yy&#39;, age:18&#125;, &#123;name:&#39;zz&#39;, age:80&#125;]</span><br><span class="line">o.find((item) &#x3D;&gt; item.name&#x3D;&#x3D;&#x3D;&#39;xx&#39;)</span><br><span class="line">&#x2F;&#x2F; &#123;name: &quot;xx&quot;, age: 18&#125;</span><br><span class="line"></span><br><span class="line">x.name &#x3D; &#39;xx1&#39;</span><br><span class="line">&#x2F;&#x2F; o -&gt; &#x2F;&#x2F; [&#123;name: &quot;xx1&quot;, age: 18&#125;1: &#123;name: &quot;yy&quot;, age: 18&#125;2: &#123;name: &quot;zz&quot;, age: 80&#125;]</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 和 filter 做对比，filter 可以返回多项</span><br><span class="line">o.filter(item&#x3D;&gt;item.age&#x3D;&#x3D;&#x3D;18)</span><br><span class="line">(2) [&#123;…&#125;, &#123;…&#125;]</span><br><span class="line"></span><br><span class="line">o.find(item&#x3D;&gt;item.age&#x3D;&#x3D;&#x3D;18)</span><br><span class="line">&#123;name: &quot;xx1&quot;, age: 18&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Array-prototype-copyWithin-i-starti-endi"><a href="#Array-prototype-copyWithin-i-starti-endi" class="headerlink" title="Array.prototype.copyWithin(i, starti, endi)"></a>Array.prototype.copyWithin(i, starti, endi)</h3><pre><code>var a = [1, 2, 3]
+a.copyWithin(0, 2, 3)
+// [3, 2, 3]</code></pre>
+<h3 id="Array-prototype-entries"><a href="#Array-prototype-entries" class="headerlink" title="Array.prototype.entries()"></a>Array.prototype.entries()</h3><p>返回一个可迭代对象（iterator）<br>这样我们就可以用 <code>for of</code> 或者 <code>next</code> 去取值</p>
+<h3 id="Array-prototype-keys"><a href="#Array-prototype-keys" class="headerlink" title="Array.prototype.keys()"></a>Array.prototype.keys()</h3><p>返回一个可迭代对象（iterator）</p>
+<h3 id="Array-prototype-values"><a href="#Array-prototype-values" class="headerlink" title="Array.prototype.values()"></a>Array.prototype.values()</h3><p>返回一个可迭代对象（iterator）</p>
+<h3 id="String-prototype-includes"><a href="#String-prototype-includes" class="headerlink" title="String.prototype.includes()"></a>String.prototype.includes()</h3><h3 id="String-prototype-repeat"><a href="#String-prototype-repeat" class="headerlink" title="String.prototype.repeat()"></a>String.prototype.repeat()</h3><pre><code>&#39;12&#39;.repeat(2) // &#39;1212&#39;</code></pre>
+<h3 id="String-prototype-startWith"><a href="#String-prototype-startWith" class="headerlink" title="String.prototype.startWith()"></a>String.prototype.startWith()</h3><h3 id="String-prototype-endWith"><a href="#String-prototype-endWith" class="headerlink" title="String.prototype.endWith()"></a>String.prototype.endWith()</h3><pre><code>s.lastIndexOf(12) === s.length-2</code></pre>
+<h3 id="Number-EPSILON"><a href="#Number-EPSILON" class="headerlink" title="Number.EPSILON"></a>Number.EPSILON</h3><h3 id="Number-isInteger"><a href="#Number-isInteger" class="headerlink" title="Number.isInteger"></a>Number.isInteger</h3><h3 id="Number-isFinite"><a href="#Number-isFinite" class="headerlink" title="Number.isFinite"></a>Number.isFinite</h3><h3 id="Number-isNaN"><a href="#Number-isNaN" class="headerlink" title="Number.isNaN"></a>Number.isNaN</h3><pre><code>Number.isNaN(&#39;NaN&#39;) // false</code></pre>
+<h3 id="Math-hypot"><a href="#Math-hypot" class="headerlink" title="Math.hypot"></a>Math.hypot</h3><pre><code>Math.hypot(3, 4) // 5</code></pre>
+<h3 id="Math-sign"><a href="#Math-sign" class="headerlink" title="Math.sign"></a>Math.sign</h3><p>返回 0 -0 1 -1 NaN</p>
+<h3 id="Math-trunc"><a href="#Math-trunc" class="headerlink" title="Math.trunc"></a>Math.trunc</h3><pre><code>Math.trunc(3.4801748017401373e+25)
+parseInt(3.4801748017401373e+25) // 3</code></pre>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/G/" rel="tag"># G</a>
+              <a href="/tags/es6/" rel="tag"># es6</a>
+              <a href="/tags/Array/" rel="tag"># Array</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/08/13/%E7%8E%A9%E8%BD%ACgit/" rel="prev" title="玩转git">
+      <i class="fa fa-chevron-left"></i> 玩转git
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/08/16/ES6%E4%B9%8BReflect%E5%92%8Cproxy/" rel="next" title="ES6之Reflect和proxy">
+      ES6之Reflect和proxy <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Array-from"><span class="nav-number">1.</span> <span class="nav-text">Array.from</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Array-of"><span class="nav-number">2.</span> <span class="nav-text">Array.of</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Array-prototype-fill-n-start-end"><span class="nav-number">3.</span> <span class="nav-text">Array.prototype.fill(n, start, end)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Array-prototype-find-gt"><span class="nav-number">4.</span> <span class="nav-text">Array.prototype.find(()&#x3D;&gt;{})</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Array-prototype-copyWithin-i-starti-endi"><span class="nav-number">5.</span> <span class="nav-text">Array.prototype.copyWithin(i, starti, endi)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Array-prototype-entries"><span class="nav-number">6.</span> <span class="nav-text">Array.prototype.entries()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Array-prototype-keys"><span class="nav-number">7.</span> <span class="nav-text">Array.prototype.keys()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Array-prototype-values"><span class="nav-number">8.</span> <span class="nav-text">Array.prototype.values()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String-prototype-includes"><span class="nav-number">9.</span> <span class="nav-text">String.prototype.includes()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String-prototype-repeat"><span class="nav-number">10.</span> <span class="nav-text">String.prototype.repeat()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String-prototype-startWith"><span class="nav-number">11.</span> <span class="nav-text">String.prototype.startWith()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String-prototype-endWith"><span class="nav-number">12.</span> <span class="nav-text">String.prototype.endWith()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Number-EPSILON"><span class="nav-number">13.</span> <span class="nav-text">Number.EPSILON</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Number-isInteger"><span class="nav-number">14.</span> <span class="nav-text">Number.isInteger</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Number-isFinite"><span class="nav-number">15.</span> <span class="nav-text">Number.isFinite</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Number-isNaN"><span class="nav-number">16.</span> <span class="nav-text">Number.isNaN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Math-hypot"><span class="nav-number">17.</span> <span class="nav-text">Math.hypot</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Math-sign"><span class="nav-number">18.</span> <span class="nav-text">Math.sign</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Math-trunc"><span class="nav-number">19.</span> <span class="nav-text">Math.trunc</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description">coding note and life perception</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-Hans,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sgw.wiki","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="HTML1.如何理解 html 语义化？ 举例法：HTML 语义化就是使用正确的标签 段落就写 p 标签，标题就写 h1 标签，文章就写 article 标签，视频就写 video 标签，等等 阐述法：首先讲以前的后台开发人员使用 table 布局，然后讲美工人员使用 div+css 布局，最后讲专业的前端会使用正确的标签进行页面开发  2.meta viewport 是做什么的？怎么写&lt;m">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试题库">
+<meta property="og:url" content="https://sgw.wiki/2020/07/23/%E9%9D%A2%E8%AF%95%E9%A2%98%E5%BA%93/index.html">
+<meta property="og:site_name" content="之哥的荣耀">
+<meta property="og:description" content="HTML1.如何理解 html 语义化？ 举例法：HTML 语义化就是使用正确的标签 段落就写 p 标签，标题就写 h1 标签，文章就写 article 标签，视频就写 video 标签，等等 阐述法：首先讲以前的后台开发人员使用 table 布局，然后讲美工人员使用 div+css 布局，最后讲专业的前端会使用正确的标签进行页面开发  2.meta viewport 是做什么的？怎么写&lt;m">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-07-23T08:03:19.000Z">
+<meta property="article:modified_time" content="2020-09-04T01:50:45.261Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="面试题">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://sgw.wiki/2020/07/23/%E9%9D%A2%E8%AF%95%E9%A2%98%E5%BA%93/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>面试题库 | 之哥的荣耀</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">之哥的荣耀</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不满是向上的车轮，能够载不自满的人类，向人道前进</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://sgw.wiki/2020/07/23/%E9%9D%A2%E8%AF%95%E9%A2%98%E5%BA%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="coding note and life perception">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="之哥的荣耀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          面试题库
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-07-23 16:03:19" itemprop="dateCreated datePublished" datetime="2020-07-23T16:03:19+08:00">2020-07-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-09-04 09:50:45" itemprop="dateModified" datetime="2020-09-04T09:50:45+08:00">2020-09-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%80%BB%E7%BB%93/" itemprop="url" rel="index"><span itemprop="name">总结</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h2><h3 id="1-如何理解-html-语义化？"><a href="#1-如何理解-html-语义化？" class="headerlink" title="1.如何理解 html 语义化？"></a>1.如何理解 html 语义化？</h3><ul>
+<li>举例法：HTML 语义化就是使用正确的标签 段落就写 p 标签，标题就写 h1 标签，文章就写 article 标签，视频就写 video 标签，等等</li>
+<li>阐述法：首先讲以前的后台开发人员使用 table 布局，然后讲美工人员使用 div+css 布局，最后讲专业的前端会使用正确的标签进行页面开发</li>
+</ul>
+<h3 id="2-meta-viewport-是做什么的？怎么写"><a href="#2-meta-viewport-是做什么的？怎么写" class="headerlink" title="2.meta viewport 是做什么的？怎么写"></a>2.meta viewport 是做什么的？怎么写</h3><p><code>&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1&quot;&gt;</code></p>
+<h2 id="Javascript"><a href="#Javascript" class="headerlink" title="Javascript"></a>Javascript</h2><h3 id="1-列举常见的-es6-属性"><a href="#1-列举常见的-es6-属性" class="headerlink" title="1.列举常见的 es6 属性"></a>1.列举常见的 es6 属性</h3><p><a href="https://sgw.wiki/es-6-tutorials/">es-6</a></p>
+<h3 id="2-函数防抖和函数节流分别是什么？"><a href="#2-函数防抖和函数节流分别是什么？" class="headerlink" title="2.函数防抖和函数节流分别是什么？"></a>2.函数防抖和函数节流分别是什么？</h3><p><a target="_blank" rel="noopener" href="https://github.com/iiicon/utils/blob/master/src/underscore/debounce.js">防抖</a><br><a target="_blank" rel="noopener" href="https://github.com/iiicon/utils/blob/master/src/underscore/throttle.js">节流</a></p>
+<h3 id="3-如何实现数组去重？"><a href="#3-如何实现数组去重？" class="headerlink" title="3.如何实现数组去重？"></a>3.如何实现数组去重？</h3><ul>
+<li>遍历比较</li>
+<li>计数排序变形</li>
+<li>使用 Set</li>
+<li>使用 WeakMap</li>
+</ul>
+<h2 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h2><h3 id="1-GET-和-POST-的区别"><a href="#1-GET-和-POST-的区别" class="headerlink" title="1.GET 和 POST 的区别"></a>1.GET 和 POST 的区别</h3><p>错解，但面试满分：</p>
+<ul>
+<li><code>GET</code> 在浏览器回退时是无害的，而 <code>POST</code> 会再次提交请求。</li>
+<li><code>GET</code> 产生的 URL 地址可以被加入收藏栏，而 <code>POST</code> 不可以。</li>
+<li><code>GET</code> 请求会被浏览器主动 cache，而 <code>POST</code> 不会，除非手动设置。</li>
+<li><code>GET</code> 请求只能进行 url 编码，而 <code>POST</code> 支持多种编码方式。</li>
+<li><code>GET</code> 请求参数会被完整保留在浏览器历史记录里，而 <code>POST</code> 中的参数不会被保留。</li>
+<li><code>GET</code> 请求在 URL 中传送的参数是有长度限制的，而 <code>POST</code> 么有。</li>
+<li>对参数的数据类型，<code>GET</code> 只接受 <code>ASCII</code> 字符，而 <code>POST</code> 没有限制。</li>
+<li><code>GET</code> 比 <code>POST</code> 更不安全，因为参数直接暴露在 <code>URL</code> 上，所以不能用来传递敏感信息。</li>
+<li><code>GET</code> 参数通过 <code>URL</code> 传递，<code>POST</code> 放在 <code>Request body</code> 中。</li>
+</ul>
+<p>正解：</p>
+<ul>
+<li>就一个区别：语义——<code>GET</code> 用于获取资源，<code>POST</code> 用于提交资源。</li>
+</ul>
+<h2 id="Vue"><a href="#Vue" class="headerlink" title="Vue"></a>Vue</h2><h3 id="1-watch-和-computed-和-methods-的区别是什么？"><a href="#1-watch-和-computed-和-methods-的区别是什么？" class="headerlink" title="1. watch 和 computed 和 methods 的区别是什么？"></a>1. watch 和 computed 和 methods 的区别是什么？</h3><ul>
+<li><code>computed</code> 和 <code>methods</code> 相比，最大区别是 <code>computed</code> 有缓存：如果 <code>computed</code> 属性依赖的属性没有变化，那么 <code>computed</code> 属性就不会重新计算， <code>methods</code> 则是看到一次计算一次</li>
+<li><code>watch</code> 和 <code>computed</code> <code>相比，computed</code> 是计算出一个属性（废话），而 <code>watch</code> 则可能是做别的事情（如上报数据）</li>
+</ul>
+<h3 id="vuejs-1-x-和-2-x-使用-Object-defineProperty-来劫持数据的-getter-和-setter，它有什么缺点？（或者-vue3-为什么要用-proxy）"><a href="#vuejs-1-x-和-2-x-使用-Object-defineProperty-来劫持数据的-getter-和-setter，它有什么缺点？（或者-vue3-为什么要用-proxy）" class="headerlink" title="vuejs 1.x 和 2.x 使用 Object.defineProperty 来劫持数据的 getter 和 setter，它有什么缺点？（或者 vue3 为什么要用 proxy）"></a>vuejs 1.x 和 2.x 使用 Object.defineProperty 来劫持数据的 getter 和 setter，它有什么缺点？（或者 vue3 为什么要用 proxy）</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Object</span>.defineProperty(data, <span class="string">&quot;a&quot;</span>, &#123;</span><br><span class="line">  get() &#123;</span><br><span class="line">    <span class="comment">// track</span></span><br><span class="line">  &#125;,</span><br><span class="line">  set() &#123;</span><br><span class="line">    <span class="comment">// trigger</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">observed = <span class="keyword">new</span> <span class="built_in">Proxy</span>(data, &#123;</span><br><span class="line">  get() &#123;</span><br><span class="line">    <span class="comment">// track</span></span><br><span class="line">  &#125;,</span><br><span class="line">  set() &#123;</span><br><span class="line">    <span class="comment">// trigger</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>Object.defineProperty</code> 需要预先知道要拦截的 <code>key</code> 是什么，所以它并不能检测对象属性的添加和删除。</li>
+<li>对于层级比较深的对象，<code>vue</code> 会使用 <code>Object.defineProperty</code> 把每一层对象数据都变成响应式的。如果我们的响应式对象很复杂，就会有相当大的性能负担</li>
+<li><code>Proxy</code> 劫持的是整个对象, 自然对于对象属性的增加和删除都能检测到</li>
+</ul>
+<h2 id="React"><a href="#React" class="headerlink" title="React"></a>React</h2><h3 id="1-受控组件-V-S-非受控组件"><a href="#1-受控组件-V-S-非受控组件" class="headerlink" title="1. 受控组件 V.S. 非受控组件"></a>1. 受控组件 V.S. 非受控组件</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;FInput value=&#123;x&#125; onChange=&#123;fn&#125;/&gt; 受控组件</span><br><span class="line">&lt;FInput defaultValue=&#123;x&#125; ref=&#123;input&#125;/&gt; 非受控组件</span><br></pre></td></tr></table></figure>
+
+<h2 id="前端工程化"><a href="#前端工程化" class="headerlink" title="前端工程化"></a>前端工程化</h2><ol>
+<li>各个模块加载方案已经区别</li>
+</ol>
+<ul>
+<li><p>AMD<br>AMD 是 RequireJS 在推广过程中对模块定义的规范化产出，其主要内容就是定义了 define 函数该如何书写，只要你按照这个规范书写模块和依赖，require.js 就能正确的进行解析<br><a target="_blank" rel="noopener" href="https://github.com/iiicon/js-modules/tree/master/src/requirejs">AMD demo</a></p>
+</li>
+<li><p>CMD<br>CMD 其实就是 SeaJS 在推广过程中对模块定义的规范化产出。主要内容就是描述该如何定义模块，如何引入模块，如何导出模块，只要你按照这个规范书写代码，sea.js 就能正确的进行解析<br><a target="_blank" rel="noopener" href="https://github.com/iiicon/js-modules/tree/master/src/seajs">CMD demo</a></p>
+<p><em>1.CMD 推崇依赖就近，AMD 推崇依赖前置 2.对于依赖的模块，AMD 是提前执行，CMD 是延迟执行</em></p>
+</li>
+<li><p>CommonJS<br>在服务器端比如 node，采用的则是 CommonJS 规范<br><a target="_blank" rel="noopener" href="https://github.com/iiicon/js-modules/tree/master/src/commonJS">CommonJS demo</a></p>
+<p><em>CommonJS 和 AMD 对比就是 commonjs 是同步的，AMD 规范则是非同步加载模块，允许指定回调函数。</em></p>
+</li>
+<li><p>ES6 模块<br>ECMAScript2015 规定了新的模块加载方案，需要使用的模块先加载完再执行代码<br><a target="_blank" rel="noopener" href="https://github.com/iiicon/js-modules/tree/master/src/ES6">ES6 demo</a></p>
+<p><em>CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。CommonJS 模块是运行时加载，ES6 模块是编译时输出接口。</em><br><em>因为 CommonJS 加载的是一个对象（即 module.exports 属性），该对象只有在脚本运行完才会生成。而 ES6 模块不是对象，它的对外接口只是一种静态定义，在代码静态解析阶段就会生成。</em></p>
+</li>
+</ul>
+<h2 id="开放题目"><a href="#开放题目" class="headerlink" title="开放题目"></a>开放题目</h2><h3 id="1-你遇到最难的问题是怎样的？"><a href="#1-你遇到最难的问题是怎样的？" class="headerlink" title="1. 你遇到最难的问题是怎样的？"></a>1. 你遇到最难的问题是怎样的？</h3><p>评分可参考如下场景</p>
+<blockquote>
+<p>一开始没搞懂<br>去网上看了个答案<br>一试发现这个广为流传的答案是有坑的<br>于是自己看 issue<br>发现还有一个小细节<br>然后解决了<br>谁知道还是在某种 edge case 有问题<br>于是自己看规范看源码，搞定</p>
+</blockquote>
+<h3 id="2-最近在关注什么新技术？"><a href="#2-最近在关注什么新技术？" class="headerlink" title="2. 最近在关注什么新技术？"></a>2. 最近在关注什么新技术？</h3><h2 id="刁钻题目"><a href="#刁钻题目" class="headerlink" title="刁钻题目"></a>刁钻题目</h2><h3 id="1"><a href="#1" class="headerlink" title="1"></a>1</h3><p>Q: <code>(a ==1 &amp;&amp; a== 2 &amp;&amp; a==3)</code> 可能为 <code>true</code> 吗？</p>
+<p>A: 第一种</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">var a &#x3D; &#123;</span><br><span class="line">  value: 1,</span><br><span class="line">  valueOf()&#123;</span><br><span class="line">   return this.value++</span><br><span class="line">  &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> a &#x3D;&#x3D;1 &amp;&amp; a&#x3D;&#x3D; 2 &amp;&amp; a&#x3D;&#x3D;3 &#x2F;&#x2F; true</span><br></pre></td></tr></table></figure>
+
+<p>A: 第二种</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">var value &#x3D; 1;</span><br><span class="line">Object.defineProperty(window, &#39;a&#39;, &#123;</span><br><span class="line">    get()&#123;</span><br><span class="line">        return value++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line">a &#x3D;&#x3D;&#x3D;1 &amp;&amp; a&#x3D;&#x3D;&#x3D; 2 &amp;&amp; a&#x3D;&#x3D;&#x3D;3 &#x2F;&#x2F; true</span><br></pre></td></tr></table></figure>
+
+<h3 id="2"><a href="#2" class="headerlink" title="2"></a>2</h3><p>Q: 问 a.x 是多少？</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = &#123; <span class="attr">name</span>: <span class="string">&quot;a&quot;</span> &#125;;</span><br><span class="line">a.x = a = &#123;&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>A: <code>undefined</code></p>
+<h3 id="3"><a href="#3" class="headerlink" title="3"></a>3</h3><p>Q: <code>[1,2,3].map(parseInt)</code> 输出什么？<br>A: <code>[1, NaN, NaN]</code></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag"># 面试题</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/06/22/js%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" rel="prev" title="js设计模式之观察者模式">
+      <i class="fa fa-chevron-left"></i> js设计模式之观察者模式
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/06/ES6%E4%B9%8BSymbol/" rel="next" title="ES6之Symbol">
+      ES6之Symbol <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTML"><span class="nav-number">1.</span> <span class="nav-text">HTML</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3-html-%E8%AF%AD%E4%B9%89%E5%8C%96%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">1.如何理解 html 语义化？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-meta-viewport-%E6%98%AF%E5%81%9A%E4%BB%80%E4%B9%88%E7%9A%84%EF%BC%9F%E6%80%8E%E4%B9%88%E5%86%99"><span class="nav-number">1.2.</span> <span class="nav-text">2.meta viewport 是做什么的？怎么写</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Javascript"><span class="nav-number">2.</span> <span class="nav-text">Javascript</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%88%97%E4%B8%BE%E5%B8%B8%E8%A7%81%E7%9A%84-es6-%E5%B1%9E%E6%80%A7"><span class="nav-number">2.1.</span> <span class="nav-text">1.列举常见的 es6 属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%87%BD%E6%95%B0%E9%98%B2%E6%8A%96%E5%92%8C%E5%87%BD%E6%95%B0%E8%8A%82%E6%B5%81%E5%88%86%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">2.2.</span> <span class="nav-text">2.函数防抖和函数节流分别是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%EF%BC%9F"><span class="nav-number">2.3.</span> <span class="nav-text">3.如何实现数组去重？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP"><span class="nav-number">3.</span> <span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-GET-%E5%92%8C-POST-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">3.1.</span> <span class="nav-text">1.GET 和 POST 的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vue"><span class="nav-number">4.</span> <span class="nav-text">Vue</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-watch-%E5%92%8C-computed-%E5%92%8C-methods-%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">4.1.</span> <span class="nav-text">1. watch 和 computed 和 methods 的区别是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vuejs-1-x-%E5%92%8C-2-x-%E4%BD%BF%E7%94%A8-Object-defineProperty-%E6%9D%A5%E5%8A%AB%E6%8C%81%E6%95%B0%E6%8D%AE%E7%9A%84-getter-%E5%92%8C-setter%EF%BC%8C%E5%AE%83%E6%9C%89%E4%BB%80%E4%B9%88%E7%BC%BA%E7%82%B9%EF%BC%9F%EF%BC%88%E6%88%96%E8%80%85-vue3-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8-proxy%EF%BC%89"><span class="nav-number">4.2.</span> <span class="nav-text">vuejs 1.x 和 2.x 使用 Object.defineProperty 来劫持数据的 getter 和 setter，它有什么缺点？（或者 vue3 为什么要用 proxy）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React"><span class="nav-number">5.</span> <span class="nav-text">React</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%8F%97%E6%8E%A7%E7%BB%84%E4%BB%B6-V-S-%E9%9D%9E%E5%8F%97%E6%8E%A7%E7%BB%84%E4%BB%B6"><span class="nav-number">5.1.</span> <span class="nav-text">1. 受控组件 V.S. 非受控组件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96"><span class="nav-number">6.</span> <span class="nav-text">前端工程化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E6%94%BE%E9%A2%98%E7%9B%AE"><span class="nav-number">7.</span> <span class="nav-text">开放题目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%A0%E9%81%87%E5%88%B0%E6%9C%80%E9%9A%BE%E7%9A%84%E9%97%AE%E9%A2%98%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84%EF%BC%9F"><span class="nav-number">7.1.</span> <span class="nav-text">1. 你遇到最难的问题是怎样的？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%9C%80%E8%BF%91%E5%9C%A8%E5%85%B3%E6%B3%A8%E4%BB%80%E4%B9%88%E6%96%B0%E6%8A%80%E6%9C%AF%EF%BC%9F"><span class="nav-number">7.2.</span> <span class="nav-text">2. 最近在关注什么新技术？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%81%E9%92%BB%E9%A2%98%E7%9B%AE"><span class="nav-number">8.</span> <span class="nav-text">刁钻题目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1"><span class="nav-number">8.1.</span> <span class="nav-text">1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2"><span class="nav-number">8.2.</span> <span class="nav-text">2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3"><span class="nav-number">8.3.</span> <span class="nav-text">3</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description">coding note and life perception</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

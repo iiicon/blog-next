@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-Hans,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sgw.wiki","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="在 xl 基础上做如下优化命名文件用 kebab case变量 camel case组件用 kebab case （个人偏好， 尤小右推荐用 Pascal case） html 部分属性尽量用 kebab caseid 用 camel case类名用 kebab case 关于 toast在 vue.prototype 上注册一个全局的 Toast，方便在组件中和 js 文件的任何地方调用主要是得">
+<meta property="og:type" content="article">
+<meta property="og:title" content="h5项目总结（xl2）">
+<meta property="og:url" content="https://sgw.wiki/2019/12/06/h5%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93%EF%BC%88xl2%EF%BC%89/index.html">
+<meta property="og:site_name" content="之哥的荣耀">
+<meta property="og:description" content="在 xl 基础上做如下优化命名文件用 kebab case变量 camel case组件用 kebab case （个人偏好， 尤小右推荐用 Pascal case） html 部分属性尽量用 kebab caseid 用 camel case类名用 kebab case 关于 toast在 vue.prototype 上注册一个全局的 Toast，方便在组件中和 js 文件的任何地方调用主要是得">
+<meta property="og:locale">
+<meta property="og:image" content="https://i.loli.net/2019/07/09/5d2425ba6317133933.jpg">
+<meta property="article:published_time" content="2019-12-06T02:01:55.000Z">
+<meta property="article:modified_time" content="2019-12-06T02:02:42.553Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="项目总结">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2019/07/09/5d2425ba6317133933.jpg">
+
+<link rel="canonical" href="https://sgw.wiki/2019/12/06/h5%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93%EF%BC%88xl2%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>h5项目总结（xl2） | 之哥的荣耀</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">之哥的荣耀</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不满是向上的车轮，能够载不自满的人类，向人道前进</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://sgw.wiki/2019/12/06/h5%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93%EF%BC%88xl2%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="coding note and life perception">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="之哥的荣耀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          h5项目总结（xl2）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-06 10:01:55 / Modified: 10:02:42" itemprop="dateCreated datePublished" datetime="2019-12-06T10:01:55+08:00">2019-12-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%80%BB%E7%BB%93/" itemprop="url" rel="index"><span itemprop="name">总结</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="在-xl-基础上做如下优化"><a href="#在-xl-基础上做如下优化" class="headerlink" title="在 xl 基础上做如下优化"></a>在 xl 基础上做如下优化</h2><h3 id="命名"><a href="#命名" class="headerlink" title="命名"></a>命名</h3><p>文件用 kebab case<br>变量 camel case<br>组件用 kebab case （个人偏好， 尤小右推荐用 Pascal case）</p>
+<p>html 部分<br>属性尽量用 kebab case<br>id 用 camel case<br>类名用 kebab case</p>
+<h3 id="关于-toast"><a href="#关于-toast" class="headerlink" title="关于 toast"></a>关于 toast</h3><p>在 vue.prototype 上注册一个全局的 Toast，方便在组件中和 js 文件的任何地方调用<br>主要是得益于 cube-ui 的 createAPI</p>
+<h3 id="关于-Loading"><a href="#关于-Loading" class="headerlink" title="关于 Loading"></a>关于 Loading</h3><p>也是利用 createAPI 的全局注册一个组件，可以用 api 调用组件</p>
+<h3 id="全局注入文件，以便每个文件使用"><a href="#全局注入文件，以便每个文件使用" class="headerlink" title="全局注入文件，以便每个文件使用"></a>全局注入文件，以便每个文件使用</h3><p>完成公共样式的抽离</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">css: &#123;</span><br><span class="line">  loaderOptions: &#123;</span><br><span class="line">    sass: &#123;</span><br><span class="line">      data: &#96;</span><br><span class="line">        @import &quot;@&#x2F;assets&#x2F;css&#x2F;variable.scss&quot;;</span><br><span class="line">        @import &quot;@&#x2F;assets&#x2F;css&#x2F;cover-cube.scss&quot;;</span><br><span class="line">        @import &quot;@&#x2F;assets&#x2F;css&#x2F;public.scss&quot;;</span><br><span class="line">      &#96;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="退出多层路由"><a href="#退出多层路由" class="headerlink" title="退出多层路由"></a>退出多层路由</h3><h3 id="input-click"><a href="#input-click" class="headerlink" title="input click"></a>input click</h3><p>点击事件需要加 native</p>
+<h3 id="在-vuex-层做数据持久化"><a href="#在-vuex-层做数据持久化" class="headerlink" title="在 vuex 层做数据持久化"></a>在 vuex 层做数据持久化</h3><p>默认方式采用 sessionstorage 存储<br>需要挑出使用 localstorage 存储的属性和 不需要存储的属性</p>
+<p>下面贴出 vuex 配置</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import Vue from &#39;vue&#39;</span><br><span class="line">import Vuex from &#39;vuex&#39;</span><br><span class="line">import state from &#39;.&#x2F;state&#39;</span><br><span class="line">import getters from &#39;.&#x2F;getters&#39;</span><br><span class="line">import mutations from &#39;.&#x2F;mutations&#39;</span><br><span class="line">import actions from &#39;.&#x2F;actions&#39;</span><br><span class="line">import createPersistedstate from &#39;vuex-persistedstate&#39;</span><br><span class="line">import createLogger from &#39;vuex&#x2F;dist&#x2F;logger&#39;</span><br><span class="line"></span><br><span class="line">Vue.use(Vuex)</span><br><span class="line"></span><br><span class="line">const debug &#x3D; process.env.NODE_ENV !&#x3D;&#x3D; &#39;production&#39;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 完全不需要存储的属性放在这里，默认的是要存储 sessionstorage</span><br><span class="line">const pathWithoutLSAndSS &#x3D; []</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 需要 localstorage 不能存 sessionstorage 的放在这里</span><br><span class="line">const pathWithoutSS &#x3D; [&#39;authToken&#39;]</span><br><span class="line"></span><br><span class="line">const vuexWithSS &#x3D; createPersistedstate(&#123;</span><br><span class="line">  key: &#39;SS&#39;,</span><br><span class="line">  storage: window.sessionStorage,</span><br><span class="line">  reducer: (vuexState) &#x3D;&gt; &#123;</span><br><span class="line">    let sessionState &#x3D; Object.assign(&#123;&#125;, vuexState)</span><br><span class="line">    let path &#x3D; [...pathWithoutSS, ...pathWithoutLSAndSS]</span><br><span class="line"></span><br><span class="line">    path.forEach(item &#x3D;&gt; &#123;</span><br><span class="line">      if (sessionState.hasOwnProperty(item)) &#123;</span><br><span class="line">        delete sessionState[item]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    return vuexState</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">const vuexWithLS &#x3D; createPersistedstate(&#123;</span><br><span class="line">  key: &#39;LS&#39;,</span><br><span class="line">  storage: window.localStorage,</span><br><span class="line">  reducer: (vuexState) &#x3D;&gt; &#123;</span><br><span class="line">    let storage &#x3D; &#123;&#125;</span><br><span class="line"></span><br><span class="line">    pathWithoutSS.forEach(item &#x3D;&gt; &#123;</span><br><span class="line">      if (vuexState.hasOwnProperty(item)) &#123;</span><br><span class="line">        storage[item] &#x3D; vuexState[item]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    return storage</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">const store &#x3D; new Vuex.Store(&#123;</span><br><span class="line">  state,</span><br><span class="line">  getters,</span><br><span class="line">  mutations,</span><br><span class="line">  actions,</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 在开发环境打开严格模式，虽然还是可以被修改，但是会在控制台报错</span><br><span class="line">  strict: debug,</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 使用插件存储 vuex 数据到 storage, 同时要在开发环境打开 logger</span><br><span class="line">  plugins: debug ? [createLogger(), vuexWithSS, vuexWithLS] : [vuexWithSS, vuexWithLS]</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">export default store</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>vuex persist API 文档</p>
+<p><img src="https://i.loli.net/2019/07/09/5d2425ba6317133933.jpg" alt="1562649994(1).jpg" loading="lazy"></p>
+<h3 id="利用-promise-解析-res-data"><a href="#利用-promise-解析-res-data" class="headerlink" title="利用 promise 解析 res.data"></a>利用 promise 解析 res.data</h3><p>优化前</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">post(url, data, options &#x3D; &#123;&#125;) &#123;</span><br><span class="line">  const instance &#x3D; axios.create(this.getFixedConfig())</span><br><span class="line">  this.interceptors(instance)</span><br><span class="line">  return instance.post(url, data, options)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>优化后</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">post(url, data, options &#x3D; &#123;&#125;) &#123;</span><br><span class="line">  const instance &#x3D; axios.create(this.getFixedConfig())</span><br><span class="line">  this.interceptors(instance)</span><br><span class="line">  return new Promise((resolve, reject) &#x3D;&gt; &#123;</span><br><span class="line">    instance.post(url, data, options).then(res &#x3D;&gt; &#123;</span><br><span class="line">      resolve(res.data)</span><br><span class="line">    &#125;, err &#x3D;&gt; &#123;</span><br><span class="line">      reject(err)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="获取-accessToken-优化"><a href="#获取-accessToken-优化" class="headerlink" title="获取 accessToken 优化"></a>获取 accessToken 优化</h3><ul>
+<li><p>优化前<br>在 mian.js 中调用获取 accessToken 的接口</p>
+</li>
+<li><p>优化后<br>写一个 getToken 的 js 文件，在 login register getpass 三个页面调用，统一存储到 vuex</p>
+</li>
+<li><p>优化空间<br>再存储一个过期时间，没有过期就不再继续请求，直接读取 vuex 中的值</p>
+</li>
+</ul>
+<h3 id="xl-需要的改动"><a href="#xl-需要的改动" class="headerlink" title="xl 需要的改动"></a>xl 需要的改动</h3><ul>
+<li>意见反馈增加参数</li>
+<li>退出登录加类型</li>
+</ul>
+<h3 id="ljl-需要优化点"><a href="#ljl-需要优化点" class="headerlink" title="ljl 需要优化点"></a>ljl 需要优化点</h3><ul>
+<li>时间选择初始化</li>
+<li>数据可能获取比较慢，在表单数据获取之后 refresh scroll</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/" rel="tag"># 项目总结</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/03/git%E5%88%86%E6%94%AF%E5%90%88%E5%B9%B6%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/" rel="prev" title="git分支合并相关操作">
+      <i class="fa fa-chevron-left"></i> git分支合并相关操作
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/12/%E4%BB%8E%E3%80%8C%E4%BB%8E%E8%BE%93%E5%85%A5URL%E5%88%B0%E9%A1%B5%E9%9D%A2%E5%8A%A0%E8%BD%BD%E3%80%8D%E8%B0%88%E5%8F%8AWeb%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="next" title="从「从输入URL到页面加载」谈及Web性能优化">
+      从「从输入URL到页面加载」谈及Web性能优化 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8-xl-%E5%9F%BA%E7%A1%80%E4%B8%8A%E5%81%9A%E5%A6%82%E4%B8%8B%E4%BC%98%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">在 xl 基础上做如下优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E5%90%8D"><span class="nav-number">1.1.</span> <span class="nav-text">命名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E-toast"><span class="nav-number">1.2.</span> <span class="nav-text">关于 toast</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E-Loading"><span class="nav-number">1.3.</span> <span class="nav-text">关于 Loading</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E6%B3%A8%E5%85%A5%E6%96%87%E4%BB%B6%EF%BC%8C%E4%BB%A5%E4%BE%BF%E6%AF%8F%E4%B8%AA%E6%96%87%E4%BB%B6%E4%BD%BF%E7%94%A8"><span class="nav-number">1.4.</span> <span class="nav-text">全局注入文件，以便每个文件使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%80%E5%87%BA%E5%A4%9A%E5%B1%82%E8%B7%AF%E7%94%B1"><span class="nav-number">1.5.</span> <span class="nav-text">退出多层路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#input-click"><span class="nav-number">1.6.</span> <span class="nav-text">input click</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-vuex-%E5%B1%82%E5%81%9A%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-number">1.7.</span> <span class="nav-text">在 vuex 层做数据持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A9%E7%94%A8-promise-%E8%A7%A3%E6%9E%90-res-data"><span class="nav-number">1.8.</span> <span class="nav-text">利用 promise 解析 res.data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96-accessToken-%E4%BC%98%E5%8C%96"><span class="nav-number">1.9.</span> <span class="nav-text">获取 accessToken 优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xl-%E9%9C%80%E8%A6%81%E7%9A%84%E6%94%B9%E5%8A%A8"><span class="nav-number">1.10.</span> <span class="nav-text">xl 需要的改动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ljl-%E9%9C%80%E8%A6%81%E4%BC%98%E5%8C%96%E7%82%B9"><span class="nav-number">1.11.</span> <span class="nav-text">ljl 需要优化点</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description">coding note and life perception</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

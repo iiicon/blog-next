@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-Hans,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sgw.wiki","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="代码仓库eventHubredux 任意两个组件如何通信&amp;&amp;发布订阅模式一个组件发布一个事件，另一个组件订阅这个事件，订阅事件的时候就是把触发的函数 push 到队列里，发布就是挨个执行这些函数，并把 payload 作为函数的参数执行 let fnObject &#x3D; &amp;#123;&amp;#125;let eventHub &#x3D; &amp;#123;  &#x2F;&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React组件通信-EventHub">
+<meta property="og:url" content="https://sgw.wiki/2019/07/17/React%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1-EventHub/index.html">
+<meta property="og:site_name" content="之哥的荣耀">
+<meta property="og:description" content="代码仓库eventHubredux 任意两个组件如何通信&amp;&amp;发布订阅模式一个组件发布一个事件，另一个组件订阅这个事件，订阅事件的时候就是把触发的函数 push 到队列里，发布就是挨个执行这些函数，并把 payload 作为函数的参数执行 let fnObject &#x3D; &amp;#123;&amp;#125;let eventHub &#x3D; &amp;#123;  &#x2F;&#x2F;">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-07-17T11:56:12.000Z">
+<meta property="article:modified_time" content="2019-08-13T10:02:57.373Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="G">
+<meta property="article:tag" content="React">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://sgw.wiki/2019/07/17/React%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1-EventHub/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>React组件通信-EventHub | 之哥的荣耀</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">之哥的荣耀</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不满是向上的车轮，能够载不自满的人类，向人道前进</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://sgw.wiki/2019/07/17/React%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1-EventHub/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="coding note and life perception">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="之哥的荣耀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          React组件通信-EventHub
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-07-17 19:56:12" itemprop="dateCreated datePublished" datetime="2019-07-17T19:56:12+08:00">2019-07-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-08-13 18:02:57" itemprop="dateModified" datetime="2019-08-13T18:02:57+08:00">2019-08-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/React/" itemprop="url" rel="index"><span itemprop="name">React</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="代码仓库"><a href="#代码仓库" class="headerlink" title="代码仓库"></a>代码仓库</h3><p><a target="_blank" rel="noopener" href="https://github.com/iiicon/react-demo-advance/blob/master/src/pages/RA2_1/index.jsx">eventHub</a><br><a target="_blank" rel="noopener" href="https://github.com/iiicon/react-demo-advance/blob/master/src/pages/RA2_2/index.jsx">redux</a></p>
+<h3 id="任意两个组件如何通信-amp-amp-发布订阅模式"><a href="#任意两个组件如何通信-amp-amp-发布订阅模式" class="headerlink" title="任意两个组件如何通信&amp;&amp;发布订阅模式"></a>任意两个组件如何通信&amp;&amp;发布订阅模式</h3><p>一个组件发布一个事件，另一个组件订阅这个事件，订阅事件的时候就是把触发的函数 push 到队列里，发布就是挨个执行这些函数，并把 payload 作为函数的参数执行</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">let fnObject &#x3D; &#123;&#125;</span><br><span class="line">let eventHub &#x3D; &#123;</span><br><span class="line">  &#x2F;&#x2F; 发布</span><br><span class="line">  trigger(eventName, data) &#123;</span><br><span class="line">    let fnList &#x3D; fnObject[eventName]</span><br><span class="line">    if (!fnList) &#123;</span><br><span class="line">      return</span><br><span class="line">    &#125;</span><br><span class="line">    for (let i &#x3D; 0; i &lt; fnList.length; i++) &#123;</span><br><span class="line">      fnList[i](data)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#x2F;&#x2F; 订阅</span><br><span class="line">  on(eventName, fn) &#123;</span><br><span class="line">    if (!fnObject[eventName]) &#123;</span><br><span class="line">      fnObject[eventName] &#x3D; []</span><br><span class="line">    &#125;</span><br><span class="line">    fnObject[eventName].push(fn)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; eventHub 的 subscribe</span><br><span class="line">let x &#x3D; &#123;</span><br><span class="line">  init() &#123;</span><br><span class="line">    eventHub.on(&#39;xxx&#39;, function(data)&#x3D;&gt;&#123; &#x2F;&#x2F; subscribe</span><br><span class="line">      store.money -&#x3D; data &#x2F;&#x2F; reducer</span><br><span class="line">      render()</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">x.init()</span><br></pre></td></tr></table></figure>
+
+<p>需要像上面这样的一个事件中心，管理发布和订阅，就是 trigger 和 on 两个函数</p>
+<p>你在需要这个事件的地方去订阅，把需要执行的函数放在里 eventHub.on(eventName, fn)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">eventHub.on(&#39;cost&#39;, data &#x3D;&gt; &#123;</span><br><span class="line">  this.setState(&#123;</span><br><span class="line">    money: this.state.money - data</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>在执行组件行为的时候，你就可以发布一个事件（其实就是执行刚才那个函数）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">eventHub.trigger(&#39;cost&#39;, 100)</span><br></pre></td></tr></table></figure>
+
+<p>这就是发布订阅模式。</p>
+<h3 id="利用-redux-进行组件通信"><a href="#利用-redux-进行组件通信" class="headerlink" title="利用 redux 进行组件通信"></a>利用 redux 进行组件通信</h3><p>当然我们很多时候数据都是自上而下的单向数据流，这样的情况我们只需要在顶层组件去订阅事件，然后在需要的时候去发布事件就行了，这样所有组件都能共享数据了</p>
+<p><code>redux</code> 就是专门做这个的工具，需要用 <code>store</code> 对象来管理所有数据，下面是 <code>redux</code> 的主要步骤:</p>
+<ol>
+<li>第一步引入 <code>createStore</code> 函数 <strong>createStore</strong></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import &#123; createStore &#125; from &#39;redux&#39;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>这个函数接受一个 <code>reducer</code> 的数据操作函数 <strong>reducer</strong></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">let reducers &#x3D; (state, action) &#x3D;&gt; &#123; &#x2F;&#x2F; reducer</span><br><span class="line">  state &#x3D; state || &#123; money: 10000 &#125;</span><br><span class="line">  switch (action.type) &#123;</span><br><span class="line">    case &#39;cost&#39;:</span><br><span class="line">      return &#123;</span><br><span class="line">        money: state.money - action.payload</span><br><span class="line">      &#125;</span><br><span class="line">    default:</span><br><span class="line">      return state</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>创建 <code>store</code> 对象, 参数是 <code>reducer</code> 函数 <strong>store</strong></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">let store &#x3D; createStore(reducer) </span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>你好像必须在顶层组件 <code>store.getState()</code> 获取数据</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;App money&#x3D;&#123;store.getState().money&#125; &#x2F;&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>如果你要发布一个事件，用来和别的组件通信，你需要： <strong>dispatch action</strong></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">store.dispatch(&#123; type: &#39;cost&#39;, payload: 100 &#125;)</span><br><span class="line">这个就对应上面发布 eventHub.trigger(&#39;cost&#39;, 100) </span><br></pre></td></tr></table></figure>
+
+<p><strong>type 就是 action-type</strong><br><strong>payload 就是 action-payload</strong></p>
+<ol start="6">
+<li>当然必须要订阅才能监听到发布的事件 <strong>subscribe</strong></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">const render &#x3D; () &#x3D;&gt;</span><br><span class="line">  ReactDOM.render(</span><br><span class="line">    &lt;RA22 &#x2F;&gt;,</span><br><span class="line">    document.getElementById(&#39;root2&#39;)</span><br><span class="line">  )</span><br><span class="line">render()</span><br><span class="line">store.subscribe(render) &#x2F;&#x2F; 只要 store 一变化，subscribe 里面的函数就会执行，这个函数就是上面的 &#96;x.init()&#96;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/G/" rel="tag"># G</a>
+              <a href="/tags/React/" rel="tag"># React</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/07/17/js%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/" rel="prev" title="js位运算符">
+      <i class="fa fa-chevron-left"></i> js位运算符
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/07/21/React%E5%92%8CReact-redux/" rel="next" title="React和React-redux">
+      React和React-redux <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E4%BB%93%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">代码仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E6%84%8F%E4%B8%A4%E4%B8%AA%E7%BB%84%E4%BB%B6%E5%A6%82%E4%BD%95%E9%80%9A%E4%BF%A1-amp-amp-%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">任意两个组件如何通信&amp;&amp;发布订阅模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A9%E7%94%A8-redux-%E8%BF%9B%E8%A1%8C%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1"><span class="nav-number">3.</span> <span class="nav-text">利用 redux 进行组件通信</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description">coding note and life perception</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-Hans,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sgw.wiki","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="使用整数判断整数 Number.isInteger如果有些数字看起来像浮点数，却存储为整数，这会让 Number.isInteger 方法判断失效而返回 true在 javascript 中，只给数字添加小数点不会让整数变为浮点数，此处的 25.0 确实是 25，所以会按照整数的形式存储 安全整数 Number.isSafeIntegerNumber.isSafeInteger 方法来识别语言可以">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《深入理解ES6》读书笔记ES6中较小的改动">
+<meta property="og:url" content="https://sgw.wiki/2019/12/12/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3ES6%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0ES6%E4%B8%AD%E8%BE%83%E5%B0%8F%E7%9A%84%E6%94%B9%E5%8A%A8/index.html">
+<meta property="og:site_name" content="之哥的荣耀">
+<meta property="og:description" content="使用整数判断整数 Number.isInteger如果有些数字看起来像浮点数，却存储为整数，这会让 Number.isInteger 方法判断失效而返回 true在 javascript 中，只给数字添加小数点不会让整数变为浮点数，此处的 25.0 确实是 25，所以会按照整数的形式存储 安全整数 Number.isSafeIntegerNumber.isSafeInteger 方法来识别语言可以">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-12-12T15:43:55.000Z">
+<meta property="article:modified_time" content="2019-12-20T03:22:04.320Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="js，es6">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://sgw.wiki/2019/12/12/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3ES6%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0ES6%E4%B8%AD%E8%BE%83%E5%B0%8F%E7%9A%84%E6%94%B9%E5%8A%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>《深入理解ES6》读书笔记ES6中较小的改动 | 之哥的荣耀</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">之哥的荣耀</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不满是向上的车轮，能够载不自满的人类，向人道前进</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://sgw.wiki/2019/12/12/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3ES6%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0ES6%E4%B8%AD%E8%BE%83%E5%B0%8F%E7%9A%84%E6%94%B9%E5%8A%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="coding note and life perception">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="之哥的荣耀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          《深入理解ES6》读书笔记ES6中较小的改动
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-12-12 23:43:55" itemprop="dateCreated datePublished" datetime="2019-12-12T23:43:55+08:00">2019-12-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-20 11:22:04" itemprop="dateModified" datetime="2019-12-20T11:22:04+08:00">2019-12-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="使用整数"><a href="#使用整数" class="headerlink" title="使用整数"></a>使用整数</h3><h4 id="判断整数-Number-isInteger"><a href="#判断整数-Number-isInteger" class="headerlink" title="判断整数 Number.isInteger"></a>判断整数 Number.isInteger</h4><p>如果有些数字看起来像浮点数，却存储为整数，这会让 Number.isInteger 方法判断失效而返回 true<br>在 javascript 中，只给数字添加小数点不会让整数变为浮点数，此处的 25.0 确实是 25，所以会按照整数的形式存储</p>
+<h4 id="安全整数-Number-isSafeInteger"><a href="#安全整数-Number-isSafeInteger" class="headerlink" title="安全整数 Number.isSafeInteger"></a>安全整数 Number.isSafeInteger</h4><p>Number.isSafeInteger 方法来识别语言可以准确得表示的整数，添加了 Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER 分别表示整数范围的上限和下限。Number.isSafeInteger 方法用来确保一个值是整数，并且落在整数值的安全范围内</p>
+<h3 id="新的-Math-方法"><a href="#新的-Math-方法" class="headerlink" title="新的 Math 方法"></a>新的 Math 方法</h3><p>ES6 引入定型数组来增强游戏和图形体验，这可以让 js 引擎做更有效的数字计算</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Math.hypot 求平方和根</span><br><span class="line">Math.sign 返回 1 -1 0</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h3 id="正式化-proto-属性"><a href="#正式化-proto-属性" class="headerlink" title="正式化 proto 属性"></a>正式化 <strong>proto</strong> 属性</h3><p>不是所有的 js 引擎 都实现了 <strong>proto</strong>, 所以 ES6 正式添加了这个特性，但有一段警告</p>
+<blockquote>
+<p>这些特性本属于 es 核心语言的一部分，在编写新的 es 代码时，程序员不应该使用这些特性和功能，也不应假定它们是存在的。除非在 web 浏览器中或者需要像 web 浏览器一样执行遗留的 es 代码，否则不鼓励</p>
+</blockquote>
+<p>所以更应该用 <code>Object.getPrototype()</code> 和 <code>Object.setPrototype()</code></p>
+<p>在 es6 引擎中 <code>Object.prototype.__proto__</code> 被定义为一个访问器属性，其 get 方法会调用 <code>Object.getPrototype</code>，set 方法会调用 <code>Object.setPrototype</code>, 因此和使用 <strong>proto</strong> 的区别就是可以直接设置对象字面量的原型。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/js%EF%BC%8Ces6/" rel="tag"># js，es6</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/12/%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3ES6%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%BA%86%E8%A7%A3%20ES7/" rel="prev" title="《深入理解ES6》读书笔记了解ES7">
+      <i class="fa fa-chevron-left"></i> 《深入理解ES6》读书笔记了解ES7
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/16/%E3%80%8A%E9%AB%98%E7%A8%8B%E4%B8%89%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E7%AC%AC%E5%85%AD%E7%AB%A0%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="next" title="《高程三》读书笔记第六章面向对象">
+      《高程三》读书笔记第六章面向对象 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%95%B4%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">使用整数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E6%95%B4%E6%95%B0-Number-isInteger"><span class="nav-number">1.1.</span> <span class="nav-text">判断整数 Number.isInteger</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E6%95%B4%E6%95%B0-Number-isSafeInteger"><span class="nav-number">1.2.</span> <span class="nav-text">安全整数 Number.isSafeInteger</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E7%9A%84-Math-%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">新的 Math 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%BC%8F%E5%8C%96-proto-%E5%B1%9E%E6%80%A7"><span class="nav-number">3.</span> <span class="nav-text">正式化 proto 属性</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description">coding note and life perception</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

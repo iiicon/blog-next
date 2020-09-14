@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-Hans,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sgw.wiki","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="前言最近系统性地过了一遍 js 正则，参考《JavaScript 正则迷你书》,很多人说，正则是反应程序员水平的侧面标准，这本书知识点非常到位，把核心的东西都梳理得很好  正则表达式字符匹配 正则表达式匹配位置 正则表达式括号的应用 正则表达式回溯法原理 正则表达式的拆分 正则表达式的构建 正则表达式的编程  实例匹配 16 进制颜色值const reg &#x3D; &#x2F;#([0-9a-fA-F]&amp;#123">
+<meta property="og:type" content="article">
+<meta property="og:title" content="js正则">
+<meta property="og:url" content="https://sgw.wiki/2020/03/06/js%E6%AD%A3%E5%88%99/index.html">
+<meta property="og:site_name" content="之哥的荣耀">
+<meta property="og:description" content="前言最近系统性地过了一遍 js 正则，参考《JavaScript 正则迷你书》,很多人说，正则是反应程序员水平的侧面标准，这本书知识点非常到位，把核心的东西都梳理得很好  正则表达式字符匹配 正则表达式匹配位置 正则表达式括号的应用 正则表达式回溯法原理 正则表达式的拆分 正则表达式的构建 正则表达式的编程  实例匹配 16 进制颜色值const reg &#x3D; &#x2F;#([0-9a-fA-F]&amp;#123">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-03-06T08:56:13.000Z">
+<meta property="article:modified_time" content="2020-04-07T02:33:12.358Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="RegExp">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://sgw.wiki/2020/03/06/js%E6%AD%A3%E5%88%99/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>js正则 | 之哥的荣耀</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">之哥的荣耀</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不满是向上的车轮，能够载不自满的人类，向人道前进</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://sgw.wiki/2020/03/06/js%E6%AD%A3%E5%88%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="coding note and life perception">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="之哥的荣耀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          js正则
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-06 16:56:13" itemprop="dateCreated datePublished" datetime="2020-03-06T16:56:13+08:00">2020-03-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-04-07 10:33:12" itemprop="dateModified" datetime="2020-04-07T10:33:12+08:00">2020-04-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index"><span itemprop="name">js</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近系统性地过了一遍 js 正则，参考<a target="_blank" rel="noopener" href="https://juejin.im/post/59cc61176fb9a00a437b290b">《JavaScript 正则迷你书》</a>,<br>很多人说，正则是反应程序员水平的侧面标准，这本书知识点非常到位，把核心的东西都梳理得很好</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/iiicon/RegExp/blob/master/reg1.js">正则表达式字符匹配</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/iiicon/RegExp/blob/master/reg2.js">正则表达式匹配位置</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/iiicon/RegExp/blob/master/reg3.js">正则表达式括号的应用</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/iiicon/RegExp/blob/master/reg4.js">正则表达式回溯法原理</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/iiicon/RegExp/blob/master/reg5.js">正则表达式的拆分</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/iiicon/RegExp/blob/master/reg6.js">正则表达式的构建</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/iiicon/RegExp/blob/master/reg7.js">正则表达式的编程</a></li>
+</ul>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><h3 id="匹配-16-进制颜色值"><a href="#匹配-16-进制颜色值" class="headerlink" title="匹配 16 进制颜色值"></a>匹配 16 进制颜色值</h3><pre><code>const reg = /#([0-9a-fA-F]&#123;6&#125;)|([0-9a-fA-F]&#123;3&#125;)/g;</code></pre>
+<h3 id="匹配时间-hh-mm"><a href="#匹配时间-hh-mm" class="headerlink" title="匹配时间 hh:mm"></a>匹配时间 hh:mm</h3><pre><code>const reg = /^[01][0-9]|[2][0-3]:[0-5][0-9]$/g;</code></pre>
+<h3 id="匹配日期-yyyy-mm-dd"><a href="#匹配日期-yyyy-mm-dd" class="headerlink" title="匹配日期 yyyy-mm-dd"></a>匹配日期 yyyy-mm-dd</h3><pre><code>const reg = /^[0-9]&#123;4&#125;-(0[1-9]|1[12])-(0[1-9]|[12][0-9]|[3][01])$/g;</code></pre>
+<h3 id="windows-操作文件路径"><a href="#windows-操作文件路径" class="headerlink" title="windows 操作文件路径"></a>windows 操作文件路径</h3><pre><code>const reg = /^[a-zA-Z]:\\([^\\:*&lt;&gt;|&quot;?\r\n/]+\\)*([^\\:*&lt;&gt;|&quot;?\r\n/]+)?$/;</code></pre>
+<h3 id="匹配-id"><a href="#匹配-id" class="headerlink" title="匹配 id"></a>匹配 id</h3><pre><code>const reg = /id=&quot;[^&quot;]*&quot;/;</code></pre>
+<h3 id="匹配位置"><a href="#匹配位置" class="headerlink" title="匹配位置"></a>匹配位置</h3><pre><code>const reg = /^|$/g;</code></pre>
+<h3 id="不匹配任何东西"><a href="#不匹配任何东西" class="headerlink" title="不匹配任何东西"></a>不匹配任何东西</h3><pre><code>const reg = /.^/</code></pre>
+<h3 id="数字千位分隔符表示法"><a href="#数字千位分隔符表示法" class="headerlink" title="数字千位分隔符表示法"></a>数字千位分隔符表示法</h3><pre><code>const reg = /(?!^)(?=(\d&#123;3&#125;)+$)/g</code></pre>
+<h3 id="验证密码"><a href="#验证密码" class="headerlink" title="验证密码"></a>验证密码</h3><pre><code>const reg = /(?=.*[0-9])(?=.*[a-zA-Z])^[0-9a-zA-Z]&#123;6,12&#125;$/;
+const reg1 = /(?!^[0-9]&#123;6,12&#125;$)(?!^[a-z]&#123;6,12&#125;$)(?!^[A-Z]&#123;6,12&#125;$)^[0-9A-Za-z]&#123;6,12&#125;$/;</code></pre>
+<h3 id="字符串trim方法模拟"><a href="#字符串trim方法模拟" class="headerlink" title="字符串trim方法模拟"></a>字符串trim方法模拟</h3><pre><code>const reg = /^\s+|\s+$/g</code></pre>
+<h3 id="将每个单词的首字母转换为大写"><a href="#将每个单词的首字母转换为大写" class="headerlink" title="将每个单词的首字母转换为大写"></a>将每个单词的首字母转换为大写</h3><pre><code>const reg = /(?:^|\s)\w/g
+const string = &quot;i am gerritv&quot;.replace(reg, c =&gt; c.toUpperCase());</code></pre>
+<h3 id="驼峰化"><a href="#驼峰化" class="headerlink" title="驼峰化"></a>驼峰化</h3><pre><code>const reg = /[-_\s]+(.)?/g;
+const string = &quot;_si-uiw&quot;.replace(reg, (match, c) =&gt; &#123;
+    c ? c.toUpperCase() : &quot;&quot;;
+&#125;);</code></pre>
+<h3 id="中线化"><a href="#中线化" class="headerlink" title="中线化"></a>中线化</h3><pre><code>const reg = /([A-Z])/g;
+const reg1 = /[-_\s]+/g;
+const string = &quot;MozTransform&quot;
+    .replace(reg, &quot;-$1&quot;)
+    .replace(reg1, &quot;-&quot;)
+    .toLowerCase();</code></pre>
+<h3 id="身份证正则"><a href="#身份证正则" class="headerlink" title="身份证正则"></a>身份证正则</h3><pre><code>const reg = /^\d&#123;15&#125;|\d&#123;17&#125;[\dxX]$/;</code></pre>
+<h3 id="IPV4地址"><a href="#IPV4地址" class="headerlink" title="IPV4地址"></a>IPV4地址</h3><pre><code>const reg = /^((0&#123;0,2&#125;\d|0?\d&#123;2&#125;|1\d&#123;2&#125;|2[0-4]\d|25[0-5])\.)&#123;3&#125;(0&#123;0,2&#125;\d|0?\d&#123;2&#125;|1\d&#123;2&#125;|2[0-4]\d</code></pre>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RegExp/" rel="tag"># RegExp</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/03/%E8%8F%9C%E8%B0%B1/" rel="prev" title="菜谱">
+      <i class="fa fa-chevron-left"></i> 菜谱
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/03/relayout%E5%92%8Crepaint/" rel="next" title="relayout和repaint">
+      relayout和repaint <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%B9%E9%85%8D-16-%E8%BF%9B%E5%88%B6%E9%A2%9C%E8%89%B2%E5%80%BC"><span class="nav-number">2.1.</span> <span class="nav-text">匹配 16 进制颜色值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%B9%E9%85%8D%E6%97%B6%E9%97%B4-hh-mm"><span class="nav-number">2.2.</span> <span class="nav-text">匹配时间 hh:mm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%B9%E9%85%8D%E6%97%A5%E6%9C%9F-yyyy-mm-dd"><span class="nav-number">2.3.</span> <span class="nav-text">匹配日期 yyyy-mm-dd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#windows-%E6%93%8D%E4%BD%9C%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84"><span class="nav-number">2.4.</span> <span class="nav-text">windows 操作文件路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%B9%E9%85%8D-id"><span class="nav-number">2.5.</span> <span class="nav-text">匹配 id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%B9%E9%85%8D%E4%BD%8D%E7%BD%AE"><span class="nav-number">2.6.</span> <span class="nav-text">匹配位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%8C%B9%E9%85%8D%E4%BB%BB%E4%BD%95%E4%B8%9C%E8%A5%BF"><span class="nav-number">2.7.</span> <span class="nav-text">不匹配任何东西</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E5%8D%83%E4%BD%8D%E5%88%86%E9%9A%94%E7%AC%A6%E8%A1%A8%E7%A4%BA%E6%B3%95"><span class="nav-number">2.8.</span> <span class="nav-text">数字千位分隔符表示法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E5%AF%86%E7%A0%81"><span class="nav-number">2.9.</span> <span class="nav-text">验证密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2trim%E6%96%B9%E6%B3%95%E6%A8%A1%E6%8B%9F"><span class="nav-number">2.10.</span> <span class="nav-text">字符串trim方法模拟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E6%AF%8F%E4%B8%AA%E5%8D%95%E8%AF%8D%E7%9A%84%E9%A6%96%E5%AD%97%E6%AF%8D%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%A4%A7%E5%86%99"><span class="nav-number">2.11.</span> <span class="nav-text">将每个单词的首字母转换为大写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A9%BC%E5%B3%B0%E5%8C%96"><span class="nav-number">2.12.</span> <span class="nav-text">驼峰化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E7%BA%BF%E5%8C%96"><span class="nav-number">2.13.</span> <span class="nav-text">中线化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BA%AB%E4%BB%BD%E8%AF%81%E6%AD%A3%E5%88%99"><span class="nav-number">2.14.</span> <span class="nav-text">身份证正则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IPV4%E5%9C%B0%E5%9D%80"><span class="nav-number">2.15.</span> <span class="nav-text">IPV4地址</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description">coding note and life perception</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

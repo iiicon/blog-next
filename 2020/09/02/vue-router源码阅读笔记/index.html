@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-Hans,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sgw.wiki","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="Vue Router使用 Vue.js + Vue Router 创建单页只需要将组件 components 映射到路由 routes，然后告诉 Vue Router 在哪里渲染它们">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vue-route 源码阅读笔记">
+<meta property="og:url" content="https://sgw.wiki/2020/09/02/vue-router%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="之哥的荣耀">
+<meta property="og:description" content="Vue Router使用 Vue.js + Vue Router 创建单页只需要将组件 components 映射到路由 routes，然后告诉 Vue Router 在哪里渲染它们">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-09-02T09:22:46.000Z">
+<meta property="article:modified_time" content="2020-09-14T01:32:15.698Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="vue">
+<meta property="article:tag" content="vue-router">
+<meta property="article:tag" content="笔记">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://sgw.wiki/2020/09/02/vue-router%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>vue-route 源码阅读笔记 | 之哥的荣耀</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">之哥的荣耀</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不满是向上的车轮，能够载不自满的人类，向人道前进</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://sgw.wiki/2020/09/02/vue-router%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="coding note and life perception">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="之哥的荣耀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vue-route 源码阅读笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-09-02 17:22:46" itemprop="dateCreated datePublished" datetime="2020-09-02T17:22:46+08:00">2020-09-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-09-14 09:32:15" itemprop="dateModified" datetime="2020-09-14T09:32:15+08:00">2020-09-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/vue/" itemprop="url" rel="index"><span itemprop="name">vue</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Vue-Router"><a href="#Vue-Router" class="headerlink" title="Vue Router"></a>Vue Router</h1><p>使用 <code>Vue.js + Vue Router</code> 创建单页只需要将组件 <code>components</code> 映射到路由 <code>routes</code>，然后告诉 <code>Vue Router</code> 在哪里渲染它们</p>
+<a id="more"></a>
+
+<h2 id="路由注册"><a href="#路由注册" class="headerlink" title="路由注册"></a>路由注册</h2><p>Vue 主要是解决视图渲染的问题，其他的能力是通过插件的方式解决</p>
+<h3 id="Vue-use"><a href="#Vue-use" class="headerlink" title="Vue.use"></a><code>Vue.use</code></h3><p>Vue 提供了 use 的全局 API 来注册这些插件，定义在 <code>vue/src/core/global-api/use.js</code> 中：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">initUse</span>(<span class="params">Vue: GlobalAPI</span>) </span>&#123;</span><br><span class="line">  Vue.use = <span class="function"><span class="keyword">function</span>(<span class="params">plugin: Function | Object</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> installedPlugins = <span class="built_in">this</span>._installedPlugins || (<span class="built_in">this</span>._installedPlugins = [])</span><br><span class="line">    <span class="keyword">if</span> (installedPlugins.indexOf(plugin) &gt; <span class="number">-1</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">this</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> args = toArray(<span class="built_in">arguments</span>, <span class="number">1</span>)</span><br><span class="line">    args.unshift(<span class="built_in">this</span>)</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> plugin.install === <span class="string">&#x27;function&#x27;</span>) &#123;</span><br><span class="line">      plugin.install.apply(plugin, args)</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> plugin === <span class="string">&#x27;function&#x27;</span>) &#123;</span><br><span class="line">      plugin.apply(<span class="literal">null</span>, args)</span><br><span class="line">    &#125;</span><br><span class="line">    installedPlugins.push(plugin)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Vue.use</code> 接受一个 <code>plugin</code> 参数，并且维护了一个 <code>_installPlugins</code> 数组，并存储所有注册过的 <code>plugins</code>,<br>接着判断 <code>install</code> 方法有没有定义，有则调用，注意第一个参数 <code>Vue</code>，最后把 plugin 存储在 <code>_installPlugins</code> 中</p>
+<h3 id="路由安装"><a href="#路由安装" class="headerlink" title="路由安装"></a>路由安装</h3><p>Vue-Router 的入口文件是 <code>src/index.js</code>，其中定义了 <code>VueRouter</code> 类，挂载了 <code>install</code> 方法 <code>VueRouter.install = install</code></p>
+<p>当我们执行 <code>Vue.use(VueRouter)</code> 的时候，就是执行了 <code>install</code> 方法，其中最重要的就是 通过 <code>Vue.mixin</code> 方法把 <code>beforeCreate</code> 和 <code>destroyed</code> 钩子注入到每一个组件中</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">initMixin</span>(<span class="params">Vue: GlobalAPI</span>) </span>&#123;</span><br><span class="line">  Vue.mixin = <span class="function"><span class="keyword">function</span>(<span class="params">mixin: Object</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.options = mergeOptions(<span class="built_in">this</span>.options, mixin)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>它其实就是把定义的对象混入了 <code>Vue.options</code> 中，因为我们在组件创建阶段会执行 <code>extend</code> 把 <code>Vue.options</code> merge 到自身的 <code>options</code> 中，所以相当于每个组件都混入了这两个钩子</p>
+<p>我们再看 <code>install</code> 方法</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">install</span>(<span class="params">Vue</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (install.installed &amp;&amp; _Vue === Vue) <span class="keyword">return</span></span><br><span class="line">  install.installed = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">  _Vue = Vue</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> isDef = <span class="function"><span class="params">v</span> =&gt;</span> v !== <span class="literal">undefined</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> registerInstance = <span class="function">(<span class="params">vm, callVal</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> i = vm.$options._parentVnode</span><br><span class="line">    <span class="keyword">if</span> (isDef(i) &amp;&amp; isDef((i = i.data)) &amp;&amp; isDef((i = i.registerRouteInstance))) &#123;</span><br><span class="line">      i(vm, callVal)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  Vue.mixin(&#123;</span><br><span class="line">    beforeCreate() &#123;</span><br><span class="line">      <span class="keyword">if</span> (isDef(<span class="built_in">this</span>.$options.router)) &#123;</span><br><span class="line">        <span class="built_in">this</span>._routerRoot = <span class="built_in">this</span></span><br><span class="line">        <span class="built_in">this</span>._router = <span class="built_in">this</span>.$options.router</span><br><span class="line">        <span class="built_in">this</span>._router.init(<span class="built_in">this</span>)</span><br><span class="line">        Vue.util.defineReactive(<span class="built_in">this</span>, <span class="string">&#x27;_route&#x27;</span>, <span class="built_in">this</span>._router.history.current)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>._routerRoot = (<span class="built_in">this</span>.$parent &amp;&amp; <span class="built_in">this</span>.$parent._routerRoot) || <span class="built_in">this</span></span><br><span class="line">      &#125;</span><br><span class="line">      registerInstance(<span class="built_in">this</span>, <span class="built_in">this</span>)</span><br><span class="line">    &#125;,</span><br><span class="line">    destroyed() &#123;</span><br><span class="line">      registerInstance(<span class="built_in">this</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(Vue.prototype, <span class="string">&#x27;$router&#x27;</span>, &#123;</span><br><span class="line">    get() &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">this</span>._routerRoot._router</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(Vue.prototype, <span class="string">&#x27;$route&#x27;</span>, &#123;</span><br><span class="line">    get() &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">this</span>._routerRoot._route</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  Vue.component(<span class="string">&#x27;RouterView&#x27;</span>, View)</span><br><span class="line">  Vue.component(<span class="string">&#x27;RouterLink&#x27;</span>, Link)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> strats = Vue.config.optionMergeStrategies</span><br><span class="line">  <span class="comment">// use the same hook merging strategy for route hooks</span></span><br><span class="line">  strats.beforeRouteEnter = strats.beforeRouteLeave = strats.beforeRouteUpdate = strats.created</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>混入的 <code>beforeCreate</code> 钩子，对于根 Vue 实例而言，执行该钩子 <code>this._routerRoot</code> 就是自身，<code>this._router</code> 表示 <code>router</code> 实例，然后执行 <code>this._router.init()</code> 初始化 <code>router</code>,<br>接着用 <code>defineReactive</code> 把 <code>this._router</code> 变成响应式对象<br>对于子组件的 <code>_routerRoot</code> 始终指向的离它最近的传入了 <code>router</code> 对象作为配置而实例化的父实例。</p>
+<p><code>beforeCreate</code> 和 <code>destroyed</code> 钩子都会执行 vnode 定义的 <code>registerInstance</code></p>
+<p>接着在实例原型上定义了 <code>$router</code> 和 <code>$route</code> 2 个属性的 get 方法，我们可以 <code>this.$router</code> 以及 <code>this.$route</code> 去访问 router</p>
+<p>接着通过 <code>Vue.component</code> 方法定义了全局的 <code>router-view</code> 和 <code>router-link</code> 组件</p>
+<p>最后定义了 <code>Vue Router</code> 钩子函数用 Vue 的 <code>created</code> 的钩子合并策略</p>
+<h2 id="VueRouter-对象"><a href="#VueRouter-对象" class="headerlink" title="VueRouter 对象"></a>VueRouter 对象</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">VueRouter</span> </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> install: <span class="function">() =&gt;</span> <span class="keyword">void</span></span><br><span class="line">  <span class="keyword">static</span> version: string</span><br><span class="line"></span><br><span class="line">  app: any</span><br><span class="line">  apps: <span class="built_in">Array</span>&lt;any&gt;</span><br><span class="line">  ready: boolean</span><br><span class="line">  readyCbs: <span class="built_in">Array</span>&lt;<span class="built_in">Function</span>&gt;</span><br><span class="line">  options: RouterOptions</span><br><span class="line">  mode: string</span><br><span class="line">  history: HashHistory | HTML5History | AbstractHistory</span><br><span class="line">  matcher: Matcher</span><br><span class="line">  fallback: boolean</span><br><span class="line">  beforeHooks: <span class="built_in">Array</span>&lt;?NavigationGuard&gt;</span><br><span class="line">  resolveHooks: <span class="built_in">Array</span>&lt;?NavigationGuard&gt;</span><br><span class="line">  afterHooks: <span class="built_in">Array</span>&lt;?AfterNavigationHook&gt;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">constructor</span>(options: RouterOptions = &#123;&#125;) &#123;</span><br><span class="line">    <span class="built_in">this</span>.app = <span class="literal">null</span></span><br><span class="line">    <span class="built_in">this</span>.apps = []</span><br><span class="line">    <span class="built_in">this</span>.options = options</span><br><span class="line">    <span class="built_in">this</span>.beforeHooks = []</span><br><span class="line">    <span class="built_in">this</span>.resolveHooks = []</span><br><span class="line">    <span class="built_in">this</span>.afterHooks = []</span><br><span class="line">    <span class="built_in">this</span>.matcher = createMatcher(options.routes || [], <span class="built_in">this</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> mode = options.mode || <span class="string">&#x27;hash&#x27;</span></span><br><span class="line">    <span class="built_in">this</span>.fallback = mode === <span class="string">&#x27;history&#x27;</span> &amp;&amp; !supportsPushState &amp;&amp; options.fallback !== <span class="literal">false</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>.fallback) &#123;</span><br><span class="line">      mode = <span class="string">&#x27;hash&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!inBrowser) &#123;</span><br><span class="line">      mode = <span class="string">&#x27;abstract&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">this</span>.mode = mode</span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span> (mode) &#123;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">&#x27;history&#x27;</span>:</span><br><span class="line">        <span class="built_in">this</span>.history = <span class="keyword">new</span> HTML5History(<span class="built_in">this</span>, options.base)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">      <span class="keyword">case</span> <span class="string">&#x27;hash&#x27;</span>:</span><br><span class="line">        <span class="built_in">this</span>.history = <span class="keyword">new</span> HashHistory(<span class="built_in">this</span>, options.base, <span class="built_in">this</span>.fallback)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">      <span class="keyword">case</span> <span class="string">&#x27;abstract&#x27;</span>:</span><br><span class="line">        <span class="built_in">this</span>.history = <span class="keyword">new</span> AbstractHistory(<span class="built_in">this</span>, options.base)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">      <span class="keyword">default</span>:</span><br><span class="line">        <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">&#x27;production&#x27;</span>) &#123;</span><br><span class="line">          assert(<span class="literal">false</span>, <span class="string">`invalid mode: <span class="subst">$&#123;mode&#125;</span>`</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  match(raw: RawLocation, current?: Route, redirectedFrom?: Location): Route &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.matcher.match(raw, current, redirectedFrom)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">get</span> <span class="title">currentRoute</span>(): ?<span class="title">Route</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.history &amp;&amp; <span class="built_in">this</span>.history.current</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  init(app: any) &#123;</span><br><span class="line">    process.env.NODE_ENV !== <span class="string">&#x27;production&#x27;</span> &amp;&amp; assert(install.installed, <span class="string">`not installed. Make sure to call \`Vue.use(VueRouter)\` `</span> + <span class="string">`before creating root instance.`</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">this</span>.apps.push(app)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>.app) &#123;</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">this</span>.app = app</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> history = <span class="built_in">this</span>.history</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (history <span class="keyword">instanceof</span> HTML5History) &#123;</span><br><span class="line">      history.transitionTo(history.getCurrentLocation())</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (history <span class="keyword">instanceof</span> HashHistory) &#123;</span><br><span class="line">      <span class="keyword">const</span> setupHashListener = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        history.setupListeners()</span><br><span class="line">      &#125;</span><br><span class="line">      history.transitionTo(history.getCurrentLocation(), setupHashListener, setupHashListener)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    history.listen(<span class="function"><span class="params">route</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">this</span>.apps.forEach(<span class="function"><span class="params">app</span> =&gt;</span> &#123;</span><br><span class="line">        app._route = route</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  beforeEach(fn: <span class="built_in">Function</span>): <span class="built_in">Function</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> registerHook(<span class="built_in">this</span>.beforeHooks, fn)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  beforeResolve(fn: <span class="built_in">Function</span>): <span class="built_in">Function</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> registerHook(<span class="built_in">this</span>.resolveHooks, fn)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  afterEach(fn: <span class="built_in">Function</span>): <span class="built_in">Function</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> registerHook(<span class="built_in">this</span>.afterHooks, fn)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  onReady(cb: <span class="built_in">Function</span>, errorCb?: <span class="built_in">Function</span>) &#123;</span><br><span class="line">    <span class="built_in">this</span>.history.onReady(cb, errorCb)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  onError(errorCb: <span class="built_in">Function</span>) &#123;</span><br><span class="line">    <span class="built_in">this</span>.history.onError(errorCb)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  push(location: RawLocation, onComplete?: <span class="built_in">Function</span>, onAbort?: <span class="built_in">Function</span>) &#123;</span><br><span class="line">    <span class="built_in">this</span>.history.push(location, onComplete, onAbort)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  replace(location: RawLocation, onComplete?: <span class="built_in">Function</span>, onAbort?: <span class="built_in">Function</span>) &#123;</span><br><span class="line">    <span class="built_in">this</span>.history.replace(location, onComplete, onAbort)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  go(n: number) &#123;</span><br><span class="line">    <span class="built_in">this</span>.history.go(n)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  back() &#123;</span><br><span class="line">    <span class="built_in">this</span>.go(<span class="number">-1</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  forward() &#123;</span><br><span class="line">    <span class="built_in">this</span>.go(<span class="number">1</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getMatchedComponents(to?: RawLocation | Route): <span class="built_in">Array</span>&lt;any&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> route: any = to ? (to.matched ? to : <span class="built_in">this</span>.resolve(to).route) : <span class="built_in">this</span>.currentRoute</span><br><span class="line">    <span class="keyword">if</span> (!route) &#123;</span><br><span class="line">      <span class="keyword">return</span> []</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> [].concat.apply(</span><br><span class="line">      [],</span><br><span class="line">      route.matched.map(<span class="function"><span class="params">m</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Object</span>.keys(m.components).map(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">return</span> m.components[key]</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;)</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  resolve(</span><br><span class="line">    to: RawLocation,</span><br><span class="line">    current?: Route,</span><br><span class="line">    append?: boolean</span><br><span class="line">  ): &#123;</span><br><span class="line">    location: Location,</span><br><span class="line">    route: Route,</span><br><span class="line">    href: string,</span><br><span class="line">    normalizedTo: Location,</span><br><span class="line">    resolved: Route</span><br><span class="line">  &#125; &#123;</span><br><span class="line">    <span class="keyword">const</span> location = normalizeLocation(to, current || <span class="built_in">this</span>.history.current, append, <span class="built_in">this</span>)</span><br><span class="line">    <span class="keyword">const</span> route = <span class="built_in">this</span>.match(location, current)</span><br><span class="line">    <span class="keyword">const</span> fullPath = route.redirectedFrom || route.fullPath</span><br><span class="line">    <span class="keyword">const</span> base = <span class="built_in">this</span>.history.base</span><br><span class="line">    <span class="keyword">const</span> href = createHref(base, fullPath, <span class="built_in">this</span>.mode)</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      location,</span><br><span class="line">      route,</span><br><span class="line">      href,</span><br><span class="line">      normalizedTo: location,</span><br><span class="line">      resolved: route</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  addRoutes(routes: <span class="built_in">Array</span>&lt;RouteConfig&gt;) &#123;</span><br><span class="line">    <span class="built_in">this</span>.matcher.addRoutes(routes)</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>.history.current !== START) &#123;</span><br><span class="line">      <span class="built_in">this</span>.history.transitionTo(<span class="built_in">this</span>.history.getCurrentLocation())</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>VueRouter 是一个类，先看构造函数做了那些事情，<code>this.app</code> 表示根 Vue 实例，<code>this.apps</code> 保存持有 <code>$options.router</code> 属性的 Vue 实例，<code>this.options</code> 保存路由配置，<code>beforeHooks,resolveHooks,afterHooks</code> 表示一些钩子，<code>this.matcher</code> 表示路由匹配器，<code>this.fallback</code>表示浏览器不支持回退到 <code>hash</code>模式，<code>this.mode</code>表示创建的模式，<code>this.history</code> 表示路由历史的具体的实现实例，不同的 <code>HTML5History,HashHistory,AbstractHistory</code> 类继承自 <code>History</code> 类</p>
+<p>我们在实例化 <code>Vue</code> 的时候传入 <code>VueRouter</code> 的实例 <code>router</code>，组件初始化时在混入的 <code>beforeCreate</code> 钩子中，如果定义了 <code>this.$options.router</code> 就会执行 <code>this._router.init(this)</code></p>
+<p>init 方法会把 this（vue 实例）存储在 <code>this.app</code> 中，只有根实例会存在 <code>this.app</code> 中，并且会拿当前的 <code>this.history</code> 执行 <code>history.transitionTo</code> 方法来做路由过渡</p>
+<h2 id="Matcher"><a href="#Matcher" class="headerlink" title="Matcher"></a>Matcher</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> type Matcher = &#123;</span><br><span class="line">  match: <span class="function">(<span class="params">raw: RawLocation, current?: Route, redirectedFrom?: Location</span>) =&gt;</span> Route,</span><br><span class="line">  addRoutes: <span class="function">(<span class="params">routes: <span class="built_in">Array</span>&lt;RouteConfig&gt;</span>) =&gt;</span> <span class="keyword">void</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中涉及到了两个概念，<code>Location</code> 和 <code>Route</code>，可以发现 <code>Location</code> 基本和 <code>window.location</code> 是同样的意思，都是对 url 的结构化描述，<code>Route</code> 有了 <code>fullPath matched redirectedFrom meta</code> 等特有属性，他是路由中的一条线路</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">declare type Location = &#123;</span><br><span class="line">  _normalized?: boolean,</span><br><span class="line">  name?: string,</span><br><span class="line">  path?: string,</span><br><span class="line">  hash?: string,</span><br><span class="line">  query?: Dictionary&lt;string&gt;,</span><br><span class="line">  params?: Dictionary&lt;string&gt;,</span><br><span class="line">  append?: boolean,</span><br><span class="line">  replace?: boolean</span><br><span class="line">&#125;</span><br><span class="line">declare type Route = &#123;</span><br><span class="line">  path: string,</span><br><span class="line">  name: ?string,</span><br><span class="line">  hash: string,</span><br><span class="line">  query: Dictionary&lt;string&gt;,</span><br><span class="line">  params: Dictionary&lt;string&gt;,</span><br><span class="line">  fullPath: string,</span><br><span class="line">  matched: <span class="built_in">Array</span>&lt;RouteRecord&gt;,</span><br><span class="line">  redirectedFrom?: string,</span><br><span class="line">  meta?: any</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>this.matcher</code> 就是在 <code>VueRouter</code> 实例化通过 <code>createMatcher</code> 创建的, <code>createMathcer</code> 接受两个参数，一个是 <code>routes</code>，一个是 <code>router</code> 实例</p>
+<p>createMatcher 首先执行<code>const &#123; pathList, pathMap, nameMap &#125; = createRouteMap(routes)</code> 创建路由映射表</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">createRouteMap</span>(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  routes: Array&lt;RouteConfig&gt;,</span></span></span><br><span class="line"><span class="function"><span class="params">  oldPathList?: Array&lt;string&gt;,</span></span></span><br><span class="line"><span class="function"><span class="params">  oldPathMap?: Dictionary&lt;RouteRecord&gt;,</span></span></span><br><span class="line"><span class="function"><span class="params">  oldNameMap?: Dictionary&lt;RouteRecord&gt;</span></span></span><br><span class="line"><span class="function"><span class="params"></span>): </span>&#123;</span><br><span class="line">  pathList: <span class="built_in">Array</span>&lt;string&gt;,</span><br><span class="line">  pathMap: Dictionary&lt;RouteRecord&gt;,</span><br><span class="line">  nameMap: Dictionary&lt;RouteRecord&gt;</span><br><span class="line">&#125; &#123;</span><br><span class="line">  <span class="comment">// the path list is used to control path matching priority</span></span><br><span class="line">  <span class="keyword">const</span> pathList: <span class="built_in">Array</span>&lt;string&gt; = oldPathList || []</span><br><span class="line">  <span class="comment">// $flow-disable-line</span></span><br><span class="line">  <span class="keyword">const</span> pathMap: Dictionary&lt;RouteRecord&gt; = oldPathMap || <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line">  <span class="comment">// $flow-disable-line</span></span><br><span class="line">  <span class="keyword">const</span> nameMap: Dictionary&lt;RouteRecord&gt; = oldNameMap || <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line"></span><br><span class="line">  routes.forEach(<span class="function"><span class="params">route</span> =&gt;</span> &#123;</span><br><span class="line">    addRouteRecord(pathList, pathMap, nameMap, route)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ensure wildcard routes are always at the end</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>, l = pathList.length; i &lt; l; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (pathList[i] === <span class="string">&#x27;*&#x27;</span>) &#123;</span><br><span class="line">      pathList.push(pathList.splice(i, <span class="number">1</span>)[<span class="number">0</span>])</span><br><span class="line">      l--</span><br><span class="line">      i--</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    pathList,</span><br><span class="line">    pathMap,</span><br><span class="line">    nameMap</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>createRouteMap</code> 把路由映射表分成三部分，<code>pathList</code> 存储所有的 <code>path</code>，<code>pathMap</code> 表示 <code>path</code> 到 <code>routeRecord</code> 的映射关系，<code>nameMap</code> 表示 <code>name</code> 到 <code>routeRecord</code> 的映射关系</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">declare type RouteRecord = &#123;</span><br><span class="line">  path: string,</span><br><span class="line">  regex: RouteRegExp,</span><br><span class="line">  components: Dictionary&lt;any&gt;,</span><br><span class="line">  instances: Dictionary&lt;any&gt;,</span><br><span class="line">  name: ?string,</span><br><span class="line">  parent: ?RouteRecord,</span><br><span class="line">  redirect: ?RedirectOption,</span><br><span class="line">  matchAs: ?string,</span><br><span class="line">  beforeEnter: ?NavigationGuard,</span><br><span class="line">  meta: any,</span><br><span class="line">  props: boolean | <span class="built_in">Object</span> | <span class="built_in">Function</span> | Dictionary&lt;boolean | <span class="built_in">Object</span> | <span class="built_in">Function</span>&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>routeRecord</code> 就是 <code>addRouteRecord</code> 执行生成的，它遍历 <code>routes</code> 为每一个 <code>route</code> 执行 <code>addRouteRecord</code> 生成一条记录，然后用 <code>pathList</code> <code>pathMap</code> <code>nameMap</code> 管理起来<br>创建的 routeRecord 如下</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> record: RouteRecord = &#123;</span><br><span class="line">  path: normalizedPath, <span class="comment">// cleanPath(`$&#123;parent.path&#125;/$&#123;path&#125;`)</span></span><br><span class="line">  regex: compileRouteRegex(normalizedPath, pathToRegexpOptions),</span><br><span class="line">  components: route.components || &#123; <span class="attr">default</span>: route.component &#125;,</span><br><span class="line">  instances: &#123;&#125;,</span><br><span class="line">  name,</span><br><span class="line">  parent,</span><br><span class="line">  matchAs,</span><br><span class="line">  redirect: route.redirect,</span><br><span class="line">  beforeEnter: route.beforeEnter,</span><br><span class="line">  meta: route.meta || &#123;&#125;,</span><br><span class="line">  props: route.props == <span class="literal">null</span> ? &#123;&#125; : route.components ? route.props : &#123; <span class="attr">default</span>: route.props &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>path</code> 是规范化后的路径，<code>regex</code> 是一个正则的扩展 解析<code>url</code>，<code>components</code> 对应 <code>&#123;default: route.component&#125;</code>，instances 是组件实例，<code>parent</code> 是父的 <code>routeRecord</code>，因为我们一般也会配置子路由，所以 <code>RouteRecord</code> 也是一个树形结构</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (route.children) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  route.children.forEach(<span class="function"><span class="params">child</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> childMatchAs = matchAs ? cleanPath(<span class="string">`<span class="subst">$&#123;matchAs&#125;</span>/<span class="subst">$&#123;child.path&#125;</span>`</span>) : <span class="literal">undefined</span></span><br><span class="line">    addRouteRecord(pathList, pathMap, nameMap, child, record, childMatchAs)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>递归执行 <code>addRouteRecord</code> 的时候把当前 <code>child</code> 作为 <code>parent</code> 参数传入，这样深度遍历，我们就能拿到 <code>route</code> 的全部记录</p>
+<p>因为 <code>pathList</code> <code>pathMap</code> <code>nameMap</code> 都是引用类型，所以我们会把所有的数据都统计到，经过 <code>createRouteMap</code> 的执行，我们会得到 <code>pathList pathMap nameMap</code>，有所有的<code>path</code>，以及对应的 <code>routeRecord</code></p>
+<p>回到 <code>createMatcher</code>，创建完路由映射表之后，定义一些方法，最后返回 <code>&#123; match, addRoutes &#125;</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addRoutes</span>(<span class="params">routes</span>) </span>&#123;</span><br><span class="line">  createRouteMap(routes, pathList, pathMap, nameMap)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>addRoutes</code> 方法的作用就是动态添加路由，调用 <code>createRouteMap</code> 传入新的 <code>routes</code></p>
+<p><code>match</code> 函数接受 3 个参数，<code>raw</code> 是 <code>rawLocation</code> 类型，它可以是一个 <code>url</code> 字符串，也可以是一个 <code>Location</code> 对象，<code>currentRoute</code> 是 <code>route</code> 类型，表示当前的路径，<code>redirectFrom</code> 和重定向相关，<br><code>match</code> 方法就是接受一个 <code>raw</code> 和当前的 <code>currentRoute</code> 计算出一个新的路径并返回</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">match</span>(<span class="params">raw: RawLocation, currentRoute?: Route, redirectedFrom?: Location</span>): <span class="title">Route</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> location = normalizeLocation(raw, currentRoute, <span class="literal">false</span>, router)</span><br><span class="line">  <span class="keyword">const</span> &#123; name &#125; = location</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (name) &#123;</span><br><span class="line">    <span class="keyword">const</span> record = nameMap[name]</span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">&#x27;production&#x27;</span>) &#123;</span><br><span class="line">      warn(record, <span class="string">`Route with name &#x27;<span class="subst">$&#123;name&#125;</span>&#x27; does not exist`</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!record) <span class="keyword">return</span> _createRoute(<span class="literal">null</span>, location)</span><br><span class="line">    <span class="keyword">const</span> paramNames = record.regex.keys.filter(<span class="function"><span class="params">key</span> =&gt;</span> !key.optional).map(<span class="function"><span class="params">key</span> =&gt;</span> key.name)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> location.params !== <span class="string">&#x27;object&#x27;</span>) &#123;</span><br><span class="line">      location.params = &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (currentRoute &amp;&amp; <span class="keyword">typeof</span> currentRoute.params === <span class="string">&#x27;object&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> currentRoute.params) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!(key <span class="keyword">in</span> location.params) &amp;&amp; paramNames.indexOf(key) &gt; <span class="number">-1</span>) &#123;</span><br><span class="line">          location.params[key] = currentRoute.params[key]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (record) &#123;</span><br><span class="line">      location.path = fillParams(record.path, location.params, <span class="string">`named route &quot;<span class="subst">$&#123;name&#125;</span>&quot;`</span>)</span><br><span class="line">      <span class="keyword">return</span> _createRoute(record, location, redirectedFrom)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (location.path) &#123;</span><br><span class="line">    location.params = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; pathList.length; i++) &#123;</span><br><span class="line">      <span class="keyword">const</span> path = pathList[i]</span><br><span class="line">      <span class="keyword">const</span> record = pathMap[path]</span><br><span class="line">      <span class="keyword">if</span> (matchRoute(record.regex, location.path, location.params)) &#123;</span><br><span class="line">        <span class="keyword">return</span> _createRoute(record, location, redirectedFrom)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> _createRoute(<span class="literal">null</span>, location)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先执行 <code>normalizeLocation</code> 方法，根据 <code>raw</code> <code>current</code> 计算出新的 <code>location</code>，他主要处理了两种情况，一种是有 <code>params</code> 且没有 <code>path</code>，一种是有 <code>path</code> 的，对于第一种情况，如果 <code>current</code> 有 <code>name</code>, 计算出的 <code>location</code> 也有 <code>name</code>。<code>normalizeLocation</code> 返回 <code>&#123;_normalized: true, path, query, hash&#125;</code></p>
+<p>计算出 <code>location</code> 后，对 <code>location</code> 的 <code>name</code> 和 <code>path</code> 的两种情况做了处理<br>有 <code>name</code> 情况根据 <code>nameMap</code> 匹配到 <code>record</code>，它是一个 <code>RouteRecord</code> 对象，如果 <code>record</code> 不存在，则匹配失败，返回一个空路径。然后拿到 <code>record</code> 对应的 <code>paramNames</code>，再对比 <code>currentRoute</code> 中的 <code>params</code>，把交集部分添加到 <code>location</code> 中，然后再通过 <code>fillParams</code> 方法根据 <code>record.path</code> 计算出 <code>location.path</code>，最后调用 <code>_createRoute(record, location, redirectedFrom)</code> 去生成一条新路径</p>
+<p>通过 <code>name</code> 我们可以很快找到 <code>record</code>，但是通过 <code>path</code> 并不能，因为我们计算后的 <code>location.path</code> 是一个真实路径，而 <code>record</code> 中的 <code>path</code> 可能会有 <code>param</code>，因此需要对所有的 <code>pathList</code> 做顺序遍历，然后通过 <code>matchRoute</code> 方法根据 <code>record.regex location.path location.params</code> 匹配，如果匹配到就通过 <code>_createRoute(record, location, redirectedFrom)</code> 去生成一条新路径。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_createRoute</span>(<span class="params">record: ?RouteRecord, location: Location, redirectedFrom?: Location</span>): <span class="title">Route</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (record &amp;&amp; record.redirect) &#123;</span><br><span class="line">    <span class="keyword">return</span> redirect(record, redirectedFrom || location)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (record &amp;&amp; record.matchAs) &#123;</span><br><span class="line">    <span class="keyword">return</span> alias(record, location, record.matchAs)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> createRoute(record, location, redirectedFrom, router)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>createRoute</code> 可以根据 <code>record</code> 和 <code>location</code> 创建出一条 <code>route</code> 路径，<code>vue-router</code> 中所有的路径都是通过 <code>createRoute</code> 函数创建，并且是 <code>freeze</code> 不可被外部修改的，<code>Route</code> 最终都会有一个特别重要的属性 <code>matched</code>，它通过 <code>formatMatch</code> 计算而来</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">formatMatch</span>(<span class="params">record: ?RouteRecord</span>): <span class="title">Array</span>&lt;<span class="title">RouteRecord</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> res = []</span><br><span class="line">  <span class="keyword">while</span> (record) &#123;</span><br><span class="line">    res.unshift(record)</span><br><span class="line">    record = record.parent</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看它通过 <code>record</code> 循环向上找 <code>parent</code>，直到找到最外层，并把所有的 <code>record</code> 都 <code>push</code> 到一个数组中，最终返回的就是 <code>record</code> 数组，它记录了一条线路上的所有 <code>record</code>，<code>matched</code> 属性非常有用，它为之后渲染组件提供了依据</p>
+<h2 id="路径切换"><a href="#路径切换" class="headerlink" title="路径切换"></a>路径切换</h2><p>history.transitionTo 是 Vue-Router 中非常重要的方法，当我们切换路由线路的时候，就会执行该方法</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">transitionTo (location: RawLocation, onComplete?: <span class="built_in">Function</span>, onAbort?: <span class="built_in">Function</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> route = <span class="built_in">this</span>.router.match(location, <span class="built_in">this</span>.current)</span><br><span class="line"></span><br><span class="line">  <span class="built_in">this</span>.confirmTransition(route, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.updateRoute(route)</span><br><span class="line">    onComplete &amp;&amp; onComplete(route)</span><br><span class="line">    <span class="built_in">this</span>.ensureURL()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">this</span>.ready) &#123;</span><br><span class="line">      <span class="built_in">this</span>.ready = <span class="literal">true</span></span><br><span class="line">      <span class="built_in">this</span>.readyCbs.forEach(<span class="function"><span class="params">cb</span> =&gt;</span> &#123; cb(route) &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, <span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (onAbort) &#123;</span><br><span class="line">      onAbort(err)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (err &amp;&amp; !<span class="built_in">this</span>.ready) &#123;</span><br><span class="line">      <span class="built_in">this</span>.ready = <span class="literal">true</span></span><br><span class="line">      <span class="built_in">this</span>.readyErrorCbs.forEach(<span class="function"><span class="params">cb</span> =&gt;</span> &#123; cb(err) &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>transitionTo 首先根据目标 location 和当前路径 this.current 执行 this.router.match 方法去匹配到目标的路径，然后执行 confirmTransition 做真正的切换，<br>这个过程可能有一些异步的操作（异步操作），所以整个 cinfirmTransition API 设计成带有成功回调函数和失败回调函数</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">confirmTransition (route: Route, <span class="attr">onComplete</span>: <span class="built_in">Function</span>, onAbort?: <span class="built_in">Function</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> current = <span class="built_in">this</span>.current</span><br><span class="line">    <span class="keyword">const</span> abort = <span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// changed after adding errors with</span></span><br><span class="line">      <span class="comment">// https://github.com/vuejs/vue-router/pull/3047 before that change,</span></span><br><span class="line">      <span class="comment">// redirect and aborted navigation would produce an err == null</span></span><br><span class="line">      <span class="keyword">if</span> (!isNavigationFailure(err) &amp;&amp; isError(err)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.errorCbs.length) &#123;</span><br><span class="line">          <span class="built_in">this</span>.errorCbs.forEach(<span class="function"><span class="params">cb</span> =&gt;</span> &#123;</span><br><span class="line">            cb(err)</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          warn(<span class="literal">false</span>, <span class="string">&#x27;uncaught error during route navigation:&#x27;</span>)</span><br><span class="line">          <span class="built_in">console</span>.error(err)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      onAbort &amp;&amp; onAbort(err)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> lastRouteIndex = route.matched.length - <span class="number">1</span></span><br><span class="line">    <span class="keyword">const</span> lastCurrentIndex = current.matched.length - <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> (</span><br><span class="line">      isSameRoute(route, current) &amp;&amp;</span><br><span class="line">      <span class="comment">// in the case the route map has been dynamically appended to</span></span><br><span class="line">      lastRouteIndex === lastCurrentIndex &amp;&amp;</span><br><span class="line">      route.matched[lastRouteIndex] === current.matched[lastCurrentIndex]</span><br><span class="line">    ) &#123;</span><br><span class="line">      <span class="built_in">this</span>.ensureURL()</span><br><span class="line">      <span class="keyword">return</span> abort(createNavigationDuplicatedError(current, route))</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> &#123; updated, deactivated, activated &#125; = resolveQueue(</span><br><span class="line">      <span class="built_in">this</span>.current.matched,</span><br><span class="line">      route.matched</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> queue: <span class="built_in">Array</span>&lt;?NavigationGuard&gt; = [].concat(</span><br><span class="line">      <span class="comment">// in-component leave guards</span></span><br><span class="line">      extractLeaveGuards(deactivated),</span><br><span class="line">      <span class="comment">// global before hooks</span></span><br><span class="line">      <span class="built_in">this</span>.router.beforeHooks,</span><br><span class="line">      <span class="comment">// in-component update hooks</span></span><br><span class="line">      extractUpdateHooks(updated),</span><br><span class="line">      <span class="comment">// in-config enter guards</span></span><br><span class="line">      activated.map(<span class="function"><span class="params">m</span> =&gt;</span> m.beforeEnter),</span><br><span class="line">      <span class="comment">// async components</span></span><br><span class="line">      resolveAsyncComponents(activated)</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="built_in">this</span>.pending = route</span><br><span class="line">    <span class="keyword">const</span> iterator = <span class="function">(<span class="params">hook: NavigationGuard, next</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">this</span>.pending !== route) &#123;</span><br><span class="line">        <span class="keyword">return</span> abort(createNavigationCancelledError(current, route))</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        hook(route, current, <span class="function">(<span class="params">to: any</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">if</span> (to === <span class="literal">false</span>) &#123;</span><br><span class="line">            <span class="comment">// next(false) -&gt; abort navigation, ensure current URL</span></span><br><span class="line">            <span class="built_in">this</span>.ensureURL(<span class="literal">true</span>)</span><br><span class="line">            abort(createNavigationAbortedError(current, route))</span><br><span class="line">          &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isError(to)) &#123;</span><br><span class="line">            <span class="built_in">this</span>.ensureURL(<span class="literal">true</span>)</span><br><span class="line">            abort(to)</span><br><span class="line">          &#125; <span class="keyword">else</span> <span class="keyword">if</span> (</span><br><span class="line">            <span class="keyword">typeof</span> to === <span class="string">&#x27;string&#x27;</span> ||</span><br><span class="line">            (<span class="keyword">typeof</span> to === <span class="string">&#x27;object&#x27;</span> &amp;&amp;</span><br><span class="line">              (<span class="keyword">typeof</span> to.path === <span class="string">&#x27;string&#x27;</span> || <span class="keyword">typeof</span> to.name === <span class="string">&#x27;string&#x27;</span>))</span><br><span class="line">          ) &#123;</span><br><span class="line">            <span class="comment">// next(&#x27;/&#x27;) or next(&#123; path: &#x27;/&#x27; &#125;) -&gt; redirect</span></span><br><span class="line">            abort(createNavigationRedirectedError(current, route))</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">typeof</span> to === <span class="string">&#x27;object&#x27;</span> &amp;&amp; to.replace) &#123;</span><br><span class="line">              <span class="built_in">this</span>.replace(to)</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              <span class="built_in">this</span>.push(to)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// confirm transition and pass on the value</span></span><br><span class="line">            next(to)</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">        abort(e)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    runQueue(queue, iterator, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> postEnterCbs = []</span><br><span class="line">      <span class="keyword">const</span> isValid = <span class="function">() =&gt;</span> <span class="built_in">this</span>.current === route</span><br><span class="line">      <span class="comment">// wait until async components are resolved before</span></span><br><span class="line">      <span class="comment">// extracting in-component enter guards</span></span><br><span class="line">      <span class="keyword">const</span> enterGuards = extractEnterGuards(activated, postEnterCbs, isValid)</span><br><span class="line">      <span class="keyword">const</span> queue = enterGuards.concat(<span class="built_in">this</span>.router.resolveHooks)</span><br><span class="line">      runQueue(queue, iterator, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.pending !== route) &#123;</span><br><span class="line">          <span class="keyword">return</span> abort(createNavigationCancelledError(current, route))</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">this</span>.pending = <span class="literal">null</span></span><br><span class="line">        onComplete(route)</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.router.app) &#123;</span><br><span class="line">          <span class="built_in">this</span>.router.app.$nextTick(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">            postEnterCbs.forEach(<span class="function"><span class="params">cb</span> =&gt;</span> &#123;</span><br><span class="line">              cb()</span><br><span class="line">            &#125;)</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先定义了 <code>abort</code> 函数，然后判断如果满足计算后的 <code>route</code> 和 <code>current</code> 是相同路径的话，则直接调用 <code>this.ensureUrl</code> 和 <code>abort</code></p>
+<p>接着根据 <code>current.matched</code> 和 <code>route.matched</code> 执行 <code>resolveQueue</code> 方法解析出 3 个队列，因为 <code>matched</code> 是一个 <code>routeRecord</code> 数组，所以遍历长度长的找到两个 <code>route</code> 不一样的位置，拿到 <code>updated</code> <code>activeted</code> <code>deactiveted</code> 三个 <code>RouteRecord</code> 数组，接下来要执行一系列的钩子</p>
+<h3 id="导航守卫"><a href="#导航守卫" class="headerlink" title="导航守卫"></a>导航守卫</h3><p>守卫就是一系列钩子<br>接下里的逻辑就是首先构造一个队列 <code>queue</code>，然后再定义一个 iterator，最后执行 <code>runQueue</code> 执行这个队列</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">runQueue</span>(<span class="params">queue: Array&lt;?NavigationGuard&gt;, fn: Function, cb: Function</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> step = <span class="function"><span class="params">index</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (index &gt;= queue.length) &#123;</span><br><span class="line">      cb()</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (queue[index]) &#123;</span><br><span class="line">        fn(queue[index], <span class="function">() =&gt;</span> &#123;</span><br><span class="line">          step(index + <span class="number">1</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        step(index + <span class="number">1</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  step(<span class="number">0</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是一个非常经典的异步函数队列化执行的模式，queue 是一个 <code>NavigationGuard</code> 类型的数组，我们定义了 <code>step</code> 函数，每次根据 <code>index</code> 从 <code>queue</code> 中取出一个 <code>guard</code>，然后执行 <code>fn</code> 函数，<br>并且吧 <code>guard</code> 作为参数传入，第二个参数是一个函数，当这个函数执行的时候再递归执行 <code>step</code> 函数，前进到下一个，这里的 <code>fn</code> 就是 <code>iterator</code> 函数</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> iterator = <span class="function">(<span class="params">hook: NavigationGuard, next</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">this</span>.pending !== route) &#123;</span><br><span class="line">    <span class="keyword">return</span> abort()</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    hook(route, current, <span class="function">(<span class="params">to: any</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (to === <span class="literal">false</span> || isError(to)) &#123;</span><br><span class="line">        <span class="built_in">this</span>.ensureURL(<span class="literal">true</span>)</span><br><span class="line">        abort(to)</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> to === <span class="string">&#x27;string&#x27;</span> || (<span class="keyword">typeof</span> to === <span class="string">&#x27;object&#x27;</span> &amp;&amp; (<span class="keyword">typeof</span> to.path === <span class="string">&#x27;string&#x27;</span> || <span class="keyword">typeof</span> to.name === <span class="string">&#x27;string&#x27;</span>))) &#123;</span><br><span class="line">        abort()</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> to === <span class="string">&#x27;object&#x27;</span> &amp;&amp; to.replace) &#123;</span><br><span class="line">          <span class="built_in">this</span>.replace(to)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="built_in">this</span>.push(to)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        next(to)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">    abort(e)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>iterator</code> 函数就是去执行 每一个导航守卫 <code>hook</code>，并传入 <code>route</code> <code>current</code> 和匿名函数，这些参数对应文档中的 <code>to</code> <code>from</code> <code>next</code>, 如果执行了匿名函数，会根据一些条件执行 <code>abort</code> 和 <code>next</code>, 只有执行 <code>next</code> 才会进入下一个钩子。(这里的 <code>next</code> 就会调用 <code>runQueue</code> 中 <code>fn</code> 的回调)</p>
+<p>最后看一下 这个 <code>queue</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> queue: <span class="built_in">Array</span>&lt;?NavigationGuard&gt; = [].concat(</span><br><span class="line">  extractLeaveGuards(deactivated),</span><br><span class="line">  <span class="built_in">this</span>.router.beforeHooks,</span><br><span class="line">  extractUpdateHooks(updated),</span><br><span class="line">  activated.map(<span class="function"><span class="params">m</span> =&gt;</span> m.beforeEnter),</span><br><span class="line">  resolveAsyncComponents(activated)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>其中钩子的顺序如下：</p>
+<ol>
+<li>在失活的组件里调用离开守卫</li>
+<li>调用全局的 <code>beforeEach</code> 守卫</li>
+<li>在重用的组件里调用 <code>beforeRouteUpdate</code> 守卫</li>
+<li>在激活的路由配置里调用 <code>beforeEnter</code></li>
+<li>解析异步路由</li>
+<li>在被激活的组件里调用 <code>beforeRouteEnter</code></li>
+<li>调用全局的 <code>beforeResolve</code> 钩子</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> enterGuards = extractEnterGuards(activated, postEnterCbs, isValid)</span><br><span class="line"><span class="keyword">const</span> queue = enterGuards.concat(<span class="built_in">this</span>.router.resolveHooks)</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>调用全局的 <code>afterEach</code> 钩子</li>
+<li>触发 <code>DOM</code> 更新</li>
+<li>调用 <code>beforeRouteEnter</code> 守卫中传给 <code>next</code> 的回调函数，创建好的组件实例会作为回调函数的参数传入</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">this</span>.router.app) &#123;</span><br><span class="line">  <span class="built_in">this</span>.router.app.$nextTick(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    postEnterCbs.forEach(<span class="function"><span class="params">cb</span> =&gt;</span> &#123;</span><br><span class="line">      cb()</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="url"><a href="#url" class="headerlink" title="url"></a>url</h3><p>当我们点击 <code>router-link</code> 的时候，实际上最终会执行 <code>router.push</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">push (location: RawLocation, onComplete?: <span class="built_in">Function</span>, onAbort?: <span class="built_in">Function</span>) &#123;</span><br><span class="line">  <span class="comment">// $flow-disable-line</span></span><br><span class="line">  <span class="keyword">if</span> (!onComplete &amp;&amp; !onAbort &amp;&amp; <span class="keyword">typeof</span> <span class="built_in">Promise</span> !== <span class="string">&#x27;undefined&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">this</span>.history.push(location, resolve, reject)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.history.push(location, onComplete, onAbort)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>hash</code> 模式下的 <code>history.push</code></strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">push (location: RawLocation, onComplete?: <span class="built_in">Function</span>, onAbort?: <span class="built_in">Function</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; <span class="attr">current</span>: fromRoute &#125; = <span class="built_in">this</span></span><br><span class="line">  <span class="built_in">this</span>.transitionTo(</span><br><span class="line">    location,</span><br><span class="line">    route =&gt; &#123;</span><br><span class="line">      pushHash(route.fullPath)</span><br><span class="line">      handleScroll(<span class="built_in">this</span>.router, route, fromRoute, <span class="literal">false</span>)</span><br><span class="line">      onComplete &amp;&amp; onComplete(route)</span><br><span class="line">    &#125;,</span><br><span class="line">    onAbort</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 transitionTo 成功的回调中，会调用 pushHash 方法</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">pushHash</span>(<span class="params">path</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (supportsPushState) &#123;</span><br><span class="line">    pushState(getUrl(path))</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">window</span>.location.hash = path</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果 <code>supportPushState</code> 为 <code>true</code>，就执行 <code>pushState(getUrl(path))</code>，否则直接替换 <code>window.location.hash</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">pushState</span>(<span class="params">url?: string, replace?: boolean</span>) </span>&#123;</span><br><span class="line">  saveScrollPosition()</span><br><span class="line">  <span class="keyword">const</span> history = <span class="built_in">window</span>.history</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (replace) &#123;</span><br><span class="line">      history.replaceState(&#123; <span class="attr">key</span>: _key &#125;, <span class="string">&#x27;&#x27;</span>, url)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      _key = genKey()</span><br><span class="line">      history.pushState(&#123; <span class="attr">key</span>: _key &#125;, <span class="string">&#x27;&#x27;</span>, url)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">    <span class="built_in">window</span>.location[replace ? <span class="string">&#x27;replace&#x27;</span> : <span class="string">&#x27;assign&#x27;</span>](url)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>pushState</code> 会调用浏览器原生的 <code>history</code> 的 <code>pushState</code> 接口或者 <code>replaceState</code> 接口，更新浏览器的 <code>url</code> 地址，并把当前 <code>url</code> 压入历史栈中</p>
+<p>然后在 h`istory 的初始化中，会设置一个监听器，监听历史栈的变化</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">setupListeners () &#123;</span><br><span class="line">  <span class="keyword">const</span> router = <span class="built_in">this</span>.router</span><br><span class="line">  <span class="keyword">const</span> expectScroll = router.options.scrollBehavior</span><br><span class="line">  <span class="keyword">const</span> supportsScroll = supportsPushState &amp;&amp; expectScroll</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (supportsScroll) &#123;</span><br><span class="line">    setupScroll()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">window</span>.addEventListener(supportsPushState ? <span class="string">&#x27;popstate&#x27;</span> : <span class="string">&#x27;hashchange&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> current = <span class="built_in">this</span>.current</span><br><span class="line">    <span class="keyword">if</span> (!ensureSlash()) &#123;</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">this</span>.transitionTo(getHash(), <span class="function"><span class="params">route</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (supportsScroll) &#123;</span><br><span class="line">        handleScroll(<span class="built_in">this</span>.router, route, current, <span class="literal">true</span>)</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (!supportsPushState) &#123;</span><br><span class="line">        replaceHash(route.fullPath)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>router.init</code> 的时候，首次执行 <code>transitionTo</code> 时成功或失败的回调都会设置为 <code>setupListeners</code>, 这个函数添加 <code>popstate</code> 或者 <code>hashchange</code> 事件，<br>事件的回调会执行 <code>transitionTo</code> 并把 <code>getHash()</code> 的结果作为第一个参数. 当点击浏览器返回按钮的时候，如果已经有 <code>url</code> 被压入历史栈，则会触发 <code>popstate</code> 事件</p>
+<h3 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h3><p>路由最终的渲染离不开组件，<code>Vue-Router</code> 内置了 <code>&lt;router-view&gt;</code> 组件</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  name: <span class="string">&#x27;RouterView&#x27;</span>,</span><br><span class="line">  functional: <span class="literal">true</span>,</span><br><span class="line">  props: &#123;</span><br><span class="line">    name: &#123;</span><br><span class="line">      type: <span class="built_in">String</span>,</span><br><span class="line">      <span class="keyword">default</span>: <span class="string">&#x27;default&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  render(_, &#123; props, children, parent, data &#125;) &#123;</span><br><span class="line">    data.routerView = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> h = parent.$createElement</span><br><span class="line">    <span class="keyword">const</span> name = props.name</span><br><span class="line">    <span class="keyword">const</span> route = parent.$route</span><br><span class="line">    <span class="keyword">const</span> cache = parent._routerViewCache || (parent._routerViewCache = &#123;&#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> depth = <span class="number">0</span></span><br><span class="line">    <span class="keyword">let</span> inactive = <span class="literal">false</span></span><br><span class="line">    <span class="keyword">while</span> (parent &amp;&amp; parent._routerRoot !== parent) &#123;</span><br><span class="line">      <span class="keyword">if</span> (parent.$vnode &amp;&amp; parent.$vnode.data.routerView) &#123;</span><br><span class="line">        depth++</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (parent._inactive) &#123;</span><br><span class="line">        inactive = <span class="literal">true</span></span><br><span class="line">      &#125;</span><br><span class="line">      parent = parent.$parent</span><br><span class="line">    &#125;</span><br><span class="line">    data.routerViewDepth = depth</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (inactive) &#123;</span><br><span class="line">      <span class="keyword">return</span> h(cache[name], data, children)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> matched = route.matched[depth]</span><br><span class="line">    <span class="keyword">if</span> (!matched) &#123;</span><br><span class="line">      cache[name] = <span class="literal">null</span></span><br><span class="line">      <span class="keyword">return</span> h()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> component = (cache[name] = matched.components[name])</span><br><span class="line"></span><br><span class="line">    data.registerRouteInstance = <span class="function">(<span class="params">vm, val</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> current = matched.instances[name]</span><br><span class="line">      <span class="keyword">if</span> ((val &amp;&amp; current !== vm) || (!val &amp;&amp; current === vm)) &#123;</span><br><span class="line">        matched.instances[name] = val</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ;(data.hook || (data.hook = &#123;&#125;)).prepatch = <span class="function">(<span class="params">_, vnode</span>) =&gt;</span> &#123;</span><br><span class="line">      matched.instances[name] = vnode.componentInstance</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> propsToPass = (data.props = resolveProps(route, matched.props &amp;&amp; matched.props[name]))</span><br><span class="line">    <span class="keyword">if</span> (propsToPass) &#123;</span><br><span class="line">      propsToPass = data.props = extend(&#123;&#125;, propsToPass)</span><br><span class="line">      <span class="keyword">const</span> attrs = (data.attrs = data.attrs || &#123;&#125;)</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> propsToPass) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!component.props || !(key <span class="keyword">in</span> component.props)) &#123;</span><br><span class="line">          attrs[key] = propsToPass[key]</span><br><span class="line">          <span class="keyword">delete</span> propsToPass[key]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> h(component, data, children)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到 <code>&lt;router-view&gt;&lt;/router-view&gt;</code> 是一个函数组件，它的渲染也是依赖 render 函数，我们分析一下他的渲染</p>
+<p>首先获取 createElement name route cache 等变量</p>
+<p>然后在 <code>router.init</code> 的时候，会执行 history.listen()</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">history.listen(<span class="function"><span class="params">route</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">this</span>.apps.forEach(<span class="function">(<span class="params">app</span>) =&gt;</span> &#123;</span><br><span class="line">    app._route = route</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">listen (cb: <span class="built_in">Function</span>) &#123;</span><br><span class="line">  <span class="built_in">this</span>.cb = cb</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们在 <code>transitionTo</code> 成功的回调中 <code>afterEach</code> 之前会执行 <code>updateRoute</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">updateRoute (route: Route) &#123;</span><br><span class="line">  <span class="built_in">this</span>.current = route</span><br><span class="line">  <span class="built_in">this</span>.cb &amp;&amp; <span class="built_in">this</span>.cb(route)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>$route</code> 是定义在 <code>Vue.prototype</code> 上。每个组件实例访问 <code>$route</code> 属性，就是访问根实例的 <code>_route</code>，也就是当前的路由线路。</p>
+<p><code>&lt;router-view&gt;</code> 是支持嵌套的，回到 <code>render</code> 函数，其中定义了 <code>depth</code> 的概念，他表示 <code>router-view</code> 嵌套的深度，每个 <code>router-view</code> 在渲染的时候都会执行如下逻辑：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">data.routerView = <span class="literal">true</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">while</span> (parent &amp;&amp; parent._routerRoot !== parent) &#123;</span><br><span class="line">  <span class="keyword">if</span> (parent.$vnode &amp;&amp; parent.$vnode.data.routerView) &#123;</span><br><span class="line">    depth++</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (parent._inactive) &#123;</span><br><span class="line">    inactive = <span class="literal">true</span></span><br><span class="line">  &#125;</span><br><span class="line">  parent = parent.$parent</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> matched = route.matched[depth]</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">const</span> component = (cache[name] = matched.components[name])</span><br></pre></td></tr></table></figure>
+
+<p><code>parent._routerRoot</code> 表示的是根 <code>Vue</code> 实例，在这个过程，如果碰到了父节点也是 <code>&lt;router-view&gt;</code> 的时候，说明有嵌套的情况，<code>depth++</code>, 遍历完成后，根据当前线路匹配的路径和 <code>depth</code><br>找到对应的 <code>RouteRecord</code>，进而找到该渲染的组件。</p>
+<p>除了找到了应该渲染的组件，还定义了一个注册路由实例的方法</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">data.registerRouteInstance = <span class="function">(<span class="params">vm, val</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> current = matched.instances[name]</span><br><span class="line">  <span class="keyword">if</span> ((val &amp;&amp; current !== vm) || (!val &amp;&amp; current === vm)) &#123;</span><br><span class="line">    matched.instances[name] = val</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>给 <code>vnode</code> 的 <code>data</code> 定义了 <code>registerRouteInstance</code> 方法，调用该方法去注册路由的实例<br>在混入的 <code>beforeCreate</code> 钩子函数中，会执行 <code>registerInstance</code> 方法，进而执行 <code>render</code> 函数中定义的 <code>registerRouteInstance</code>，从而给 <code>matched.instances[name]</code> 赋值当前组件的 <code>vm</code> 实例</p>
+<p>render 函数最后根据 component 渲染出对应的组件 vnode</p>
+<p><strong>那么当我们执行 transitionTo 来更改路由后，组件是如何渲染的呢？</strong></p>
+<p>在混入的 <code>beforeCreate</code> 钩子中我们吧 <code>this._route</code> 变为了响应式属性，我们在 渲染 r<code>outer-view</code> 的时候，会访问 <code>parent.$route</code>, 触发了 <code>getter</code>，相当于 <code>router-view</code> 对它有依赖，然后再执行完 <code>transitionTo</code> 后，修改 <code>app._route</code> 的时候又触发了 <code>setter</code>，因此会通知 <code>router-view</code> 的渲染 <code>watcher</code> 更新，重新渲染组件</p>
+<p>VueRotuer 还内置了 <code>router-link</code> 组件</p>
+<p>通过 to 属性指定目标地址，默认渲染成带有正确连接的 a 标签，可以通过 tag 生成别的标签，另外当路由成功激活时，链接元素自动设置一个表示激活的 css 类名</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  name: <span class="string">&#x27;RouterLink&#x27;</span>,</span><br><span class="line">  props: &#123;</span><br><span class="line">    to: &#123;</span><br><span class="line">      type: toTypes,</span><br><span class="line">      required: <span class="literal">true</span></span><br><span class="line">    &#125;,</span><br><span class="line">    tag: &#123;</span><br><span class="line">      type: <span class="built_in">String</span>,</span><br><span class="line">      <span class="keyword">default</span>: <span class="string">&#x27;a&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    exact: <span class="built_in">Boolean</span>,</span><br><span class="line">    append: <span class="built_in">Boolean</span>,</span><br><span class="line">    replace: <span class="built_in">Boolean</span>,</span><br><span class="line">    activeClass: <span class="built_in">String</span>,</span><br><span class="line">    exactActiveClass: <span class="built_in">String</span>,</span><br><span class="line">    event: &#123;</span><br><span class="line">      type: eventTypes,</span><br><span class="line">      <span class="keyword">default</span>: <span class="string">&#x27;click&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  render(h: <span class="built_in">Function</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> router = <span class="built_in">this</span>.$router</span><br><span class="line">    <span class="keyword">const</span> current = <span class="built_in">this</span>.$route</span><br><span class="line">    <span class="keyword">const</span> &#123; location, route, href &#125; = router.resolve(<span class="built_in">this</span>.to, current, <span class="built_in">this</span>.append)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> classes = &#123;&#125;</span><br><span class="line">    <span class="keyword">const</span> globalActiveClass = router.options.linkActiveClass</span><br><span class="line">    <span class="keyword">const</span> globalExactActiveClass = router.options.linkExactActiveClass</span><br><span class="line">    <span class="keyword">const</span> activeClassFallback = globalActiveClass == <span class="literal">null</span> ? <span class="string">&#x27;router-link-active&#x27;</span> : globalActiveClass</span><br><span class="line">    <span class="keyword">const</span> exactActiveClassFallback = globalExactActiveClass == <span class="literal">null</span> ? <span class="string">&#x27;router-link-exact-active&#x27;</span> : globalExactActiveClass</span><br><span class="line">    <span class="keyword">const</span> activeClass = <span class="built_in">this</span>.activeClass == <span class="literal">null</span> ? activeClassFallback : <span class="built_in">this</span>.activeClass</span><br><span class="line">    <span class="keyword">const</span> exactActiveClass = <span class="built_in">this</span>.exactActiveClass == <span class="literal">null</span> ? exactActiveClassFallback : <span class="built_in">this</span>.exactActiveClass</span><br><span class="line">    <span class="keyword">const</span> compareTarget = location.path ? createRoute(<span class="literal">null</span>, location, <span class="literal">null</span>, router) : route</span><br><span class="line"></span><br><span class="line">    classes[exactActiveClass] = isSameRoute(current, compareTarget)</span><br><span class="line">    classes[activeClass] = <span class="built_in">this</span>.exact ? classes[exactActiveClass] : isIncludedRoute(current, compareTarget)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> handler = <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (guardEvent(e)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.replace) &#123;</span><br><span class="line">          router.replace(location)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          router.push(location)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> on = &#123; <span class="attr">click</span>: guardEvent &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(<span class="built_in">this</span>.event)) &#123;</span><br><span class="line">      <span class="built_in">this</span>.event.forEach(<span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">        on[e] = handler</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      on[<span class="built_in">this</span>.event] = handler</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> data: any = &#123;</span><br><span class="line">      class: classes</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>.tag === <span class="string">&#x27;a&#x27;</span>) &#123;</span><br><span class="line">      data.on = on</span><br><span class="line">      data.attrs = &#123; href &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> a = findAnchor(<span class="built_in">this</span>.$slots.default)</span><br><span class="line">      <span class="keyword">if</span> (a) &#123;</span><br><span class="line">        a.isStatic = <span class="literal">false</span></span><br><span class="line">        <span class="keyword">const</span> extend = _Vue.util.extend</span><br><span class="line">        <span class="keyword">const</span> aData = (a.data = extend(&#123;&#125;, a.data))</span><br><span class="line">        aData.on = on</span><br><span class="line">        <span class="keyword">const</span> aAttrs = (a.data.attrs = extend(&#123;&#125;, a.data.attrs))</span><br><span class="line">        aAttrs.href = href</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        data.on = on</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> h(<span class="built_in">this</span>.tag, data, <span class="built_in">this</span>.$slots.default)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>router.resolve</code> 函数执行<br>先规范生成目标 <code>location</code>，再根据 <code>location</code> 和 <code>match</code> 通过 <code>this.match</code> 方法计算生成目标路径 <code>route</code>，然后再根据 <code>base、fullPath</code> 和 <code>this.mode</code> 通过 <code>createHref</code> 方法计算出最终跳转的 <code>href</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">resolve (</span><br><span class="line">  to: RawLocation,</span><br><span class="line">  current?: Route,</span><br><span class="line">  append?: boolean</span><br><span class="line">): &#123;</span><br><span class="line">  location: Location,</span><br><span class="line">  route: Route,</span><br><span class="line">  href: string,</span><br><span class="line">  normalizedTo: Location,</span><br><span class="line">  resolved: Route</span><br><span class="line">&#125; &#123;</span><br><span class="line">  <span class="keyword">const</span> location = normalizeLocation(</span><br><span class="line">    to,</span><br><span class="line">    current || <span class="built_in">this</span>.history.current,</span><br><span class="line">    append,</span><br><span class="line">    <span class="built_in">this</span></span><br><span class="line">  )</span><br><span class="line">  <span class="keyword">const</span> route = <span class="built_in">this</span>.match(location, current)</span><br><span class="line">  <span class="keyword">const</span> fullPath = route.redirectedFrom || route.fullPath</span><br><span class="line">  <span class="keyword">const</span> base = <span class="built_in">this</span>.history.base</span><br><span class="line">  <span class="keyword">const</span> href = createHref(base, fullPath, <span class="built_in">this</span>.mode)</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    location,</span><br><span class="line">    route,</span><br><span class="line">    href,</span><br><span class="line">    normalizedTo: location,</span><br><span class="line">    resolved: route</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createHref</span> (<span class="params">base: string, fullPath: string, mode</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> path = mode === <span class="string">&#x27;hash&#x27;</span> ? <span class="string">&#x27;#&#x27;</span> + fullPath : fullPath</span><br><span class="line">  <span class="keyword">return</span> base ? cleanPath(base + <span class="string">&#x27;/&#x27;</span> + path) : path</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解析完路由后 添加 activeClass 和 exactActiveClass</p>
+<p>接着创建了一个守卫函数</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> handler = <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (guardEvent(e)) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>.replace) &#123;</span><br><span class="line">      router.replace(location)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      router.push(location)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">guardEvent</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) <span class="keyword">return</span></span><br><span class="line">  <span class="keyword">if</span> (e.defaultPrevented) <span class="keyword">return</span></span><br><span class="line">  <span class="keyword">if</span> (e.button !== <span class="literal">undefined</span> &amp;&amp; e.button !== <span class="number">0</span>) <span class="keyword">return</span></span><br><span class="line">  <span class="keyword">if</span> (e.currentTarget &amp;&amp; e.currentTarget.getAttribute) &#123;</span><br><span class="line">    <span class="keyword">const</span> target = e.currentTarget.getAttribute(<span class="string">&#x27;target&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> (<span class="regexp">/\b_blank\b/i</span>.test(target)) <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (e.preventDefault) &#123;</span><br><span class="line">    e.preventDefault()</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> on = &#123; <span class="attr">click</span>: guardEvent &#125;</span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(<span class="built_in">this</span>.event)) &#123;</span><br><span class="line">  <span class="built_in">this</span>.event.forEach(<span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">    on[e] = handler</span><br><span class="line">  &#125;)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  on[<span class="built_in">this</span>.event] = handler</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最终会监听点击事件或者其它可以通过 <code>prop</code> 传入的事件类型，执行 <code>hanlder</code> 函数，最终执行 <code>router.push</code> 或者 r<code>outer.replace</code> 函数</p>
+<p>最后判断当前 <code>tag</code> 是否是 <code>&lt;a&gt;</code> 标签，<code>&lt;router-link&gt;</code> 默认会渲染成 <code>&lt;a&gt;</code> 标签，当然我们也可以修改 <code>tag</code> 的 <code>prop</code> 渲染成其他节点，这种情况下会尝试找它子元素的 <code>&lt;a&gt;</code> 标签，如果有则把事件绑定到 <code>&lt;a&gt;</code> 标签上并添加 <code>href</code> 属性，否则绑定到外层元素本身</p>
+<p><strong>路径变化是路由中最重要的功能，我们要记住以下内容：路由始终会维护当前的线路，路由切换的时候会把当前线路切换到目标线路，切换过程中会执行一系列的导航守卫钩子函数，会更改 url，同样也会渲染对应的组件，切换完毕后会把目标线路更新替换当前线路，这样就会作为下一次的路径切换的依据。</strong></p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
+<li>路由钩子为什么要 bind</li>
+<li>this.current 什么时候赋值</li>
+</ol>
+<p><code>transitionTo</code> 成功回调执行 <code>updateRoute</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">updateRoute (route: Route) &#123;</span><br><span class="line">  <span class="comment">//. ..</span></span><br><span class="line">  <span class="built_in">this</span>.current = route</span><br><span class="line">  <span class="built_in">this</span>.cb &amp;&amp; <span class="built_in">this</span>.cb(route)</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>a 标签执行 router.push</li>
+<li>routerRecord.instance 什么时候赋值</li>
+</ol>
+<p><code>beforeCreate</code> 混入了 <code>registerInstance(this, this)</code>, 这个函数会执行 <code>registerRouteInstance</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">data.registerRouteInstance = <span class="function">(<span class="params">vm, val</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// val could be undefined for unregistration</span></span><br><span class="line">  <span class="keyword">const</span> current = matched.instances[name]</span><br><span class="line">  <span class="keyword">if</span> ((val &amp;&amp; current !== vm) || (!val &amp;&amp; current === vm)) &#123;</span><br><span class="line">    matched.instances[name] = val</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/vue/" rel="tag"># vue</a>
+              <a href="/tags/vue-router/" rel="tag"># vue-router</a>
+              <a href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag"># 笔记</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/20/vue3%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" rel="prev" title="vue3 源码阅读笔记">
+      <i class="fa fa-chevron-left"></i> vue3 源码阅读笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/09/14/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Vue-Router"><span class="nav-number">1.</span> <span class="nav-text">Vue Router</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E6%B3%A8%E5%86%8C"><span class="nav-number">1.1.</span> <span class="nav-text">路由注册</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Vue-use"><span class="nav-number">1.1.1.</span> <span class="nav-text">Vue.use</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E5%AE%89%E8%A3%85"><span class="nav-number">1.1.2.</span> <span class="nav-text">路由安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VueRouter-%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.2.</span> <span class="nav-text">VueRouter 对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Matcher"><span class="nav-number">1.3.</span> <span class="nav-text">Matcher</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%AF%E5%BE%84%E5%88%87%E6%8D%A2"><span class="nav-number">1.4.</span> <span class="nav-text">路径切换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E8%88%AA%E5%AE%88%E5%8D%AB"><span class="nav-number">1.4.1.</span> <span class="nav-text">导航守卫</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#url"><span class="nav-number">1.4.2.</span> <span class="nav-text">url</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6"><span class="nav-number">1.4.3.</span> <span class="nav-text">组件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">1.5.</span> <span class="nav-text">问题</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description">coding note and life perception</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

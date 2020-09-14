@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-Hans,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sgw.wiki","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="静态方法fromCharCode如果参数为空，就返回&#39;&#39;,否则就返回 Unicode 对应的字符串 实例方法charAt返回指定位置的字符，大于长度或者负数都返回空字符串 charCodeAt返回指定位置的 unicode，大于或者负数都返回 NaN concat返回一个新字符串，不改变原字符串, 都是字符串连接不是的话要改成字符串 slice返回一个字字符串，不改变原字符串，没有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="js标准库String">
+<meta property="og:url" content="https://sgw.wiki/2019/07/16/js%E6%A0%87%E5%87%86%E5%BA%93String/index.html">
+<meta property="og:site_name" content="之哥的荣耀">
+<meta property="og:description" content="静态方法fromCharCode如果参数为空，就返回&#39;&#39;,否则就返回 Unicode 对应的字符串 实例方法charAt返回指定位置的字符，大于长度或者负数都返回空字符串 charCodeAt返回指定位置的 unicode，大于或者负数都返回 NaN concat返回一个新字符串，不改变原字符串, 都是字符串连接不是的话要改成字符串 slice返回一个字字符串，不改变原字符串，没有">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-07-16T07:16:41.000Z">
+<meta property="article:modified_time" content="2019-12-24T05:31:46.950Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="js">
+<meta property="article:tag" content="标准库">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://sgw.wiki/2019/07/16/js%E6%A0%87%E5%87%86%E5%BA%93String/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>js标准库String | 之哥的荣耀</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">之哥的荣耀</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不满是向上的车轮，能够载不自满的人类，向人道前进</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://sgw.wiki/2019/07/16/js%E6%A0%87%E5%87%86%E5%BA%93String/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="coding note and life perception">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="之哥的荣耀">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          js标准库String
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-07-16 15:16:41" itemprop="dateCreated datePublished" datetime="2019-07-16T15:16:41+08:00">2019-07-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-24 13:31:46" itemprop="dateModified" datetime="2019-12-24T13:31:46+08:00">2019-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index"><span itemprop="name">js</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a>静态方法</h3><h4 id="fromCharCode"><a href="#fromCharCode" class="headerlink" title="fromCharCode"></a>fromCharCode</h4><p>如果参数为空，就返回&#39;&#39;,否则就返回 Unicode 对应的字符串</p>
+<h3 id="实例方法"><a href="#实例方法" class="headerlink" title="实例方法"></a>实例方法</h3><h4 id="charAt"><a href="#charAt" class="headerlink" title="charAt"></a>charAt</h4><p>返回指定位置的字符，大于长度或者负数都返回空字符串</p>
+<h4 id="charCodeAt"><a href="#charCodeAt" class="headerlink" title="charCodeAt"></a>charCodeAt</h4><p>返回指定位置的 unicode，大于或者负数都返回 NaN</p>
+<h4 id="concat"><a href="#concat" class="headerlink" title="concat"></a>concat</h4><p>返回一个新字符串，不改变原字符串, 都是字符串连接不是的话要改成字符串</p>
+<h4 id="slice"><a href="#slice" class="headerlink" title="slice"></a>slice</h4><p>返回一个字字符串，不改变原字符串，没有的话也是返回&#39;&#39;</p>
+<h4 id="substring"><a href="#substring" class="headerlink" title="substring"></a>substring</h4><p>substring(9, -3) 会把-3 变成 0，然后变成(0, 9)，违反直觉，所以不建议使用，依然返回新字符串，不改变原字符串</p>
+<h4 id="substr"><a href="#substr" class="headerlink" title="substr"></a>substr</h4><p>和 slice 的区别是第二个参数是要截取的长度，返回一个新的字符串，且不会改动原字符串。</p>
+<h4 id="indexOf-lastIndexOf"><a href="#indexOf-lastIndexOf" class="headerlink" title="indexOf lastIndexOf"></a>indexOf lastIndexOf</h4><p>indexOf(&#39;o&#39;, 6) 6 是开始的位置, 返回一个字符串在另一个字符串中出现的位置</p>
+<h4 id="trim"><a href="#trim" class="headerlink" title="trim"></a>trim</h4><p>去除两端的 \s \t \v \n \r，返回新字符串，不改变原字符串</p>
+<h4 id="toLowerCase-toUpperCase"><a href="#toLowerCase-toUpperCase" class="headerlink" title="toLowerCase toUpperCase"></a>toLowerCase toUpperCase</h4><p>改变大小写，不改变原来字符串的大小</p>
+<h4 id="match"><a href="#match" class="headerlink" title="match"></a>match</h4><p>找到了返回数组，找不到返回 null</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39;cat, bat, sat, fat&#39;.match(&#39;at&#39;) &#x2F;&#x2F; [&quot;at&quot;]</span><br><span class="line">&#39;cat, bat, sat, fat&#39;.match(&#39;xt&#39;) &#x2F;&#x2F; null</span><br></pre></td></tr></table></figure>
+
+<h4 id="search"><a href="#search" class="headerlink" title="search"></a>search</h4><p>和 match 基本一致，不同得是返回开始的位置</p>
+<h4 id="replace"><a href="#replace" class="headerlink" title="replace"></a>replace</h4><p>基本是替换第一个，除非是正则表达式加上了 g</p>
+<h4 id="split"><a href="#split" class="headerlink" title="split"></a>split</h4><p>返回一个按照指定分隔符分成的数组</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39;a|b|c&#39;.split(&#39;|&#39;) &#x2F;&#x2F; [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]</span><br><span class="line">&#39;a|b|c&#39;.split(&#39;&#39;) &#x2F;&#x2F; [&#39;a&#39;, &#39;|&#39;, &#39;b&#39;, &#39;|&#39;, &#39;c&#39;]</span><br><span class="line">&#39;a|b|c&#39;.split() &#x2F;&#x2F; [&#39;a|b|c&#39;]</span><br><span class="line">&#39;|b|c&#39;.split(&#39;|&#39;) &#x2F;&#x2F; [&#39;&#39;, &#39;b&#39;, &#39;c&#39;]</span><br><span class="line">&#39;a|b|c&#39;.split(&#39;|&#39;, 2) &#x2F;&#x2F; [&#39;a&#39;, &#39;b&#39;]</span><br><span class="line">&#39;a|b|c&#39;.split(&#39;|&#39;, 4) &#x2F;&#x2F; [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]</span><br></pre></td></tr></table></figure>
+
+<h4 id="repeat"><a href="#repeat" class="headerlink" title="repeat"></a>repeat</h4><p>构造并返回一个新字符串，该字符串包含被连接在一起的指定数量的字符串的副本。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;abc&quot;.repeat(0)      &#x2F;&#x2F; &quot;&quot;</span><br><span class="line">&quot;abc&quot;.repeat(1)      &#x2F;&#x2F; &quot;abc&quot;</span><br><span class="line">&quot;abc&quot;.repeat(2)      &#x2F;&#x2F; &quot;abcabc&quot;</span><br><span class="line">&quot;abc&quot;.repeat(3.5)    &#x2F;&#x2F; &quot;abcabcabc&quot; 参数count将会被自动转换成整数.</span><br></pre></td></tr></table></figure>
+
+<h4 id="localeCompare"><a href="#localeCompare" class="headerlink" title="localeCompare"></a>localeCompare</h4><p>比较两个字符的长度，转成 unicode 判断</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/js/" rel="tag"># js</a>
+              <a href="/tags/%E6%A0%87%E5%87%86%E5%BA%93/" rel="tag"># 标准库</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/07/16/a-story/" rel="prev" title="【转】因为故事，你才是与众不同的你 | 心理咨询实录">
+      <i class="fa fa-chevron-left"></i> 【转】因为故事，你才是与众不同的你 | 心理咨询实录
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/07/16/js%E6%A0%87%E5%87%86%E5%BA%93Date/" rel="next" title="js标准库Date">
+      js标准库Date <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">静态方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fromCharCode"><span class="nav-number">1.1.</span> <span class="nav-text">fromCharCode</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">实例方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#charAt"><span class="nav-number">2.1.</span> <span class="nav-text">charAt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#charCodeAt"><span class="nav-number">2.2.</span> <span class="nav-text">charCodeAt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#concat"><span class="nav-number">2.3.</span> <span class="nav-text">concat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#slice"><span class="nav-number">2.4.</span> <span class="nav-text">slice</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#substring"><span class="nav-number">2.5.</span> <span class="nav-text">substring</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#substr"><span class="nav-number">2.6.</span> <span class="nav-text">substr</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#indexOf-lastIndexOf"><span class="nav-number">2.7.</span> <span class="nav-text">indexOf lastIndexOf</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#trim"><span class="nav-number">2.8.</span> <span class="nav-text">trim</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#toLowerCase-toUpperCase"><span class="nav-number">2.9.</span> <span class="nav-text">toLowerCase toUpperCase</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#match"><span class="nav-number">2.10.</span> <span class="nav-text">match</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#search"><span class="nav-number">2.11.</span> <span class="nav-text">search</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#replace"><span class="nav-number">2.12.</span> <span class="nav-text">replace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#split"><span class="nav-number">2.13.</span> <span class="nav-text">split</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#repeat"><span class="nav-number">2.14.</span> <span class="nav-text">repeat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#localeCompare"><span class="nav-number">2.15.</span> <span class="nav-text">localeCompare</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description">coding note and life perception</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
