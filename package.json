@@ -1,0 +1,39 @@
+{
+  "name": "theme-next-blog",
+  "version": "1.0.0",
+  "private": true,
+  "hexo": {
+    "version": "5.1.1"
+  },
+  "description": "Elegant and powerful theme for Hexo.",
+  "scripts": {
+    "start": "hexo s",
+    "update": "node lib/update.js",
+    "highlight": "node lib/highlight.js"
+  },
+  "keywords": [
+    "hexo",
+    "theme",
+    "next"
+  ],
+  "author": "GerritV",
+  "license": "MIT",
+  "homepage": "https://theme-next.js.org",
+  "dependencies": {
+    "hexo": "5.1.1",
+    "hexo-deployer-git": "^2.1.0",
+    "hexo-generator-archive": "1.0.0",
+    "hexo-generator-category": "^1.0.0",
+    "hexo-generator-feed": "3.0.0",
+    "hexo-generator-index": "2.0.0",
+    "hexo-generator-searchdb": "1.3.2",
+    "hexo-generator-tag": "^1.0.0",
+    "hexo-renderer-marked": "3.1.0",
+    "hexo-renderer-stylus": "2.0.0",
+    "hexo-server": "2.0.0",
+    "hexo-theme-next": "8.0.0"
+  },
+  "engines": {
+    "node": ">=10.9.0"
+  }
+}
