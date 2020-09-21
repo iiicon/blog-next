@@ -1,7 +1,7 @@
 ---
 title: vue-router 源码阅读笔记
 date: 2020-09-02 17:22:46
-tags: [vue, 笔记, vue-router]
+tags: [vue2.x, 笔记, vue-router]
 categories: vue
 ---
 

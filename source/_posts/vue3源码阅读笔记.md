@@ -1,7 +1,7 @@
 ---
 title: vue3 源码阅读笔记
 date: 2020-08-20 10:03:35
-tags: [vue, 笔记]
+tags: [vue3, 笔记]
 categories: vue
 ---
 
