@@ -183,3 +183,109 @@ Vue.prototype.$mount = function (
   return mount.call(this, el, hydrating);
 };
 ```
+
+这里首先缓存了原型上的 $mount 方法，首先对 el 做了限制，Vue 不能挂载在 body html 这样的根节点上，如果没有定义 render 方法，则会把 el 或者 template 字符串转换成 render 方法。
+这里我们要牢记，Vue2 版本中，所有 Vue 的组件的渲染最终都需要 render 方法，无论我们是用单文件 .vue 的方式开发组件还是写了 el 或者 template 字符串转换成 render 方法，那么这么过程是 Vue 的一个在线编译的过程，它是调用 compileToFunctions 方法实现的
+
+
+```js
+// public mount method
+Vue.prototype.$mount = function (
+  el?: string | Element,
+  hydrating?: boolean
+): Component {
+  el = el && inBrowser ? query(el) : undefined
+  return mountComponent(this, el, hydrating)
+}
+```
+
+公共的 `$mount` 方法传入两个参数，第一个是 `el`，它表示挂载的元素，可以是字符串，也可以是 `DOM` 对象，第二个是否是服务端渲染，`$mount` 方法实际上会去调用 `mountComponent` 方法
+
+```js
+export function mountComponent (
+  vm: Component,
+  el: ?Element,
+  hydrating?: boolean
+): Component {
+  vm.$el = el
+  if (!vm.$options.render) {
+    vm.$options.render = createEmptyVNode
+    if (process.env.NODE_ENV !== 'production') {
+      /* istanbul ignore if */
+      if ((vm.$options.template && vm.$options.template.charAt(0) !== '#') ||
+        vm.$options.el || el) {
+        warn(
+          'You are using the runtime-only build of Vue where the template ' +
+          'compiler is not available. Either pre-compile the templates into ' +
+          'render functions, or use the compiler-included build.',
+          vm
+        )
+      } else {
+        warn(
+          'Failed to mount component: template or render function not defined.',
+          vm
+        )
+      }
+    }
+  }
+  callHook(vm, 'beforeMount')
+
+  let updateComponent
+  /* istanbul ignore if */
+  if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
+    updateComponent = () => {
+      const name = vm._name
+      const id = vm._uid
+      const startTag = `vue-perf-start:${id}`
+      const endTag = `vue-perf-end:${id}`
+
+      mark(startTag)
+      const vnode = vm._render()
+      mark(endTag)
+      measure(`vue ${name} render`, startTag, endTag)
+
+      mark(startTag)
+      vm._update(vnode, hydrating)
+      mark(endTag)
+      measure(`vue ${name} patch`, startTag, endTag)
+    }
+  } else {
+    updateComponent = () => {
+      vm._update(vm._render(), hydrating)
+    }
+  }
+
+  // we set this to vm._watcher inside the watcher's constructor
+  // since the watcher's initial patch may call $forceUpdate (e.g. inside child
+  // component's mounted hook), which relies on vm._watcher being already defined
+  new Watcher(vm, updateComponent, noop, {
+    before () {
+      if (vm._isMounted) {
+        callHook(vm, 'beforeUpdate')
+      }
+    }
+  }, true /* isRenderWatcher */)
+  hydrating = false
+
+  // manually mounted instance, call mounted on self
+  // mounted is called for render-created child components in its inserted hook
+  if (vm.$vnode == null) {
+    vm._isMounted = true
+    callHook(vm, 'mounted')
+  }
+  return vm
+}
+```
+
+`mountComponent` 核心就是实例化一个渲染 `Watcher`，在它的回调函数中调用 `updateComponent` 方法，在此方法中调用 `vm._render` 方法生成虚拟 `Node`，最终调用 `vm._update` 更新 `DOM`
+这里的 watcher 有两个作用，一个是初始化的时候会执行回调函数，另一个是当 vm 实例中的监测数据发生变化的时候执行回调函数，这里第四个参数是 watcher 构造函数的 options 参数之一，执行 `this.before = options.before` 保留了 `before` 钩子函数
+
+函数最后判断为根节点的时候设置 `vm._isMounte`d 为 `true`，表示这个实例已经挂载了，同时执行 `mounted` 钩子函数。这里注意 `vm.$vnode` 表示 `Vue` 实例的父虚拟 `Node`，它是 `null` 表示是根 Vue 的实例
+
+这里也涉及到了两个钩子函数 
+
+```
+new watcher(vm, updateComponent, noop, {beforeUpdate})
+updateComponent
+callHook(vm, 'mounted')
+```
