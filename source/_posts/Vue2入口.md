@@ -2,7 +2,8 @@
 layout: post
 title: Vue2入口
 date: 2020-09-21 10:22:40
-tags:
+tags: [vue2.x, 笔记]
+categories: vue
 ---
 
 ## web 应用 Runtime + Compiler 版本

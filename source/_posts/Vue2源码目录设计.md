@@ -2,7 +2,7 @@
 layout: post
 title: Vue2.x源码目录设计
 date: 2020-09-21 09:38:45
-tags: [vue2.x, 笔记, vuex]
+tags: [vue2.x, 笔记]
 categories: vue
 ---
 
