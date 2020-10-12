@@ -1,5 +1,5 @@
 ---
-title: vue3 源码阅读笔记
+title: vue3 组件核心源码阅读笔记
 date: 2020-08-20 10:03:35
 tags: [vue3, 笔记]
 categories: vue
@@ -547,8 +547,8 @@ const setupRenderEffect = (
 
 可以看到，更新组件主要做三件事情：更新组件 `vnode` 节点，渲染新的子树 `vnode` 根据新旧子树 `vnode` 执行 `patch` 逻辑
 
-更新组件 `vnode` 的时候，要判断有没有新组件 `vnode` `next`，有则更新，没有就用之前的 `vnode`
-渲染新的子树 `vnode` 和之前的一样
+更新组件 `vnode` 的时候，要判断有没有新组件 `vnode` `next`，有则更新，没有就用之前的 `vnode`  
+渲染新的子树 `vnode` 和之前的一样  
 最后就是核心的 `patch` 逻辑，用来找出新旧子树 vnode 的不同，并找到一种合适的方式更新 DOM
 
 ### 核心 patch
@@ -905,7 +905,416 @@ const patchChildren = (
 
    - 如果新子节点也是 vnode 数组，那么就需要做完整的 diff 新旧子节点了，这是最复杂的情况，内部运用了核心 diff 算法。
 
+## 组件更新：完整的 DOM diff 流程是怎样的？（下）
+
+在 `processElement` 中，处理子节点的时候，当前后都是节点数组的时候，就执行核心的 `diff` 算法
+
+新子节点数组相对于旧子节点数组的变化，无非是通过更新、删除、添加和移动节点来完成，而核心 diff 算法，就是在已知旧子节点 DOM 结构，vnode 和新子节点 vnode 情况下，以较低的成本完成子节点的更新为目的，求解生成新子节点 DOM 的系列操作
+
+### 同步头部节点
+
+```js
+const patchKeyedChildren = (
+  c1,
+  c2,
+  container,
+  parentAnchor,
+  parentComponent,
+  parentSuspense,
+  isSVG,
+  optimized
+) => {
+  let i = 0;
+  const l2 = c2.length;
+  // 旧子节点的尾部索引
+  let e1 = c1.length - 1;
+  // 新子节点的尾部索引
+  let e2 = l2 - 1;
+  // 1. 从头部开始同步
+  // i = 0, e1 = 3, e2 = 4
+  // (a b) c d
+  // (a b) e c d
+  while (i <= e1 && i <= e2) {
+    const n1 = c1[i];
+    const n2 = c2[i];
+    if (isSameVNodeType(n1, n2)) {
+      // 相同的节点，递归执行 patch 更新节点
+      patch(
+        n1,
+        n2,
+        container,
+        parentAnchor,
+        parentComponent,
+        parentSuspense,
+        isSVG,
+        optimized
+      );
+    } else {
+      break;
+    }
+    i++;
+  }
+};
+```
+
+在整个 diff 的过程，我们需要维护几个变量：头部索引 `i`，旧子节点的尾部索引 `e1` 和新子节点的尾部索引 `e2`
+
+同步头部节点就是从头部开始，依次对比新节点和旧节点，如果他们相同则执行 patch 更新节点，如果不同或者索引 i 大于索引 e1 或者 e2，则同步过程结束
+
+### 同步尾部节点
+
+接着从尾部开始同步尾部节点
+
+```js
+const patchKeyedChildren = (
+  c1,
+  c2,
+  container,
+  parentAnchor,
+  parentComponent,
+  parentSuspense,
+  isSVG,
+  optimized
+) => {
+  let i = 0;
+  const l2 = c2.length;
+  // 旧子节点的尾部索引
+  let e1 = c1.length - 1;
+  // 新子节点的尾部索引
+  let e2 = l2 - 1;
+  // 1. 从头部开始同步
+  // i = 0, e1 = 3, e2 = 4
+  // (a b) c d
+  // (a b) e c d
+  // 2. 从尾部开始同步
+  // i = 2, e1 = 3, e2 = 4
+  // (a b) (c d)
+  // (a b) e (c d)
+  while (i <= e1 && i <= e2) {
+    const n1 = c1[e1];
+    const n2 = c2[e2];
+    if (isSameVNodeType(n1, n2)) {
+      patch(
+        n1,
+        n2,
+        container,
+        parentAnchor,
+        parentComponent,
+        parentSuspense,
+        isSVG,
+        optimized
+      );
+    } else {
+      break;
+    }
+    e1--;
+    e2--;
+  }
+};
+```
+
+同步尾部节点就是从尾部开始，依次对比新节点和旧节点，如果相同的则执行 patch 更新节点，如果不同或者索引 i 大于 e1 或者 e2 则同步过程结束
+
+接下来有三种情况需要处理：
+
+- 新子节点剩余要添加的新节点
+- 旧子节点剩余要删除的多余节点
+- 未知子序列
+
+### 添加新节点
+
+```js
+const patchKeyedChildren = (
+  c1,
+  c2,
+  container,
+  parentAnchor,
+  parentComponent,
+  parentSuspense,
+  isSVG,
+  optimized
+) => {
+  let i = 0;
+  const l2 = c2.length;
+  // 旧子节点的尾部索引
+  let e1 = c1.length - 1;
+  // 新子节点的尾部索引
+  let e2 = l2 - 1;
+  // 1. 从头部开始同步
+  // i = 0, e1 = 3, e2 = 4
+  // (a b) c d
+  // (a b) e c d
+  // ...
+  // 2. 从尾部开始同步
+  // i = 2, e1 = 3, e2 = 4
+  // (a b) (c d)
+  // (a b) e (c d)
+  // 3. 挂载剩余的新节点
+  // i = 2, e1 = 1, e2 = 2
+  if (i > e1) {
+    if (i <= e2) {
+      const nextPos = e2 + 1;
+      const anchor = nextPos < l2 ? c2[nextPos].el : parentAnchor;
+      while (i <= e2) {
+        // 挂载新节点
+        patch(
+          null,
+          c2[i],
+          container,
+          anchor,
+          parentComponent,
+          parentSuspense,
+          isSVG
+        );
+        i++;
+      }
+    }
+  }
+};
+```
+
+如果索引 i 大于尾部索引 e1 且小于 e2，那么从索引 i 开始到索引 e2 之间，我们直接挂载子树这部分的节点
+
+### 删除多余节点
+
+如果不满足添加新节点的情况，我们就要接着判断旧子节点是否有剩余，如果满足则删除旧子节点
+
+```js
+const patchKeyedChildren = (
+  c1,
+  c2,
+  container,
+  parentAnchor,
+  parentComponent,
+  parentSuspense,
+  isSVG,
+  optimized
+) => {
+  let i = 0;
+  const l2 = c2.length;
+  // 旧子节点的尾部索引
+  let e1 = c1.length - 1;
+  // 新子节点的尾部索引
+  let e2 = l2 - 1;
+  // 1. 从头部开始同步
+  // i = 0, e1 = 4, e2 = 3
+  // (a b) c d e
+  // (a b) d e
+  // ...
+  // 2. 从尾部开始同步
+  // i = 2, e1 = 4, e2 = 3
+  // (a b) c (d e)
+  // (a b) (d e)
+  // 3. 普通序列挂载剩余的新节点
+  // i = 2, e1 = 2, e2 = 1
+  // 不满足
+  if (i > e1) {
+  }
+  // 4. 普通序列删除多余的旧节点
+  // i = 2, e1 = 2, e2 = 1
+  else if (i > e2) {
+    while (i <= e1) {
+      // 删除节点
+      unmount(c1[i], parentComponent, parentSuspense, true);
+      i++;
+    }
+  }
+};
+```
+
+如果索引 i 大于尾部索引 e2，那么从索引 i 开始到索引 e1 之间，我们直接删除旧子树这部分的节点
+
+### 处理未知子序列
+
+单纯的添加和删除节点都是比较理想的情况，操作起来也很容易，但是有些时候并非这么幸运，我们会遇到比较复杂的未知子序列
+
+当我们完成前后的移动后，得到中间的两个子序列，记录开始位置 s1 s2
+
+#### 根据 key 建立新子序列的索引图
+
+通常我们在开发过程中， 会给 v-for 生成的列表中的每一项分配唯一 key 作为项的唯一的 ID，这个 key 在 diff 过程中起到很关键的作用。对于新旧子序列中的节点，我们认为 key 相同就是同一个节点，直接执行 patch 即可
+
+根据 key 建立新子序列的索引图
+
+```js
+const patchKeyedChildren = (
+  c1,
+  c2,
+  container,
+  parentAnchor,
+  parentComponent,
+  parentSuspense,
+  isSVG,
+  optimized
+) => {
+  let i = 0;
+  const l2 = c2.length;
+  // 旧子节点的尾部索引
+  let e1 = c1.length - 1;
+  // 新子节点的尾部索引
+  let e2 = l2 - 1;
+  // 1. 从头部开始同步
+  // i = 0, e1 = 7, e2 = 7
+  // (a b) c d e f g h
+  // (a b) e c d i g h
+  // 2. 从尾部开始同步
+  // i = 2, e1 = 7, e2 = 7
+  // (a b) c d e f (g h)
+  // (a b) e c d i (g h)
+  // 3. 普通序列挂载剩余的新节点， 不满足
+  // 4. 普通序列删除多余的旧节点，不满足
+  // i = 2, e1 = 4, e2 = 5
+  // 旧子序列开始索引，从 i 开始记录
+  const s1 = i;
+  // 新子序列开始索引，从 i 开始记录
+  const s2 = i; //
+  // 5.1 根据 key 建立新子序列的索引图 Map<key, index> 
+  const keyToNewIndexMap = new Map();
+  for (i = s2; i <= e2; i++) {
+    const nextChild = c2[i];
+    keyToNewIndexMap.set(nextChild.key, i);
+  }
+};
+```
+
+#### 更新和移除旧节点
+
+接下来，我们就需要遍历旧子序列，有相同的节点就通过 patch 更新，并且移除那些不在新子序列中的节点，同时找出需要移动的节点
+
+```js
+const patchKeyedChildren = (c1, c2, container, parentAnchor, parentComponent, parentSuspense, isSVG, optimized) => {
+  let i = 0
+  const l2 = c2.length
+  // 旧子节点的尾部索引
+  let e1 = c1.length - 1
+  // 新子节点的尾部索引
+  let e2 = l2 - 1
+  // 1. 从头部开始同步
+  // i = 0, e1 = 7, e2 = 7
+  // (a b) c d e f g h
+  // (a b) e c d i g h
+  // 2. 从尾部开始同步
+  // i = 2, e1 = 7, e2 = 7
+  // (a b) c d e f (g h)
+  // (a b) e c d i (g h)
+  // 3. 普通序列挂载剩余的新节点，不满足
+  // 4. 普通序列删除多余的旧节点，不满足
+  // i = 2, e1 = 4, e2 = 5
+  // 旧子序列开始索引，从 i 开始记录
+  const s1 = i
+  // 新子序列开始索引，从 i 开始记录
+  const s2 = i
+  // 5.1 根据 key 建立新子序列的索引图
+  // 5.2 正序遍历旧子序列，找到匹配的节点更新，删除不在新子序列中的节点，判断是否有移动节点
+  // 新子序列已更新节点的数量
+  let patched = 0
+  // 新子序列待更新节点的数量，等于新子序列的长度
+  const toBePatched = e2 - s2 + 1
+  // 是否存在要移动的节点
+  let moved = false
+  // 用于跟踪判断是否有节点移动
+  let maxNewIndexSoFar = 0
+  // 这个数组存储新子序列中的元素在旧子序列节点的索引，用于确定最长递增子序列
+  const newIndexToOldIndexMap = new Array(toBePatched)
+  // 初始化数组，每个元素的值都是 0
+  // 0 是一个特殊的值，如果遍历完了仍有元素的值为 0，则说明这个新节点没有对应的旧节点
+  for (i = 0; i < toBePatched; i++)
+    newIndexToOldIndexMap[i] = 0
+  // 正序遍历旧子序列
+  for (i = s1; i <= e1; i++) {
+    // 拿到每一个旧子序列节点
+    const prevChild = c1[i]
+    if (patched >= toBePatched) {
+      // 所有新的子序列节点都已经更新，剩余的节点删除
+      unmount(prevChild, parentComponent, parentSuspense, true)
+      continue
+    }
+    // 查找旧子序列中的节点在新子序列中的索引
+    let newIndex = keyToNewIndexMap.get(prevChild.key)
+    if (newIndex === undefined) {
+      // 找不到说明旧子序列已经不存在于新子序列中，则删除该节点
+      unmount(prevChild, parentComponent, parentSuspense, true)
+    }
+    else {
+      // 更新新子序列中的元素在旧子序列中的索引，这里加 1 偏移，是为了避免 i 为 0 的特殊情况，影响对后续最长递增子序列的求解
+      newIndexToOldIndexMap[newIndex - s2] = i + 1
+      // maxNewIndexSoFar 始终存储的是上次求值的 newIndex，如果不是一直递增，则说明有移动
+      if (newIndex >= maxNewIndexSoFar) {
+        maxNewIndexSoFar = newIndex
+      }
+      else {
+        moved = true
+      }
+      // 更新新旧子序列中匹配的节点
+      patch(prevChild, c2[newIndex], container, null, parentComponent, parentSuspense, isSVG, optimized)
+      patched++
+    }
+  }
+}
+
+```
+
+#### 移动和挂载新节点
+
+最后我们就要移动和挂载新节点
+
+```js
+const patchKeyedChildren = (c1, c2, container, parentAnchor, parentComponent, parentSuspense, isSVG, optimized) => {
+  let i = 0
+  const l2 = c2.length
+  // 旧子节点的尾部索引
+  let e1 = c1.length - 1
+  // 新子节点的尾部索引
+  let e2 = l2 - 1
+  // 1. 从头部开始同步
+  // i = 0, e1 = 6, e2 = 7
+  // (a b) c d e f g
+  // (a b) e c d h f g
+  // 2. 从尾部开始同步
+  // i = 2, e1 = 6, e2 = 7
+  // (a b) c (d e)
+  // (a b) (d e)
+  // 3. 普通序列挂载剩余的新节点， 不满足
+  // 4. 普通序列删除多余的节点，不满足
+  // i = 2, e1 = 4, e2 = 5
+  // 旧子节点开始索引，从 i 开始记录
+  const s1 = i
+  // 新子节点开始索引，从 i 开始记录
+  const s2 = i //
+  // 5.1 根据 key 建立新子序列的索引图
+  // 5.2 正序遍历旧子序列，找到匹配的节点更新，删除不在新子序列中的节点，判断是否有移动节点
+  // 5.3 移动和挂载新节点
+  // 仅当节点移动时生成最长递增子序列
+  const increasingNewIndexSequence = moved
+    ? getSequence(newIndexToOldIndexMap)
+    : EMPTY_ARR
+  let j = increasingNewIndexSequence.length - 1
+  // 倒序遍历以便我们可以使用最后更新的节点作为锚点
+  for (i = toBePatched - 1; i >= 0; i--) {
+    const nextIndex = s2 + i
+    const nextChild = c2[nextIndex]
+    // 锚点指向上一个更新的节点，如果 nextIndex 超过新子节点的长度，则指向 parentAnchor
+    const anchor = nextIndex + 1 < l2 ? c2[nextIndex + 1].el : parentAnchor
+    if (newIndexToOldIndexMap[i] === 0) {
+      // 挂载新的子节点
+      patch(null, nextChild, container, anchor, parentComponent, parentSuspense, isSVG)
+    }
+    else if (moved) {
+      // 没有最长递增子序列（reverse 的场景）或者当前的节点索引不在最长递增子序列中，需要移动
+      if (j < 0 || i !== increasingNewIndexSequence[j]) {
+        move(nextChild, container, anchor, 2)
+      }
+      else {
+        // 倒序递增子序列
+        j--
+      }
+    }
+  }
+}
+
+```
+
 ## 问题
 
 - 虽然 Vue.js 的更新粒度是组件级别的，组件的数据变化只会影响当前组件的更新，但是在组件更新的过程中，也会对子组件做一定的检查，判断子组件是否也要更新，并通过某种机制避免子组件重复更新。
-- processComponent 处理组件 vnode，本质上就是去判断子组件是否需要更新，如果需要则递归执行子组件的副作用渲染函数来更新，否则仅仅更新一些 vnode 的属性，并让子组件实例保留对组件 vnode 的引用，用于子组件自身数据变化引起组件重新渲染的时候，在渲染函数内部可以拿到新的组件 vnode。
+- processComponent 处理组件 vnode，本质上就是去判断子组件是否需要更新，如果需要则递归执行子组件的副作用渲染函数来更新，否则仅仅更新一些 vnode 的属性，并让子组件实例保留对组件 vnode 的引用，用于子组件自身数据变化引起组件重新渲染的时候（下一次），在渲染函数内部可以拿到新的组件 vnode。
