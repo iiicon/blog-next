@@ -71,7 +71,7 @@ function getSequence(arr: number[]): number[] {
 }
 ```
 
-## 300 最长上升子序列
+## leetcode 300 最长上升子序列
 
 给定一个无序的整数数组，找到其中最长上升子序列的长度
 
@@ -88,8 +88,8 @@ vue3 对应的是 O(nlogn) 的复杂度，下面写 O(n^2) 的复杂度
 
 ```js
 var lengthOfLTS = function (arr) {
-  let len = arr.length;
-  let dp = new Array(len).fill(1);
+  const len = arr.length;
+  const dp = new Array(len).fill(1);
 
   for (let i = 0; i < len; i++) {
     for (let j = 0; j < i; j++) {
